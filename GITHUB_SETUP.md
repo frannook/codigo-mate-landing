@@ -11,7 +11,7 @@ El proyecto está listo para clonar y trabajar en equipo. Sigue estos pasos **de
 5. **NO inicialices con README** (ya lo tenemos)
 6. Click **"Create repository"**
 
-Verás una pantalla con instrucciones. Copia la URL del repo (será algo como `https://github.com/tu-usuario/codigo-mate-landing.git`)
+Verás una pantalla con instrucciones. Copia la URL del repo (será algo como `https://github.com/frannook/codigo-mate-landing.git`)
 
 ---
 
@@ -21,7 +21,7 @@ En tu terminal local, en la carpeta donde descargaste/clonaste el proyecto:
 
 ```bash
 # Agregar el remoto (reemplaza con tu URL)
-git remote add origin https://github.com/tu-usuario/codigo-mate-landing.git
+git remote add origin https://github.com/frannook/codigo-mate-landing.git
 
 # Cambiar rama default a main (si está en master)
 git branch -M main
@@ -40,14 +40,14 @@ git push -u origin main
 2. Busca por username de GitHub de cada compañero
 3. Dale permisos **"Write"** (para que puedan hacer push)
 
-O simplemente comparte el link del repo: `https://github.com/tu-usuario/codigo-mate-landing`
+O simplemente comparte el link del repo: `https://github.com/frannook/codigo-mate-landing`
 
 ---
 
 ## 4️⃣ Clonar en Otra Máquina (o Compañeros)
 
 ```bash
-git clone https://github.com/tu-usuario/codigo-mate-landing
+git clone https://github.com/frannook/codigo-mate-landing
 cd codigo-mate-landing
 
 # Install
@@ -81,9 +81,8 @@ npm run dev
 ```bash
 # .env.local (copiar de .env.example y llenar)
 GEMINI_API_KEY=tu_key_aqui
-TELEGRAM_BOT_TOKEN=...
-RESEND_API_KEY=...
-# etc.
+GMAIL_USER=...
+GMAIL_APP_PASSWORD=...
 ```
 
 Si necesitas compartir keys entre el equipo, usa:
