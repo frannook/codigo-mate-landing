@@ -1,0 +1,162 @@
+/* =========================================================================
+   "Mientras dormís" (.ns): una noche de un agente en cuatro escenas.
+   Estado base (sin JS / sin movimiento / móvil): escenas apiladas y visibles.
+   .ns.is-pinned (lo pone NightStory en ≥ 900px con movimiento): reloj a la izquierda, un solo
+   celular a la derecha y las escenas superpuestas que el scroll va cambiando.
+   ========================================================================= */
+
+.ns {
+  --dev-w: 340px;
+  --dev-h: min(620px, calc(100svh - 150px));
+  position: relative;
+  border-top: 1px solid var(--rule);
+  background: var(--navy-900);
+}
+
+.ns__head {
+  display: flex; flex-direction: column; gap: 18px; max-width: 820px;
+  padding-top: clamp(80px, 11vw, 140px); padding-bottom: clamp(40px, 5vw, 64px);
+}
+.ns__lead { margin: 0; max-width: 46ch; font-size: 17px; line-height: 1.65; color: var(--mist); text-wrap: pretty; }
+
+/* ---------- Cielo ---------- */
+.ns__pin { position: relative; isolation: isolate; padding-bottom: clamp(80px, 11vw, 140px); }
+.ns__sky { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.ns__stars {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(224, 225, 221, 0.55), transparent 60%),
+    radial-gradient(1px 1px at 37% 64%, rgba(224, 225, 221, 0.35), transparent 60%),
+    radial-gradient(1.5px 1.5px at 58% 12%, rgba(224, 225, 221, 0.5), transparent 60%),
+    radial-gradient(1px 1px at 76% 42%, rgba(175, 187, 203, 0.45), transparent 60%),
+    radial-gradient(1px 1px at 88% 82%, rgba(224, 225, 221, 0.3), transparent 60%),
+    radial-gradient(1.5px 1.5px at 24% 88%, rgba(175, 187, 203, 0.35), transparent 60%);
+  background-size: 460px 380px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 95%);
+  mask-image: linear-gradient(to bottom, #000 30%, transparent 95%);
+}
+/* Luz detrás del celular: le da algo que refractar al vidrio. */
+.ns__sky::after {
+  content: ''; position: absolute; right: -10%; top: 10%; width: min(820px, 90vw); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(65, 90, 119, 0.4), rgba(65, 90, 119, 0.12) 55%, transparent);
+}
+/* Primera luz: sube desde abajo cuando la noche termina. */
+.ns__dawn {
+  position: absolute; inset: 0; opacity: 0;
+  background:
+    radial-gradient(70% 55% at 30% 105%, rgba(119, 141, 169, 0.32), transparent 70%),
+    linear-gradient(to top, rgba(65, 90, 119, 0.45), rgba(36, 51, 73, 0.2) 45%, transparent 80%);
+}
+
+/* ---------- Escenas (base apilada) ---------- */
+.ns__stage { display: flex; flex-direction: column; gap: clamp(64px, 9vw, 112px); }
+.ns__clock, .ns__device { display: none; }
+.ns__scene { display: flex; flex-direction: column; gap: 28px; }
+
+.ns__copy { display: flex; flex-direction: column; gap: 14px; max-width: 520px; }
+.ns__when { margin: 0; display: flex; align-items: baseline; gap: 12px; font-size: 15px; line-height: 1.5; color: var(--mist); }
+.ns__when time {
+  font-family: var(--fm); font-size: 14px; font-variant-numeric: tabular-nums; color: var(--bone);
+  padding: 3px 9px; border-radius: 999px; border: 1px solid rgba(119, 141, 169, 0.32);
+}
+.ns__copy h3 {
+  margin: 0; font-family: var(--fh); font-weight: 400; font-size: clamp(32px, 3.4vw, 46px); line-height: 1.05;
+  letter-spacing: -0.01em; color: var(--bone); text-wrap: balance;
+}
+.ns__copy > p:not(.ns__when) { margin: 0; max-width: 42ch; font-size: 17px; line-height: 1.65; color: var(--mist); text-wrap: pretty; }
+
+.ns__install { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; padding-top: 22px; border-top: 1px solid var(--rule); }
+.ns__punch { margin: 0; font-family: var(--fh); font-size: clamp(24px, 2.4vw, 30px); line-height: 1.15; color: var(--bone); }
+.ns__code {
+  display: flex; align-items: center; width: fit-content; max-width: 100%; overflow: hidden;
+  padding: 12px 16px; border-radius: 12px; background: var(--navy); border: 1px solid rgba(119, 141, 169, 0.22);
+  font-family: var(--fm); font-size: clamp(11px, 3.1vw, 14px); color: var(--bone); white-space: nowrap;
+}
+.ns__code-text { display: inline-block; }
+.ns__caret { display: inline-block; flex-shrink: 0; width: 7px; height: 1.1em; margin-left: 3px; background: var(--slate); animation: cmCaret 1s steps(1) infinite; }
+.ns__small { margin: 0; max-width: 44ch; font-size: 15px; line-height: 1.6; color: var(--mist); }
+
+/* ---------- Celular ---------- */
+.ns__vis {
+  position: relative; display: flex; flex-direction: column; overflow: hidden;
+  width: min(100%, 360px); min-height: 460px; border-radius: 34px;
+  background: rgba(21, 32, 47, 0.82); border: 1px solid rgba(119, 141, 169, 0.24);
+  box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.08), 0 40px 80px -40px rgba(0, 0, 0, 0.75);
+}
+.ns__status { display: flex; padding: 14px 26px 8px; font-size: 12.5px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--bone); }
+.ns__app {
+  display: flex; align-items: center; gap: 10px; margin: 4px 10px 0; padding: 10px 12px; border-radius: 18px;
+  background: var(--bone); color: var(--navy);
+}
+.ns__avatar {
+  width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: var(--navy); color: var(--bone); font-size: 13px; font-weight: 500;
+}
+.ns__who { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.ns__who strong { font-size: 13.5px; font-weight: 600; }
+.ns__who small { font-size: 11.5px; color: var(--steel); }
+.ns__app--wa { background: var(--navy-600); color: var(--bone); }
+.ns__app--wa .ns__avatar { background: var(--bone); color: var(--navy); }
+.ns__app--wa small { color: var(--mist); }
+
+.ns__log { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; padding: 16px 14px 20px; }
+.ns__log p { margin: 0; }
+/* Los estilos de chat globales traen animaciones de entrada propias: acá manda el scroll. */
+.ns .bubble-user, .ns .handoff, .ns .wa { animation: none; }
+.ns__log .bubble-bot { align-self: flex-start; max-width: 88%; }
+.ns__log .bubble-user { max-width: 84%; }
+.ns__bot { display: flex; flex-direction: column; gap: 10px; white-space: normal; }
+.ns__bot .order { width: 100%; }
+.ns .order__fill { animation: none; transform: scaleX(0.66); }
+.ns__summary { display: flex; flex-direction: column; gap: 4px; white-space: normal; }
+.ns__summary strong { font-size: 13px; font-weight: 600; }
+.ns__summary span:nth-child(2) { font-family: var(--fm); font-size: 12px; color: var(--mist); }
+
+.ns__notif {
+  position: absolute; top: 44px; left: 10px; right: 10px; z-index: 1;
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.7);
+}
+.ns__notif .wa__sub { white-space: normal; overflow: visible; color: var(--navy-600); }
+
+/* Movimiento apagado o pantallas medianas sin pin: copia y celular lado a lado. */
+@media (min-width: 900px) {
+  .ns:not(.is-pinned) .ns__scene { display: grid; grid-template-columns: minmax(0, 1fr) 360px; column-gap: clamp(48px, 7vw, 112px); align-items: center; }
+}
+
+/* ---------- Modo fijado (escritorio con movimiento) ---------- */
+.ns.is-pinned .ns__pin { min-height: 100svh; display: flex; align-items: center; padding: 96px 0 40px; }
+.ns.is-pinned .ns__stage {
+  width: 100%; display: grid; gap: 0 clamp(48px, 7vw, 112px);
+  grid-template-columns: minmax(0, 1fr) var(--dev-w);
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 'clock dev' 'copy dev';
+}
+.ns.is-pinned .ns__scene { display: contents; }
+.ns.is-pinned .ns__copy { grid-area: copy; align-self: start; padding-top: 36px; will-change: transform, opacity; }
+.ns.is-pinned .ns__when time { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.ns.is-pinned .ns__device,
+.ns.is-pinned .ns__vis { grid-area: dev; align-self: center; width: var(--dev-w); height: var(--dev-h); min-height: 0; border-radius: 40px; }
+.ns.is-pinned .ns__device {
+  --glass-r: 40px;
+  display: block; position: relative;
+  background-color: rgba(21, 32, 47, 0.7); border: 1px solid rgba(119, 141, 169, 0.26);
+  box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.08), 0 50px 100px -40px rgba(0, 0, 0, 0.8);
+}
+/* Isla del celular (::before lo usa .glass). */
+.ns.is-pinned .ns__device::after {
+  content: ''; position: absolute; top: 12px; left: 50%; width: 86px; height: 24px; margin-left: -43px; border-radius: 12px; background: var(--navy-900);
+}
+.ns.is-pinned .ns__vis { background: transparent; border-color: transparent; box-shadow: none; will-change: transform, opacity, filter; }
+.ns.is-pinned .ns__status { padding-top: 16px; }
+
+.ns.is-pinned .ns__clock { display: flex; flex-direction: column; gap: 18px; grid-area: clock; align-self: end; max-width: 520px; }
+.ns__digits { height: 1em; overflow: hidden; font-family: var(--fh); font-size: clamp(64px, 7vw, 96px); line-height: 1; color: var(--bone); font-variant-numeric: tabular-nums; }
+.ns__reel { display: flex; flex-direction: column; will-change: transform; }
+.ns__reel span { display: block; height: 1em; }
+.ns__night { position: relative; height: 2px; border-radius: 1px; background: rgba(119, 141, 169, 0.2); }
+.ns__fill { position: absolute; inset: 0; border-radius: inherit; background: var(--slate); transform-origin: left; transform: scaleX(0.075); }
+.ns__tick { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--bone); }
+.ns__ends { display: flex; justify-content: space-between; font-size: 13px; color: var(--slate); }
+
+html[data-motion='off'] .ns__caret { animation: none; }

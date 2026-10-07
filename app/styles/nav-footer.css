@@ -1,0 +1,195 @@
+/* =========================================================
+   Nav flotante (.navp) y footer de cierre (.foot)
+   ========================================================= */
+
+/* ---------- Nav: píldora de vidrio ---------- */
+.navp {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+  padding: 12px 16px 0; display: flex; flex-direction: column; align-items: center;
+  pointer-events: none;
+}
+.navp__bar {
+  position: relative; isolation: isolate; pointer-events: auto;
+  width: 100%; max-width: 980px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 6px 6px 6px 18px; border-radius: 999px;
+  border: 1px solid rgba(175, 187, 203, 0.16);
+  transition: transform 0.7s var(--ease-out), border-color 0.5s;
+}
+/* Capa de vidrio: navy translúcido + desenfoque, brillo especular arriba y sombra suave. */
+.navp__bar::before {
+  content: ''; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(180deg, rgba(27, 38, 59, 0.72), rgba(13, 27, 42, 0.66));
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  backdrop-filter: blur(22px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgba(224, 225, 221, 0.14),
+    inset 0 -1px 0 rgba(11, 23, 36, 0.4),
+    0 18px 40px -18px rgba(0, 0, 0, 0.65),
+    0 2px 6px -2px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.5s var(--ease-out);
+}
+/* Arriba de todo: más aire y un vidrio más liviano. */
+.navp[data-top='true'] .navp__bar { transform: translateY(12px); border-color: rgba(175, 187, 203, 0.1); }
+.navp[data-top='true'] .navp__bar::before { opacity: 0.55; }
+/* Al bajar se va; vuelve al subir o si algo adentro tiene el foco. */
+.navp[data-hidden='true']:not(:focus-within) .navp__bar { transform: translateY(calc(-100% - 24px)); }
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .navp__bar::before, .navp__sheet { background: var(--navy-800); }
+  .navp[data-top='true'] .navp__bar::before { opacity: 1; }
+}
+
+.navp__brand { display: flex; align-items: center; flex: none; min-height: 44px; border-radius: 8px; }
+.navp__brand img { display: block; flex: none; height: 30px; width: auto; max-width: none; }
+
+.navp__links { position: relative; display: none; align-items: center; }
+.navp__link {
+  position: relative; z-index: 1; display: flex; align-items: center; height: 44px; padding: 0 16px;
+  border-radius: 999px; font-size: 14px; white-space: nowrap; color: var(--mist); transition: color 0.3s;
+}
+.navp__link:hover, .navp__link[aria-current] { color: var(--white); }
+.navp__link:focus-visible { outline-offset: -2px; }
+/* Pastilla que se desliza: ocupa toda la fila y se recorta sobre el link (clip-path animable). */
+.navp__pill {
+  position: absolute; inset: 0; border-radius: 999px; pointer-events: none; opacity: 0;
+  background: rgba(119, 141, 169, 0.16);
+  box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.1);
+  clip-path: inset(0 100% 0 0 round 999px);
+  transition: clip-path 0.55s var(--ease-out), opacity 0.3s;
+}
+
+.navp__right { display: flex; align-items: center; gap: 6px; flex: none; }
+.navp .motion-toggle { padding: 0 8px; }
+.navp .nav__cta { height: 44px; padding: 0 18px; gap: 8px; }
+.navp__cta-long { display: none; }
+@media (min-width: 560px) {
+  .navp__cta-long { display: inline; }
+  .navp__cta-short { display: none; }
+}
+
+.navp__burger {
+  position: relative; flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+  border: 1px solid rgba(175, 187, 203, 0.18); background: rgba(119, 141, 169, 0.08); color: var(--bone);
+  transition: background 0.25s, border-color 0.25s;
+}
+.navp__burger:hover { background: rgba(119, 141, 169, 0.18); }
+.navp__burger span {
+  position: absolute; left: 13px; right: 13px; height: 1.5px; border-radius: 1px; background: currentColor;
+  transition: transform 0.45s var(--ease-out);
+}
+.navp__burger span:first-child { transform: translateY(-3.5px); }
+.navp__burger span:last-child { transform: translateY(3.5px); }
+.navp__burger[aria-expanded='true'] span:first-child { transform: rotate(45deg); }
+.navp__burger[aria-expanded='true'] span:last-child { transform: rotate(-45deg); }
+
+/* Panel móvil */
+.navp__sheet {
+  position: absolute; top: calc(100% + 10px); left: 16px; right: 16px; max-width: 980px; margin: 0 auto;
+  pointer-events: auto; border-radius: 28px; padding: 10px;
+  border: 1px solid rgba(175, 187, 203, 0.16);
+  background: rgba(21, 32, 47, 0.8);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.12), 0 30px 60px -24px rgba(0, 0, 0, 0.7);
+  opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.98); transform-origin: top center;
+  transition: opacity 0.35s var(--ease-out), transform 0.5s var(--ease-out), visibility 0s linear 0.5s;
+}
+.navp[data-open='true'] .navp__sheet { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.navp__sheet ul { list-style: none; margin: 0; padding: 0; }
+.navp__sheet li + li { border-top: 1px solid var(--rule); }
+.navp__sheet a {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 0 14px;
+  border-radius: 18px; font-family: var(--fh); font-size: clamp(30px, 8vw, 38px); line-height: 1; color: var(--bone);
+  transition: background 0.25s;
+}
+.navp__sheet a:hover, .navp__sheet a[aria-current] { background: rgba(119, 141, 169, 0.12); color: var(--white); }
+.navp__sheet a svg { color: var(--slate); flex: none; }
+.navp__sheet li { opacity: 0; transform: translateY(8px); transition: opacity 0.4s, transform 0.6s var(--ease-out); }
+.navp[data-open='true'] .navp__sheet li { opacity: 1; transform: none; transition-delay: calc(0.05s + var(--i, 0) * 0.04s); }
+
+@media (min-width: 960px) {
+  .navp__links { display: flex; }
+  .navp__burger, .navp__sheet { display: none; }
+}
+@media (max-width: 380px) {
+  .navp { padding-left: 10px; padding-right: 10px; }
+  .navp__bar { padding-left: 12px; gap: 6px; }
+  .navp__right { gap: 2px; }
+  .navp .nav__cta { padding: 0 14px; }
+  .navp .nav__cta svg { display: none; }
+}
+
+/* ---------- Footer de cierre ---------- */
+.foot { position: relative; overflow: hidden; background: var(--navy-900); border-top: 1px solid var(--rule); }
+
+.foot__close {
+  padding-top: clamp(88px, 12vw, 168px);
+  display: grid; gap: 40px clamp(40px, 6vw, 96px); align-items: end;
+}
+@media (min-width: 900px) { .foot__close { grid-template-columns: 1.35fr 1fr; } }
+.foot__title {
+  margin: 0; max-width: 13ch; font-family: var(--fh); font-weight: 400; letter-spacing: -0.015em;
+  font-size: clamp(44px, 6.6vw, 92px); line-height: 1; text-wrap: balance; color: var(--bone);
+}
+.foot__title em { font-style: italic; color: var(--slate); padding-right: 0.04em; }
+.foot__act { display: flex; flex-direction: column; gap: 28px; }
+.foot__lead { margin: 0; max-width: 40ch; font-size: 17px; line-height: 1.65; color: var(--mist); text-wrap: pretty; }
+.foot__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+.foot__mail {
+  position: relative; display: inline-flex; align-items: center; min-height: 44px;
+  font-size: 16px; color: var(--bone); overflow-wrap: anywhere;
+}
+.foot__mail::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: var(--steel);
+  transform-origin: right; transition: transform 0.5s var(--ease-out), background 0.3s;
+}
+.foot__mail:hover::after { background: var(--bone); animation: footLine 0.7s var(--ease-out); }
+@keyframes footLine { 0% { transform: scaleX(1); transform-origin: right; } 45% { transform: scaleX(0); transform-origin: right; } 55% { transform: scaleX(0); transform-origin: left; } 100% { transform: scaleX(1); transform-origin: left; } }
+
+.foot__grid {
+  margin-top: clamp(72px, 9vw, 128px); padding-top: 48px; border-top: 1px solid var(--rule);
+  display: grid; gap: 40px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+}
+@media (min-width: 900px) { .foot__grid { grid-template-columns: 2fr 1fr 1fr; } }
+.foot__brand { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+/* El logo nunca se estira: alto fijo, ancho por proporción, sin estirarse en el eje cruzado del flex. */
+.foot__brand img { display: block; flex: none; align-self: flex-start; height: 32px; width: auto; max-width: none; }
+.foot__brand p { margin: 0; max-width: 36ch; font-size: 15px; line-height: 1.65; color: var(--mist); }
+.foot__col { display: flex; flex-direction: column; align-items: flex-start; }
+.foot__col h3 { margin: 0 0 6px; font-size: 14px; font-weight: 500; color: var(--slate); }
+.foot__col a {
+  display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; color: var(--mist);
+  transition: color 0.25s, transform 0.4s var(--ease-out);
+}
+.foot__col a:hover { color: var(--white); transform: translateX(4px); }
+
+/* Marca gigante: el tamaño sale del ancho del contenedor (cqi), así nunca desborda. */
+.foot__markwrap { container-type: inline-size; margin-top: clamp(56px, 8vw, 112px); }
+.foot__mark {
+  margin: 0; padding-bottom: 0.06em; white-space: nowrap; user-select: none;
+  font-family: var(--fh); font-weight: 400; font-size: min(22.5cqi, 300px); line-height: 0.9; letter-spacing: -0.02em;
+  color: var(--steel);
+}
+.foot__mark span { display: inline-block; }
+.foot__mark span:last-child { font-style: italic; color: var(--slate); }
+/* Revelado: sube desde una máscara al entrar (lo dispara Reveal con .is-in). */
+.reveal-on .foot__mark[data-reveal] {
+  opacity: 1; transform: none;
+  clip-path: inset(100% 0 -30% 0);
+  transition: clip-path 1.5s var(--ease-out);
+}
+.reveal-on .foot__mark[data-reveal] span { transform: translateY(40%); transition: transform 1.5s var(--ease-out); }
+.reveal-on .foot__mark[data-reveal] span:last-child { transition-delay: 0.12s; }
+.reveal-on .foot__mark[data-reveal].is-in { clip-path: inset(-20% 0 -30% 0); }
+.reveal-on .foot__mark[data-reveal].is-in span { transform: none; }
+.reveal-on:not(.reveal-live) .foot__mark[data-reveal] { animation: none; clip-path: none; }
+.reveal-on:not(.reveal-live) .foot__mark[data-reveal] span { transform: none; }
+
+.foot__legal {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 24px;
+  padding-top: 16px; padding-bottom: 20px; border-top: 1px solid var(--rule);
+  font-size: 13px; color: var(--slate);
+}
+.foot__top { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--mist); }
+.foot__top svg { transition: transform 0.4s var(--ease-out); }
+.foot__top:hover svg { transform: translateY(-3px); }

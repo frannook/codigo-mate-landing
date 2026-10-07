@@ -1,9 +1,11 @@
-import Image from 'next/image';
 import Booking from '@/components/Booking';
 import ChatWidget from '@/components/ChatWidget';
 import FocusChatLink from '@/components/FocusChatLink';
+import Footer from '@/components/Footer';
 import Motion from '@/components/Motion';
-import MotionToggle from '@/components/MotionToggle';
+import Nav from '@/components/Nav';
+import NightStory from '@/components/NightStory';
+import Quote from '@/components/Quote';
 import Reveal from '@/components/Reveal';
 import Steps from '@/components/Steps';
 import Testimonials from '@/components/Testimonials';
@@ -29,45 +31,15 @@ const ASKS: [string, string][] = [
   ['¿Cuánto cuesta y cuánto tarda?', 'Precio, plazos y qué incluye']
 ];
 
-function Logo({ height }: { height: number }) {
-  return <Image src="/logo-light.png" alt="Código Mate" width={1307} height={406} style={{ height, width: 'auto' }} priority={height > 30} />;
-}
-
 export default function Home() {
   return (
     <>
       <Reveal />
       <Motion />
+      <Nav />
       <div className="top">
         <div aria-hidden="true" className="top__glow" />
         <div aria-hidden="true" className="top__grid" />
-
-        <nav className="nav" aria-label="Principal">
-          <div className="wrap nav__inner">
-            <a href="#top" className="nav__brand" aria-label="Código Mate, inicio">
-              <Logo height={36} />
-            </a>
-            <div className="nav__links only-wide">
-              <a href="#probalo" className="nav__link">
-                Probalo
-              </a>
-              <a href="#como" className="nav__link">
-                Cómo trabajamos
-              </a>
-              <a href="#testimonios" className="nav__link">
-                Clientes
-              </a>
-            </div>
-            <div className="nav__right">
-              <MotionToggle />
-              <a href="#agendar" className="nav__cta">
-                <span className="only-wide">Agendar una llamada</span>
-                <span className="only-narrow">Agendar</span>
-                <ArrowRight />
-              </a>
-            </div>
-          </div>
-        </nav>
 
         <header id="top" className="wrap hero">
           <div className="hero__copy">
@@ -156,48 +128,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section section--what">
-        <div className="wrap section__inner what">
-          <div data-reveal="up" className="what__head">
-            <h2 className="h2" data-headline>
-              Un empleado que no duerme, <em className="accent">sabe todo</em> y avisa cuando te necesita.
-            </h2>
-          </div>
-          <div className="bento">
-            <article data-reveal="up" data-spot className="tile tile--wide">
-              <div className="tile__vis tile__vis--clock" aria-hidden="true">
-                <span>24</span>
-                <small>horas</small>
-              </div>
-              <h3>Atiende a cualquier hora</h3>
-              <p>Dudas de precios, horarios, envíos y cambios. Respuestas al instante, de noche, domingos y feriados, con el tono de tu marca.</p>
-            </article>
-            <article data-reveal="up" data-spot className="tile">
-              <div className="tile__vis tile__vis--track" aria-hidden="true">
-                <i />
-                <i />
-                <i />
-              </div>
-              <h3>Sigue pedidos y resuelve</h3>
-              <p>Consulta el estado, explica políticas y cierra el problema en la misma conversación.</p>
-            </article>
-            <article data-reveal="up" data-spot className="tile">
-              <div className="tile__vis tile__vis--wa" aria-hidden="true">
-                <span>Pasa a tu WhatsApp</span>
-              </div>
-              <h3>Te llama cuando hace falta</h3>
-              <p>Si necesita una persona, te pasa la charla completa para que no repitas preguntas.</p>
-            </article>
-            <article data-reveal="up" data-spot className="tile tile--wide">
-              <div className="tile__vis tile__vis--code" aria-hidden="true">
-                <code>&lt;script src=&quot;codigomate.js&quot;&gt;</code>
-              </div>
-              <h3>Una línea de código y está en línea</h3>
-              <p>Funciona en cualquier plataforma: tienda, sitio a medida o landing. Nosotros nos encargamos de la instalación.</p>
-            </article>
-          </div>
-        </div>
-      </section>
+      <NightStory />
 
       <section id="como" className="section section--how">
         <div className="wrap section__inner how">
@@ -223,7 +154,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="agendar" className="section section--book">
+      <Quote />
+
+      <section id="agendar" className="section section--book ambient">
         <div className="wrap section__inner book">
           <div data-reveal="left" className="book__intro">
             <h2 className="h2" data-headline>
@@ -237,30 +170,13 @@ export default function Home() {
               <span>Te confirmamos por email y WhatsApp</span>
             </div>
           </div>
-          <div data-reveal="right" className="form-card">
+          <div data-reveal="right" className="glass glass--strong bk-card">
             <Booking />
           </div>
         </div>
       </section>
 
-      <footer className="footer">
-        <div data-reveal="up" className="wrap footer__inner">
-          <div className="footer__brand">
-            <Logo height={32} />
-            <p>Agentes de IA que atienden a tus clientes desde tu web y te pasan a WhatsApp cuando hace falta.</p>
-          </div>
-          <nav className="footer__nav" aria-label="Pie de página">
-            <a href="#probalo">Probalo</a>
-            <a href="#como">Cómo trabajamos</a>
-            <a href="#testimonios">Clientes</a>
-            <a href="#agendar">Agendar una llamada</a>
-          </nav>
-          <a href="#agendar" className="btn btn--solid footer__cta">
-            Agendar una llamada <ArrowRight />
-          </a>
-        </div>
-        <div className="wrap footer__legal">© 2026 Código Mate · Hecho en Argentina</div>
-      </footer>
+      <Footer />
     </>
   );
 }

@@ -1,0 +1,145 @@
+/* ---------- Cotizador (components/Quote.tsx) ---------- */
+/* overflow: clip (y no hidden) para que el resumen pueda ser sticky. */
+.section.qt { overflow: clip; background: var(--navy); scroll-margin-top: 72px; }
+.qt__inner { display: flex; flex-direction: column; gap: clamp(40px, 5vw, 64px); }
+.qt__head { display: flex; flex-direction: column; gap: 20px; max-width: 680px; }
+.qt__head .lead { max-width: 560px; }
+.qt__grid { display: grid; gap: 40px; align-items: start; }
+@media (min-width: 960px) {
+  .qt__grid { grid-template-columns: minmax(0, 1fr) 380px; gap: clamp(40px, 5vw, 72px); }
+}
+
+/* Inputs nativos invisibles sobre su etiqueta: teclado y lectores de pantalla funcionan solos. */
+.qt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.qt input:disabled { cursor: default; }
+
+.qt__form { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
+.qt__group { margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.qt__group legend { padding: 0; margin-bottom: 14px; font-size: 19px; font-weight: 500; letter-spacing: -0.01em; color: var(--bone); }
+.qt__hint { margin: 0; font-size: 14px; line-height: 1.55; color: var(--mist); }
+.qt__examples { color: var(--bone); }
+
+/* Chips de rubro */
+.qt__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.qt__chip { position: relative; display: flex; }
+.qt__chip span {
+  display: flex; align-items: center; min-height: 44px; padding: 8px 16px; border-radius: 999px;
+  border: 1px solid var(--steel); background: var(--navy-800); color: var(--bone); font-size: 14px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.qt__chip:hover span { border-color: var(--slate); }
+.qt__chip input:checked + span { background: var(--bone); border-color: var(--bone); color: var(--navy); }
+
+/* Control segmentado */
+.qt__seg {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px;
+  border-radius: 14px; background: var(--navy-800); border: 1px solid var(--rule);
+}
+.qt__seg--two { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 560px) {
+  .qt__seg { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .qt__seg--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.qt__segopt { position: relative; display: flex; }
+.qt__segopt > span {
+  flex: 1; display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 8px 10px;
+  border-radius: 10px; font-size: 14px; color: var(--mist); text-align: center; font-variant-numeric: tabular-nums;
+  transition: background 0.25s var(--ease-out), color 0.2s;
+}
+.qt__segopt:hover > span { color: var(--white); }
+.qt__segopt input:checked + span { background: var(--navy-500); color: var(--white); box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.08); }
+.qt__segopt--tall > span { flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px 16px; text-align: left; }
+.qt__segopt--tall strong { font-weight: 500; font-size: 15px; color: var(--bone); }
+.qt__segopt--tall strong small { margin-left: 6px; font-weight: 400; font-size: 13px; color: var(--mist); }
+.qt__segopt--tall > span > small { font-size: 13px; line-height: 1.45; color: var(--mist); }
+
+/* Funciones con interruptor */
+.qt__features { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.qt__features li { border-bottom: 1px solid var(--rule); }
+.qt__feat {
+  position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; align-items: start;
+  padding: 18px 4px; min-height: 44px; cursor: pointer; border-radius: 10px; transition: background 0.2s;
+}
+.qt__feat:hover { background: rgba(27, 38, 59, 0.5); }
+.qt__switch {
+  position: relative; width: 44px; height: 26px; margin-top: 1px; border-radius: 999px; flex-shrink: 0;
+  background: var(--navy-600); box-shadow: inset 0 0 0 1px var(--steel); transition: background 0.25s;
+}
+.qt__switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--mist); transition: transform 0.3s var(--ease-out), background 0.25s;
+}
+.qt__feat input:checked + .qt__switch { background: var(--bone); box-shadow: none; }
+.qt__feat input:checked + .qt__switch::after { transform: translateX(18px); background: var(--navy); }
+.qt__feat input:disabled + .qt__switch { opacity: 0.7; }
+.qt__feattext { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.qt__featname { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 16px; font-weight: 500; color: var(--bone); }
+.qt__featdesc { font-size: 14px; line-height: 1.5; color: var(--mist); text-wrap: pretty; }
+.qt__featprice { grid-column: 2; font-size: 13px; color: var(--mist); font-variant-numeric: tabular-nums; }
+.qt__feat[data-on] .qt__featprice { color: var(--bone); }
+@media (min-width: 640px) {
+  .qt__feat { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .qt__featprice { grid-column: 3; padding-top: 3px; text-align: right; white-space: nowrap; }
+}
+.qt__tag { padding: 2px 9px; border-radius: 999px; border: 1px solid var(--steel); font-size: 12px; font-weight: 400; color: var(--mist); }
+
+/* Foco visible en el elemento que se ve */
+.qt__chip input:focus-visible + span,
+.qt__segopt input:focus-visible + span,
+.qt__feat input:focus-visible + .qt__switch { outline: 2px solid var(--bone); outline-offset: 3px; }
+
+/* ---------- Resumen ---------- */
+/* Fondo propio por si .glass (app/styles/glass.css) todavía no existe. */
+.qt__card {
+  display: flex; flex-direction: column; gap: 24px; padding: 28px; border-radius: 18px;
+  background: rgba(27, 38, 59, 0.78); border: 1px solid rgba(119, 141, 169, 0.24);
+  -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.06), 0 40px 80px -40px rgba(0, 0, 0, 0.7);
+}
+.qt__totals { display: flex; flex-direction: column; gap: 18px; }
+.qt__total { display: flex; flex-direction: column; gap: 4px; }
+.qt__total + .qt__total { padding-top: 18px; border-top: 1px solid var(--rule); }
+.qt__totallabel { font-size: 13px; color: var(--mist); }
+.qt__num {
+  font-family: var(--fh); font-size: clamp(44px, 4.4vw, 56px); line-height: 1; letter-spacing: -0.01em;
+  color: var(--white); font-variant-numeric: tabular-nums;
+}
+.qt__num small { margin-left: 4px; font-family: var(--fb); font-size: 15px; color: var(--mist); letter-spacing: 0; }
+.qt__detail { display: flex; flex-direction: column; gap: 20px; }
+.qt__list { list-style: none; margin: 0; padding: 18px 0 0; border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 9px; font-size: 14px; color: var(--bone); }
+.qt__list li { display: flex; gap: 10px; line-height: 1.45; }
+.qt__list li::before { content: ''; flex-shrink: 0; width: 5px; height: 5px; margin-top: 0.55em; border-radius: 50%; background: var(--slate); }
+.qt__note { margin: 0; font-size: 13px; line-height: 1.5; color: var(--mist); }
+.qt__cta { justify-content: center; width: 100%; white-space: normal; text-align: center; height: auto; min-height: 52px; padding: 12px 20px; }
+.qt__bar { display: none; }
+
+@media (min-width: 960px) {
+  .qt__aside { position: sticky; top: 104px; }
+}
+
+/* Móvil: el resumen es una barra fija abajo que se expande. Solo mientras la sección está en pantalla. */
+@media (max-width: 959.98px) {
+  .qt__inner { padding-bottom: calc(clamp(80px, 11vw, 140px) + 72px); }
+  .qt__aside {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: 0 8px calc(8px + env(safe-area-inset-bottom));
+    transform: translateY(110%); visibility: hidden;
+    transition: transform 0.45s var(--ease-out), visibility 0s linear 0.45s;
+  }
+  .qt__aside[data-inview] { transform: none; visibility: visible; transition: transform 0.45s var(--ease-out), visibility 0s; }
+  .qt__card { gap: 16px; padding: 8px 8px 8px 18px; border-radius: 16px; max-height: calc(100dvh - 96px); overflow-y: auto; }
+  .qt__aside[data-open] .qt__card { padding: 8px 18px 18px; }
+  .qt__totals { display: none; }
+  .qt__detail { display: none; }
+  .qt__aside[data-open] .qt__detail { display: flex; animation: cmIn 0.35s var(--ease-out) both; }
+  .qt__bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 52px;
+    padding: 0; border: 0; background: none; color: var(--bone); cursor: pointer; text-align: left;
+  }
+  .qt__barnums { display: flex; flex-direction: column; gap: 2px; font-variant-numeric: tabular-nums; }
+  .qt__barnums span:first-child { font-family: var(--fh); font-size: 24px; line-height: 1; color: var(--white); }
+  .qt__barnums span:last-child { font-size: 13px; color: var(--mist); }
+  .qt__barlabel {
+    display: flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px;
+    border: 1px solid rgba(119, 141, 169, 0.4); font-size: 14px;
+  }
+}

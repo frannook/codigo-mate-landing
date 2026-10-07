@@ -8,14 +8,14 @@ import Lenis from 'lenis';
 import { motionOn } from '@/lib/motion';
 
 // Capa de movimiento: scroll suave (Lenis), barra de progreso, paralaje, titulares palabra por palabra,
-// cinta que reacciona a la velocidad del scroll, botones magnéticos y brillo que sigue al cursor.
+// cinta que reacciona a la velocidad del scroll y botones magnéticos.
 // Si el movimiento está apagado (interruptor o sistema) no se arma nada y la página se ve completa.
 export default function Motion() {
   useEffect(() => {
     if (!motionOn()) return;
     gsap.registerPlugin(ScrollTrigger, SplitText);
 
-    const lenis = new Lenis({ lerp: 0.09, anchors: { offset: -72 } });
+    const lenis = new Lenis({ lerp: 0.09, anchors: { offset: -88 } });
     lenis.on('scroll', ScrollTrigger.update);
     const tick = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(tick);
@@ -59,11 +59,6 @@ export default function Motion() {
         });
       }
 
-      // Visuales de las tarjetas y de los pasos se desplazan a distinta velocidad que el texto.
-      gsap.utils.toArray<HTMLElement>('.tile__vis, .tcard').forEach(el =>
-        gsap.fromTo(el, { yPercent: 6 }, { yPercent: -6, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } })
-      );
-
       // Botones magnéticos.
       gsap.utils.toArray<HTMLElement>('.btn--solid, .nav__cta').forEach(el => {
         const x = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3' });
@@ -80,18 +75,7 @@ export default function Motion() {
       });
     });
 
-    // Spotlight en tarjetas: posición del cursor como variables CSS.
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-spot]'));
-    const move = (e: PointerEvent) => {
-      const el = e.currentTarget as HTMLElement;
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      el.style.setProperty('--my', `${e.clientY - r.top}px`);
-    };
-    cards.forEach(c => c.addEventListener('pointermove', move));
-
     return () => {
-      cards.forEach(c => c.removeEventListener('pointermove', move));
       ctx.revert();
       gsap.ticker.remove(tick);
       lenis.destroy();

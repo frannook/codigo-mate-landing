@@ -1,0 +1,83 @@
+/* ---------- Testimonios: marquee de cards ---------- */
+.tm { --tm-gap: clamp(14px, 1.6vw, 20px); display: flex; flex-direction: column; gap: 24px; }
+
+/* Lista real: solo para lectores con movimiento prendido; grilla visible con movimiento apagado. */
+.tm__list {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  margin: 0; padding: 0; list-style: none;
+}
+:root[data-motion='off'] .tm__list {
+  position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal;
+  display: grid; gap: var(--tm-gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+:root[data-motion='off'] .tm__list .tm__card { width: auto; height: 100%; margin: 0; }
+:root[data-motion='off'] .tm__rows,
+:root[data-motion='off'] .tm__ctrl { display: none; }
+
+/* Filas a todo el ancho (la sección y el body ya recortan el desborde horizontal). */
+.tm__rows {
+  margin-inline: calc(50% - 50vw); padding-block: 14px; display: flex; flex-direction: column; gap: var(--tm-gap);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.tm__row { touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+.tm__row.is-drag { cursor: grabbing; }
+.tm__row:nth-child(3) { display: none; }
+@media (min-width: 1024px) { .tm__row:nth-child(3) { display: block; } }
+.tm__track { display: flex; align-items: stretch; width: max-content; will-change: transform; }
+
+/* Card: vidrio sutil sobre navy, filo de luz arriba, brillo de borde que sigue al cursor. */
+.tm__card {
+  --mx: 50%; --my: 0px;
+  position: relative; flex: 0 0 auto; width: clamp(280px, 28vw, 400px); margin: 0 var(--tm-gap) 0 0;
+  padding: clamp(20px, 2.2vw, 28px); border-radius: 18px;
+  display: flex; flex-direction: column; gap: 18px;
+  background: rgba(27, 38, 59, 0.62);
+  border: 1px solid rgba(119, 141, 169, 0.16);
+  box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.1), 0 1px 2px rgba(5, 10, 18, 0.3);
+  transition: transform 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out);
+}
+.tm__card::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: radial-gradient(220px circle at var(--mx) var(--my), rgba(224, 225, 221, 0.6), rgba(119, 141, 169, 0.18) 45%, transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0; transition: opacity 0.4s var(--ease-out);
+}
+@media (hover: hover) {
+  .tm__card:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.14), 0 18px 40px -18px rgba(5, 10, 18, 0.7);
+  }
+  .tm__card:hover::before { opacity: 1; }
+}
+
+.tm__chip {
+  align-self: flex-start; padding: 5px 11px; border-radius: 999px; font-size: 12.5px; line-height: 1.3; color: var(--mist);
+  background: rgba(119, 141, 169, 0.12); border: 1px solid rgba(119, 141, 169, 0.22);
+}
+.tm__quote {
+  flex: 1; margin: 0; font-family: var(--fh); font-size: clamp(20px, 1.75vw, 24px); line-height: 1.3;
+  color: var(--bone); text-wrap: pretty;
+}
+.tm__who { display: flex; align-items: center; gap: 12px; }
+.tm__avatar {
+  flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--navy-500); border: 1px solid rgba(175, 187, 203, 0.22); color: var(--bone);
+  font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+}
+.tm__id { display: flex; flex-direction: column; font-size: 13.5px; color: var(--mist); }
+.tm__id strong { color: var(--bone); font-weight: 500; font-size: 14.5px; }
+
+/* Pausa (WCAG 2.2.2) */
+.tm__ctrl { display: flex; justify-content: flex-end; }
+.tm__pause {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border-radius: 999px;
+  border: 1px solid rgba(119, 141, 169, 0.35); background: transparent; color: var(--bone);
+  font: inherit; font-size: 14px; cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.tm__pause:hover { border-color: var(--slate); background: rgba(119, 141, 169, 0.1); }
+.tm__pause[aria-pressed='true'] { background: var(--bone); color: var(--navy); border-color: var(--bone); }
+.tm__pause:focus-visible { outline: 2px solid var(--bone); outline-offset: 3px; }
