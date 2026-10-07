@@ -6,8 +6,10 @@ import { buildSystemPrompt } from '@/lib/chat/store';
 
 export const runtime = 'nodejs';
 
-// Modelo configurable por variable de entorno. gemini-2.5-flash tiene capa gratuita en Google AI Studio.
-const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+// Modelo configurable por variable de entorno. gemini-3.1-flash-lite tiene capa gratuita en Google AI Studio.
+const MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+// Si el modelo principal está saturado (503), se reintenta una vez con este.
+const FALLBACK_MODEL = 'gemini-3.5-flash-lite';
 const MAX_MESSAGES = 16;
 const MAX_LEN = 2000;
 const SYSTEM = buildSystemPrompt();
@@ -67,9 +69,9 @@ export async function POST(req: Request) {
     parts: [{ text: m.content }]
   }));
 
-  try {
-    const response = await client.models.generateContent({
-      model: MODEL,
+  const generate = (model: string) =>
+    client!.models.generateContent({
+      model,
       contents,
       config: {
         systemInstruction: SYSTEM,
@@ -78,6 +80,12 @@ export async function POST(req: Request) {
         // Chat de soporte: respuestas rápidas, sin gastar tokens en "pensar".
         thinkingConfig: { thinkingBudget: 0 }
       }
+    });
+
+  try {
+    const response = await generate(MODEL).catch(error => {
+      if (error instanceof ApiError && error.status === 503 && MODEL !== FALLBACK_MODEL) return generate(FALLBACK_MODEL);
+      throw error;
     });
     const reply = (response.text || '').trim();
     if (!reply) {
