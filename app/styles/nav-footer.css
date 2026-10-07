@@ -147,7 +147,7 @@
 @keyframes footLine { 0% { transform: scaleX(1); transform-origin: right; } 45% { transform: scaleX(0); transform-origin: right; } 55% { transform: scaleX(0); transform-origin: left; } 100% { transform: scaleX(1); transform-origin: left; } }
 
 .foot__grid {
-  margin-top: clamp(72px, 9vw, 128px); padding-top: 48px; border-top: 1px solid var(--rule);
+  margin-top: clamp(72px, 9vw, 128px); padding-top: 48px;
   display: grid; gap: 40px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
 }
 @media (min-width: 900px) { .foot__grid { grid-template-columns: 2fr 1fr 1fr; } }
@@ -166,30 +166,34 @@
 /* Marca gigante: el tamaño sale del ancho del contenedor (cqi), así nunca desborda. */
 .foot__markwrap { container-type: inline-size; margin-top: clamp(56px, 8vw, 112px); }
 .foot__mark {
-  margin: 0; padding-bottom: 0.06em; white-space: nowrap; user-select: none;
+  margin: 0; padding-bottom: 0.2em; white-space: nowrap; user-select: none;
   font-family: var(--fh); font-weight: 400; font-size: min(22.5cqi, 300px); line-height: 0.9; letter-spacing: -0.02em;
   color: var(--steel);
 }
 .foot__mark span { display: inline-block; }
 .foot__mark span:last-child { font-style: italic; color: var(--slate); }
-/* Revelado: sube desde una máscara al entrar (lo dispara Reveal con .is-in). */
-.reveal-on .foot__mark[data-reveal] {
-  opacity: 1; transform: none;
-  clip-path: inset(100% 0 -30% 0);
+/* Revelado: sube desde una máscara al entrar (Reveal pone .is-in en el contenedor).
+   El clip-path va en el hijo: si estuviera en el elemento observado, IntersectionObserver lo ve recortado y nunca dispara. */
+.reveal-on .foot__markwrap[data-reveal] { opacity: 1; transform: none; }
+.reveal-on [data-reveal] > .foot__mark {
+  clip-path: inset(100% 0 0 0);
   transition: clip-path 1.5s var(--ease-out);
 }
-.reveal-on .foot__mark[data-reveal] span { transform: translateY(40%); transition: transform 1.5s var(--ease-out); }
-.reveal-on .foot__mark[data-reveal] span:last-child { transition-delay: 0.12s; }
-.reveal-on .foot__mark[data-reveal].is-in { clip-path: inset(-20% 0 -30% 0); }
-.reveal-on .foot__mark[data-reveal].is-in span { transform: none; }
-.reveal-on:not(.reveal-live) .foot__mark[data-reveal] { animation: none; clip-path: none; }
-.reveal-on:not(.reveal-live) .foot__mark[data-reveal] span { transform: none; }
+.reveal-on [data-reveal] > .foot__mark span { transform: translateY(40%); transition: transform 1.5s var(--ease-out); }
+.reveal-on [data-reveal] > .foot__mark span:last-child { transition-delay: 0.12s; }
+.reveal-on [data-reveal].is-in > .foot__mark { clip-path: inset(-20% 0 0 0); }
+.reveal-on [data-reveal].is-in > .foot__mark span { transform: none; }
+.reveal-on:not(.reveal-live) .foot__markwrap[data-reveal] { animation: none; }
+.reveal-on:not(.reveal-live) [data-reveal] > .foot__mark { clip-path: none; }
+.reveal-on:not(.reveal-live) [data-reveal] > .foot__mark span { transform: none; }
 
 .foot__legal {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 24px;
-  padding-top: 16px; padding-bottom: 20px; border-top: 1px solid var(--rule);
+  padding-top: 16px; padding-bottom: 20px;
   font-size: 13px; color: var(--slate);
 }
+/* Filetes al ancho de la columna (no del padding de .wrap), como el resto de las secciones. */
+.foot__grid, .foot__legal { background: linear-gradient(var(--rule), var(--rule)) no-repeat 50% 0 / calc(100% - 48px) 1px; }
 .foot__top { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--mist); }
 .foot__top svg { transition: transform 0.4s var(--ease-out); }
 .foot__top:hover svg { transform: translateY(-3px); }

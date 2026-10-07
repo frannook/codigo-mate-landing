@@ -15,7 +15,7 @@ export default function Motion() {
     if (!motionOn()) return;
     gsap.registerPlugin(ScrollTrigger, SplitText);
 
-    const lenis = new Lenis({ lerp: 0.09, anchors: { offset: -88 } });
+    const lenis = new Lenis({ lerp: 0.09, anchors: true }) // el alto del nav sale de scroll-padding-top (html), igual que sin Lenis;
     lenis.on('scroll', ScrollTrigger.update);
     const tick = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(tick);

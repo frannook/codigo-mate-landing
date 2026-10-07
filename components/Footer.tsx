@@ -51,8 +51,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="wrap foot__markwrap">
-        <p className="foot__mark" data-reveal="mark" aria-hidden="true">
+      <div className="wrap foot__markwrap" data-reveal="mark">
+        <p className="foot__mark" aria-hidden="true">
           <span>Código</span> <span>Mate</span>
         </p>
       </div>

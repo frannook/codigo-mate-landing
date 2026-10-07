@@ -295,7 +295,7 @@ html.lenis, html.lenis body { height: auto; }
 /* ---------- Secciones ---------- */
 .section { border-top: 1px solid var(--rule); overflow: hidden; }
 .section--how { background: var(--navy); }
-.section--book { background: var(--navy-900); scroll-margin-top: 72px; }
+.section--book { background: var(--navy-900); }
 .section__inner { padding-top: clamp(80px, 11vw, 140px); padding-bottom: clamp(80px, 11vw, 140px); }
 .h2 {
   margin: 0; font-family: var(--fh); font-weight: 400; letter-spacing: -0.01em;

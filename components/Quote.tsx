@@ -194,7 +194,7 @@ export default function Quote() {
           </div>
 
           <aside className="qt__aside" data-open={open || undefined} data-inview={inView || undefined} aria-label="Tu estimación">
-            <div className="qt__card glass">
+            <div className="qt__card glass glass--strong">
               <button
                 type="button"
                 className="qt__bar"

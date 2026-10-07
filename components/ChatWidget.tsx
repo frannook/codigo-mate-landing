@@ -112,8 +112,10 @@ export default function ChatWidget({ showcase = false }: { showcase?: boolean })
 
   const send = async (text: string) => {
     takeOver();
+    // El mensaje ya aparece en la charla: se vacía el campo al instante y vuelve si no se pudo enviar.
+    setDraft('');
     const sent = await sessionRef.current!.send(text);
-    if (sent) setDraft('');
+    if (!sent) setDraft(d => d || text);
   };
 
   sendRef.current = send;

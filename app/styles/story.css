@@ -14,9 +14,10 @@
 }
 
 .ns__head {
-  display: flex; flex-direction: column; gap: 18px; max-width: 820px;
+  display: flex; flex-direction: column; gap: 18px;
   padding-top: clamp(80px, 11vw, 140px); padding-bottom: clamp(40px, 5vw, 64px);
 }
+.ns__head > .h2 { max-width: 820px; }
 .ns__lead { margin: 0; max-width: 46ch; font-size: 17px; line-height: 1.65; color: var(--mist); text-wrap: pretty; }
 
 /* ---------- Cielo ---------- */
@@ -46,6 +47,9 @@
   background:
     radial-gradient(70% 55% at 30% 105%, rgba(119, 141, 169, 0.32), transparent 70%),
     linear-gradient(to top, rgba(65, 90, 119, 0.45), rgba(36, 51, 73, 0.2) 45%, transparent 80%);
+  /* El amanecer se apaga antes del borde: sin corte duro contra la sección siguiente. */
+  -webkit-mask-image: linear-gradient(to top, transparent, #000 30%);
+  mask-image: linear-gradient(to top, transparent, #000 30%);
 }
 
 /* ---------- Escenas (base apilada) ---------- */
