@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Chivo:wght@400;500;700&family=Archivo:wght@400;500;800&display=swap" rel="stylesheet">
+<style>
+:root{--fh:"Instrument Serif",Georgia,serif;--fb:"Geist",system-ui,sans-serif;--fhw:400;--fhls:-0.01em}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:#0D1B2A;color:#E0E1DD;font-family:var(--fb);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:#E0E1DD;text-decoration:none}
+a:hover{color:#FFFFFF}
+input,textarea,button{font-family:inherit}
+:focus-visible{outline:2px solid #778DA9;outline-offset:3px}
+::selection{background:#415A77;color:#E0E1DD}
+@keyframes cmIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes cmDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-2px)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</helmet>
+
+<div style="position:relative;overflow:hidden">
+  <div aria-hidden="true" style="position:absolute;top:-320px;left:50%;width:1100px;height:760px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(65,90,119,.42),rgba(65,90,119,0));pointer-events:none"></div>
+  <div aria-hidden="true" style="position:absolute;inset:0;background-image:linear-gradient(to right,rgba(119,141,169,.06) 1px,transparent 1px),linear-gradient(to bottom,rgba(119,141,169,.06) 1px,transparent 1px);background-size:80px 80px;-webkit-mask-image:radial-gradient(90% 60% at 50% 0%,#000,transparent 80%);mask-image:radial-gradient(90% 60% at 50% 0%,#000,transparent 80%);pointer-events:none"></div>
+
+  <nav data-screen-label="Nav" aria-label="Principal" style="position:sticky;top:0;z-index:20;background:#0D1B2A;border-bottom:1px solid rgba(119,141,169,.16)">
+    <div style="max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="#top" aria-label="Código Mate, inicio" style="display:flex;align-items:center;flex-shrink:0;isolation:isolate;background:#0D1B2A">
+        <img src="uploads/logo.jpeg" alt="Código Mate" style="height:40px;width:auto;display:block;filter:brightness(3.4) saturate(.55);mix-blend-mode:screen">
+      </a>
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:center;gap:32px">
+          <a href="#demo" style="font-size:14px;color:#AFBBCB;white-space:nowrap;padding:6px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s" style-hover="color:#E0E1DD;border-color:#778DA9">Servicio</a>
+          <a href="#como" style="font-size:14px;color:#AFBBCB;white-space:nowrap;padding:6px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s" style-hover="color:#E0E1DD;border-color:#778DA9">Cómo trabajamos</a>
+          <a href="#agendar" style="font-size:14px;color:#AFBBCB;white-space:nowrap;padding:6px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s" style-hover="color:#E0E1DD;border-color:#778DA9">Contacto</a>
+        </div>
+      </sc-if>
+      <a href="#agendar" style="display:flex;align-items:center;gap:8px;white-space:nowrap;flex-shrink:0;height:44px;padding:0 18px;border-radius:999px;background:#E0E1DD;color:#0D1B2A;font-size:14px;font-weight:500;transition:background .2s,transform .2s" style-hover="background:#FFFFFF;color:#0D1B2A;transform:translateY(-1px)">
+        <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><span>Agendar una llamada</span></sc-if>
+        <sc-if value="{{ narrow }}"><span>Agendar</span></sc-if>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header id="top" data-screen-label="Hero" style="position:relative;max-width:1200px;margin:0 auto;padding:clamp(48px,8vw,104px) 24px clamp(72px,10vw,128px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));column-gap:clamp(40px,6vw,88px);row-gap:56px;align-items:center">
+    <div style="display:flex;flex-direction:column;gap:28px;max-width:560px;animation:cmIn .7s cubic-bezier(.2,.7,.2,1) both">
+      <div style="display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#778DA9">
+        <span aria-hidden="true" style="width:24px;height:1px;background:#778DA9"></span>
+        <span>Agentes de IA para webs que ya existen</span>
+      </div>
+      <h1 style="margin:0;font-family:var(--fh);font-weight:var(--fhw);letter-spacing:var(--fhls);font-size:clamp(48px,6.2vw,84px);line-height:1;text-wrap:balance">Tu web ahora <em style="font-style:italic;color:#778DA9;padding-right:.04em">atiende</em> a tus clientes.</h1>
+      <p style="margin:0;max-width:500px;font-size:clamp(16px,1.4vw,18px);line-height:1.65;color:#AFBBCB;text-wrap:pretty">Sumamos un agente a tu sitio que responde dudas, sigue pedidos y resuelve problemas en el momento, las 24 horas. Cuando hace falta una persona, pasa la conversación a tu WhatsApp con todo el contexto.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;padding-top:4px">
+        <a href="#agendar" style="display:flex;align-items:center;gap:10px;white-space:nowrap;height:52px;padding:0 24px;border-radius:999px;background:#E0E1DD;color:#0D1B2A;font-weight:500;font-size:15px;transition:background .2s,transform .2s" style-hover="background:#FFFFFF;color:#0D1B2A;transform:translateY(-1px)">Agendar una llamada <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+        <a href="#demo" style="display:flex;align-items:center;white-space:nowrap;height:52px;padding:0 24px;border-radius:999px;border:1px solid rgba(119,141,169,.4);color:#E0E1DD;font-weight:500;font-size:15px;transition:border-color .2s,background .2s" style-hover="border-color:#778DA9;background:rgba(27,38,59,.6)">Ver cómo funciona</a>
+      </div>
+      <div style="display:flex;gap:12px 24px;flex-wrap:wrap;padding-top:20px;border-top:1px solid rgba(119,141,169,.16);font-size:14px;color:#778DA9">
+        <span>Se instala con una línea de código</span>
+        <span>Funciona en cualquier plataforma</span>
+      </div>
+    </div>
+
+    <div id="demo" style="position:relative;scroll-margin-top:96px;animation:cmIn .9s .12s cubic-bezier(.2,.7,.2,1) both">
+      <div style="border-radius:14px;border:1px solid rgba(119,141,169,.26);background:#1B263B;box-shadow:inset 0 1px 0 rgba(224,225,221,.05),0 32px 64px -32px rgba(0,0,0,.65);overflow:hidden">
+        <div style="display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid rgba(119,141,169,.16);background:#15202F">
+          <span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#415A77"></span>
+          <span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#415A77"></span>
+          <span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:#415A77"></span>
+          <div style="flex:1;min-width:0;margin-left:10px;padding:6px 12px;border-radius:6px;background:#0D1B2A;font-size:12px;color:#778DA9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">tiendanomade.com.ar/mi-cuenta</div>
+        </div>
+        <div style="position:relative;height:clamp(500px,62vh,560px);padding:22px;background:#1B263B">
+          <div aria-hidden="true" style="display:flex;flex-direction:column;gap:12px;opacity:.5">
+            <div style="height:12px;width:32%;border-radius:3px;background:#415A77"></div>
+            <div style="height:120px;width:52%;border-radius:8px;background:#243349"></div>
+            <div style="height:9px;width:44%;border-radius:3px;background:#2E3F57"></div>
+            <div style="height:9px;width:36%;border-radius:3px;background:#2E3F57"></div>
+          </div>
+
+          <section aria-label="Chat con Mati, asistente de Tienda Nómade" style="position:absolute;right:14px;bottom:14px;top:14px;width:min(352px,calc(100% - 28px));display:flex;flex-direction:column;border-radius:12px;background:#0D1B2A;border:1px solid rgba(119,141,169,.28);box-shadow:0 20px 48px -24px rgba(0,0,0,.75);overflow:hidden">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 12px 12px 16px;background:#E0E1DD;color:#0D1B2A">
+              <div aria-hidden="true" style="width:34px;height:34px;flex-shrink:0;border-radius:50%;background:#0D1B2A;color:#E0E1DD;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:14px">M</div>
+              <div style="display:flex;flex-direction:column;gap:1px;flex:1;min-width:0">
+                <span style="font-weight:600;font-size:14px">Mati · Asistente</span>
+                <span style="font-size:12px;color:#415A77">En línea · responde al instante</span>
+              </div>
+              <button type="button" onClick="{{ chatReset }}" aria-label="Empezar una conversación nueva" title="Nueva conversación" style="width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:none;border-radius:8px;background:transparent;color:#415A77;cursor:pointer;transition:background .2s,color .2s" style-hover="background:rgba(13,27,42,.08);color:#0D1B2A">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+              </button>
+            </div>
+
+            <div ref="{{ chatRef }}" role="log" aria-live="polite" aria-relevant="additions" style="flex:1;overflow-y:auto;overscroll-behavior:contain;padding:16px 14px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:#243349 transparent">
+              <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="1">
+                <sc-if value="{{ m.isBot }}">
+                  <div style="align-self:flex-start;max-width:86%;display:flex;flex-direction:column;gap:8px;animation:cmIn .3s ease both">
+                    <sc-if value="{{ m.text }}">
+                      <div style="padding:10px 13px;border-radius:12px 12px 12px 4px;background:#1B263B;font-size:14px;line-height:1.5;color:#E0E1DD;white-space:pre-wrap;overflow-wrap:anywhere">{{ m.text }}</div>
+                    </sc-if>
+                    <sc-for list="{{ m.orders }}" as="o">
+                      <div style="width:248px;max-width:100%;padding:12px;border-radius:10px;border:1px solid rgba(119,141,169,.28);background:#15202F;display:flex;flex-direction:column;gap:9px">
+                        <div style="display:flex;justify-content:space-between;gap:8px;font-size:12px"><span style="color:#778DA9">Pedido #{{ o.id }}</span><span style="color:#E0E1DD;font-weight:500">{{ o.status }}</span></div>
+                        <div role="progressbar" aria-label="Avance del envío" aria-valuemin="0" aria-valuemax="3" aria-valuenow="{{ o.step }}" style="height:4px;border-radius:2px;background:#243349;overflow:hidden"><div style="width:{{ o.pct }};height:100%;background:#778DA9;transition:width .6s ease"></div></div>
+                        <div style="display:flex;justify-content:space-between;font-size:11px;color:#778DA9"><span>Preparado</span><span>Despachado</span><span>Entregado</span></div>
+                      </div>
+                    </sc-for>
+                    <sc-if value="{{ m.hasHandoff }}">
+                      <div style="align-self:flex-start;display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:#E0E1DD;color:#0D1B2A;font-size:12.5px;font-weight:500">Continuar en WhatsApp con Lucía <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ m.isUser }}">
+                  <div style="align-self:flex-end;max-width:80%;padding:10px 13px;border-radius:12px 12px 4px 12px;background:#415A77;font-size:14px;line-height:1.5;color:#FFFFFF;white-space:pre-wrap;overflow-wrap:anywhere;animation:cmIn .25s ease both">{{ m.text }}</div>
+                </sc-if>
+              </sc-for>
+
+              <sc-if value="{{ showChips }}">
+                <div style="display:flex;flex-wrap:wrap;gap:6px;animation:cmIn .3s .1s ease both">
+                  <sc-for list="{{ chips }}" as="c" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ c.onClick }}" style="min-height:32px;padding:6px 12px;border-radius:999px;border:1px solid #415A77;background:transparent;font-size:12.5px;color:#AFBBCB;cursor:pointer;transition:border-color .2s,color .2s,background .2s" style-hover="border-color:#778DA9;color:#E0E1DD;background:#15202F">{{ c.label }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ loading }}">
+                <div role="status" aria-label="Mati está escribiendo" style="align-self:flex-start;display:flex;gap:4px;padding:13px 14px;border-radius:12px 12px 12px 4px;background:#1B263B;animation:cmIn .2s ease both">
+                  <span style="width:6px;height:6px;border-radius:50%;background:#AFBBCB;animation:cmDot 1s infinite"></span>
+                  <span style="width:6px;height:6px;border-radius:50%;background:#AFBBCB;animation:cmDot 1s .15s infinite"></span>
+                  <span style="width:6px;height:6px;border-radius:50%;background:#AFBBCB;animation:cmDot 1s .3s infinite"></span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ chatError }}">
+                <div role="alert" style="align-self:stretch;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid rgba(119,141,169,.35);background:#15202F;font-size:13px;line-height:1.45;color:#E0E1DD;animation:cmIn .25s ease both">
+                  <span style="flex:1">{{ chatError }}</span>
+                  <sc-if value="{{ canRetry }}">
+                    <button type="button" onClick="{{ chatRetry }}" style="flex-shrink:0;min-height:32px;padding:6px 12px;border-radius:999px;border:1px solid #778DA9;background:transparent;color:#E0E1DD;font-size:12.5px;cursor:pointer;transition:background .2s" style-hover="background:#1B263B">Reintentar</button>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+
+            <form onSubmit="{{ onChatSubmit }}" style="display:flex;align-items:center;gap:6px;margin:0 12px 8px;padding:4px 4px 4px 14px;border-radius:12px;border:1px solid {{ inputBorder }};background:#0D1B2A;transition:border-color .2s">
+              <label for="cm-chat-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Escribí tu consulta</label>
+              <input id="cm-chat-input" ref="{{ inputRef }}" value="{{ draft }}" onChange="{{ onDraft }}" onFocus="{{ onInputFocus }}" onBlur="{{ onInputBlur }}" placeholder="Escribí tu consulta…" maxlength="500" autocomplete="off" enterkeyhint="send" style="flex:1;min-width:0;height:38px;border:none;background:transparent;color:#E0E1DD;font-size:{{ inputFs }};outline:none">
+              <button type="submit" aria-label="Enviar mensaje" disabled="{{ sendDisabled }}" style="width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:none;border-radius:9px;background:{{ sendBg }};color:{{ sendFg }};cursor:pointer;transition:background .2s,color .2s">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg>
+              </button>
+            </form>
+            <div style="padding:0 0 10px;text-align:center;font-size:11px;color:#778DA9">Hecho por Código Mate</div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+<section id="como" data-screen-label="Cómo trabajamos" style="border-top:1px solid rgba(119,141,169,.16);background:#0D1B2A">
+  <div style="max-width:1200px;margin:0 auto;padding:clamp(72px,10vw,128px) 24px;display:flex;flex-direction:column;gap:clamp(40px,5vw,64px)">
+    <div data-reveal="1" style="display:flex;flex-direction:column;gap:20px;max-width:680px">
+      <div style="display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#778DA9">
+        <span aria-hidden="true" style="width:24px;height:1px;background:#778DA9"></span>
+        <span>Cómo trabajamos</span>
+      </div>
+      <h2 style="margin:0;font-family:var(--fh);font-weight:var(--fhw);letter-spacing:var(--fhls);font-size:clamp(36px,4.4vw,58px);line-height:1.04;text-wrap:balance">De la primera charla a tu agente <em style="font-style:italic;color:#778DA9;padding-right:.04em">en línea</em>.</h2>
+    </div>
+    <ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px">
+      <li data-reveal="1" style="padding:32px 28px;border-radius:14px;background:#1B263B;border:1px solid rgba(119,141,169,.16);display:flex;flex-direction:column;transition:border-color .3s" style-hover="border-color:rgba(119,141,169,.42)">
+        <span style="font-family:var(--fh);font-size:30px;line-height:1;color:#778DA9;padding-bottom:20px;margin-bottom:28px;border-bottom:1px solid rgba(119,141,169,.18)">01</span>
+        <h3 style="margin:0 0 12px;font-size:20px;line-height:1.3;font-weight:500;letter-spacing:-.01em">Entendemos tu negocio</h3>
+        <p style="margin:0;max-width:34ch;font-size:15px;line-height:1.65;color:#AFBBCB;text-wrap:pretty">Una llamada para conocer qué te preguntan tus clientes, tu horario, tus precios y tus políticas.</p>
+      </li>
+      <li data-reveal="1" style="padding:32px 28px;border-radius:14px;background:#1B263B;border:1px solid rgba(119,141,169,.16);display:flex;flex-direction:column;transition:border-color .3s" style-hover="border-color:rgba(119,141,169,.42)">
+        <span style="font-family:var(--fh);font-size:30px;line-height:1;color:#778DA9;padding-bottom:20px;margin-bottom:28px;border-bottom:1px solid rgba(119,141,169,.18)">02</span>
+        <h3 style="margin:0 0 12px;font-size:20px;line-height:1.3;font-weight:500;letter-spacing:-.01em">Entrenamos al agente</h3>
+        <p style="margin:0;max-width:34ch;font-size:15px;line-height:1.65;color:#AFBBCB;text-wrap:pretty">Lo armamos con tu información y tu tono de voz, y lo probamos con conversaciones reales antes de publicarlo.</p>
+      </li>
+      <li data-reveal="1" style="padding:32px 28px;border-radius:14px;background:#1B263B;border:1px solid rgba(119,141,169,.16);display:flex;flex-direction:column;transition:border-color .3s" style-hover="border-color:rgba(119,141,169,.42)">
+        <span style="font-family:var(--fh);font-size:30px;line-height:1;color:#778DA9;padding-bottom:20px;margin-bottom:28px;border-bottom:1px solid rgba(119,141,169,.18)">03</span>
+        <h3 style="margin:0 0 12px;font-size:20px;line-height:1.3;font-weight:500;letter-spacing:-.01em">Lo instalamos en tu web</h3>
+        <p style="margin:0;max-width:34ch;font-size:15px;line-height:1.65;color:#AFBBCB;text-wrap:pretty">Una línea de código en tu sitio y queda activo. Las consultas que necesitan una persona llegan a tu WhatsApp.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="agendar" data-screen-label="Agendar llamada" style="border-top:1px solid rgba(119,141,169,.16);background:#0B1724;scroll-margin-top:72px">
+  <div style="max-width:1200px;margin:0 auto;padding:clamp(72px,10vw,128px) 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:56px;align-items:start">
+    <div data-reveal="1" style="display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#778DA9">
+        <span aria-hidden="true" style="width:24px;height:1px;background:#778DA9"></span>
+        <span>Agendá una llamada</span>
+      </div>
+      <h2 style="margin:0;font-family:var(--fh);font-weight:var(--fhw);letter-spacing:var(--fhls);font-size:clamp(36px,4.4vw,58px);line-height:1.04;text-wrap:balance">Contanos de tu web y <em style="font-style:italic;color:#778DA9;padding-right:.04em">tomemos un mate</em>.</h2>
+      <p style="margin:0;max-width:440px;font-size:17px;line-height:1.6;color:#AFBBCB">30 minutos por videollamada. Revisamos tu sitio, las consultas que más recibís y te mostramos cómo quedaría tu agente.</p>
+      <div style="display:flex;flex-direction:column;gap:12px;padding-top:16px;border-top:1px solid rgba(119,141,169,.18);font-size:15px;color:#AFBBCB">
+        <span>Sin costo y sin compromiso</span>
+        <span>Te confirmamos por email y WhatsApp</span>
+      </div>
+    </div>
+
+    <div data-reveal="1" style="padding:28px;border-radius:14px;background:#1B263B;border:1px solid rgba(119,141,169,.2)">
+      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px">
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#AFBBCB">Nombre
+              <input value="{{ f.name }}" onChange="{{ h.name }}" placeholder="Tu nombre" autocomplete="name" style="height:48px;padding:0 14px;border-radius:10px;border:1px solid #415A77;background:#0D1B2A;color:#E0E1DD;font-size:16px;outline:none;transition:border-color .2s" style-focus="border-color:#E0E1DD">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#AFBBCB">Email
+              <input type="email" value="{{ f.email }}" onChange="{{ h.email }}" placeholder="vos@empresa.com" autocomplete="email" style="height:48px;padding:0 14px;border-radius:10px;border:1px solid #415A77;background:#0D1B2A;color:#E0E1DD;font-size:16px;outline:none;transition:border-color .2s" style-focus="border-color:#E0E1DD">
+            </label>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#AFBBCB">Tu sitio web
+            <input value="{{ f.web }}" onChange="{{ h.web }}" placeholder="www.tunegocio.com" autocomplete="url" style="height:48px;padding:0 14px;border-radius:10px;border:1px solid #415A77;background:#0D1B2A;color:#E0E1DD;font-size:16px;outline:none;transition:border-color .2s" style-focus="border-color:#E0E1DD">
+          </label>
+          <div role="group" aria-label="Tipo de negocio" style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:13px;color:#AFBBCB">Tipo de negocio</span>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ rubros }}" as="r" hint-placeholder-count="5">
+                <button type="button" aria-pressed="{{ r.sel }}" onClick="{{ r.onClick }}" style="min-height:40px;padding:8px 14px;border-radius:999px;border:1px solid {{ r.bd }};background:{{ r.bg }};color:{{ r.fg }};font-size:13px;cursor:pointer;transition:background .2s,border-color .2s">{{ r.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div role="group" aria-label="Día" style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:13px;color:#AFBBCB">Elegí un día</span>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px">
+              <sc-for list="{{ days }}" as="d" hint-placeholder-count="8">
+                <button type="button" aria-pressed="{{ d.sel }}" aria-label="{{ d.label }}" onClick="{{ d.onClick }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border-radius:10px;border:1px solid {{ d.bd }};background:{{ d.bg }};color:{{ d.fg }};cursor:pointer;transition:background .2s,border-color .2s">
+                  <span style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.8">{{ d.dow }}</span>
+                  <span style="font-size:20px;font-weight:500">{{ d.day }}</span>
+                  <span style="font-size:11px;opacity:.8">{{ d.mon }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <div role="group" aria-label="Horario" style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:13px;color:#AFBBCB">Horario (hora Argentina)</span>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px">
+              <sc-for list="{{ times }}" as="t" hint-placeholder-count="5">
+                <button type="button" aria-pressed="{{ t.sel }}" onClick="{{ t.onClick }}" style="min-height:44px;padding:10px;border-radius:10px;border:1px solid {{ t.bd }};background:{{ t.bg }};color:{{ t.fg }};font-size:14px;cursor:pointer;transition:background .2s,border-color .2s">{{ t.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#AFBBCB">¿Qué te gustaría resolver? (opcional)
+            <textarea value="{{ f.msg }}" onChange="{{ h.msg }}" rows="3" placeholder="Ej: nos escriben mucho por envíos y cambios" style="padding:13px 14px;border-radius:10px;border:1px solid #415A77;background:#0D1B2A;color:#E0E1DD;font-size:16px;outline:none;resize:vertical;transition:border-color .2s" style-focus="border-color:#E0E1DD"></textarea>
+          </label>
+          <sc-if value="{{ error }}">
+            <span role="alert" style="font-size:13px;color:#E0E1DD;padding:10px 12px;border-radius:10px;background:#415A77">{{ error }}</span>
+          </sc-if>
+          <button type="button" onClick="{{ submit }}" style="display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 22px;border-radius:999px;border:none;background:#E0E1DD;color:#0D1B2A;font-size:15px;font-weight:500;cursor:pointer;transition:background .2s,transform .2s" style-hover="background:#FFFFFF;transform:translateY(-1px)">Confirmar llamada <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ sent }}">
+        <div role="status" style="display:flex;flex-direction:column;gap:18px;padding:12px 4px;animation:cmIn .5s ease both">
+          <div aria-hidden="true" style="width:52px;height:52px;border-radius:50%;background:#E0E1DD;color:#0D1B2A;display:flex;align-items:center;justify-content:center;font-size:24px">✓</div>
+          <h3 style="margin:0;font-family:var(--fh);font-weight:var(--fhw);font-size:36px;line-height:1.05">¡Listo, {{ f.name }}!</h3>
+          <p style="margin:0;font-size:16px;line-height:1.6;color:#AFBBCB">Agendamos tu llamada para el <strong style="color:#E0E1DD;font-weight:500">{{ summary }}</strong>. Te mandamos el link a {{ f.email }}.</p>
+          <button type="button" onClick="{{ reset }}" style="width:fit-content;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid #415A77;background:transparent;color:#E0E1DD;font-size:14px;cursor:pointer;transition:background .2s" style-hover="background:#0D1B2A">Cambiar fecha</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</section>
+
+<footer style="border-top:1px solid rgba(119,141,169,.16);background:#0B1724">
+  <div style="max-width:1200px;margin:0 auto;padding:32px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;color:#778DA9">
+    <div style="isolation:isolate;background:#0B1724;display:flex"><img src="uploads/logo.jpeg" alt="Código Mate" style="height:32px;width:auto;filter:brightness(3.4) saturate(.55);mix-blend-mode:screen"></div>
+    <span>© 2026 Código Mate · Agentes de IA para tu web</span>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;fontPair&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Instrument Serif + Geist&quot;,&quot;Bricolage + Chivo&quot;,&quot;Archivo&quot;],&quot;default&quot;:&quot;Instrument Serif + Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Tipografía&quot;},&quot;chatEndpoint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chat&quot;}}">
+const FONTS = {
+  'Instrument Serif + Geist': ['"Instrument Serif",Georgia,serif', '"Geist",system-ui,sans-serif', 400, '-0.01em'],
+  'Bricolage + Chivo': ['"Bricolage Grotesque",sans-serif', '"Chivo",system-ui,sans-serif', 800, '-0.035em'],
+  'Archivo': ['"Archivo",sans-serif', '"Archivo",system-ui,sans-serif', 800, '-0.03em']
+};
+const RUBROS = ['E-commerce', 'Servicios', 'Salud', 'Educación', 'Gastronomía', 'Otro'];
+const TIMES = ['10:00', '11:30', '14:00', '15:30', '17:00'];
+const DOW = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+const MON = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const mod = p => import(new URL(p, document.baseURI).href);
+
+class Component extends DCLogic {
+  state = {
+    chat: { messages: [], status: 'idle', error: null, hasUserMessages: false },
+    draft: '', inputFocus: false, wide: true, quick: [],
+    f: { name: '', email: '', web: '', msg: '', rubro: '', date: '', time: '' }, sent: false, error: ''
+  };
+  chatRef = React.createRef();
+  inputRef = React.createRef();
+
+  async componentDidMount() {
+    this.applyFonts();
+    this.mq = window.matchMedia('(min-width: 760px)');
+    this.onMq = () => this.setState({ wide: this.mq.matches });
+    this.onMq();
+    this.mq.addEventListener('change', this.onMq);
+    this.reveal();
+    try {
+      const [engine, prov] = await Promise.all([mod('chat/chat-engine.js'), mod('chat/chat-provider.js')]);
+      this.createProvider = prov.createProvider;
+      this.session = new engine.ChatSession({
+        provider: prov.createProvider({ endpoint: this.props.chatEndpoint || '' }),
+        onChange: chat => this.setState({ chat })
+      });
+      this.setState({ quick: engine.QUICK_REPLIES });
+    } catch (e) {
+      console.warn('[chat] no se pudo cargar', e);
+      this.setState({ chat: { messages: [], status: 'error', error: 'No se pudo cargar el asistente.', hasUserMessages: false } });
+    }
+  }
+  componentDidUpdate(pp, ps) {
+    if (pp.fontPair !== this.props.fontPair) this.applyFonts();
+    if (pp.chatEndpoint !== this.props.chatEndpoint && this.session) this.session.setProvider(this.createProvider({ endpoint: this.props.chatEndpoint || '' }));
+    const a = ps.chat, b = this.state.chat;
+    if (a.messages.length !== b.messages.length || a.status !== b.status) {
+      const el = this.chatRef.current;
+      if (el) requestAnimationFrame(() => el.scrollTo({ top: el.scrollHeight, behavior: this.reduced ? 'auto' : 'smooth' }));
+    }
+  }
+  componentWillUnmount() {
+    this.io && this.io.disconnect();
+    this.mq && this.mq.removeEventListener('change', this.onMq);
+    this.session && this.session.reset();
+  }
+
+  applyFonts() {
+    const p = FONTS[this.props.fontPair] || FONTS['Instrument Serif + Geist'];
+    const s = document.documentElement.style;
+    s.setProperty('--fh', p[0]); s.setProperty('--fb', p[1]); s.setProperty('--fhw', p[2]); s.setProperty('--fhls', p[3]);
+  }
+  reveal() {
+    this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (this.reduced || !('IntersectionObserver' in window)) return;
+    const els = document.querySelectorAll('[data-reveal]');
+    this.io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'none'; this.io.unobserve(e.target); }
+    }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach((el, i) => {
+      el.style.opacity = '0'; el.style.transform = 'translateY(16px)';
+      el.style.transition = `opacity .7s ease ${(i % 3) * 0.07}s, transform .7s cubic-bezier(.2,.7,.2,1) ${(i % 3) * 0.07}s, border-color .3s`;
+      this.io.observe(el);
+    });
+  }
+  async sendChat(text) {
+    if (!this.session) return;
+    const sent = await this.session.send(text);
+    if (sent) this.setState({ draft: '' });
+  }
+  setF(k, v) { this.setState(s => ({ f: { ...s.f, [k]: v }, error: '' })); }
+  chip(sel, onClick, label, extra) {
+    return { label, onClick, sel, ...extra, bg: sel ? '#E0E1DD' : '#0D1B2A', fg: sel ? '#0D1B2A' : '#E0E1DD', bd: sel ? '#E0E1DD' : '#415A77' };
+  }
+
+  renderVals() {
+    const { f, sent, error, chat, draft, wide, inputFocus, quick } = this.state;
+    const loading = chat.status === 'loading';
+    const canSend = !!draft.trim() && !loading && !!this.session;
+    const msgs = chat.messages.map(m => {
+      const orders = (m.attachments || []).filter(a => a.type === 'order').map(o => ({ ...o, pct: `${Math.round((o.step / 3) * 100)}%` }));
+      return { id: m.id, text: m.text, isBot: m.role === 'assistant', isUser: m.role === 'user', orders, hasHandoff: (m.attachments || []).some(a => a.type === 'handoff') };
+    });
+    const last = chat.messages[chat.messages.length - 1];
+    const days = [];
+    const d = new Date(); d.setHours(12);
+    while (days.length < 8) {
+      d.setDate(d.getDate() + 1);
+      if (d.getDay() === 0 || d.getDay() === 6) continue;
+      const key = `${DOW[d.getDay()]} ${d.getDate()} de ${MON[d.getMonth()]}`;
+      days.push(this.chip(f.date === key, () => this.setF('date', key), key, { dow: DOW[d.getDay()], day: d.getDate(), mon: MON[d.getMonth()] }));
+    }
+    const h = {};
+    ['name', 'email', 'web', 'msg'].forEach(k => { h[k] = e => this.setF(k, e.target.value); });
+    return {
+      wide, narrow: !wide,
+      chatRef: this.chatRef, inputRef: this.inputRef,
+      msgs, loading, draft,
+      chatError: chat.status === 'error' ? chat.error : '',
+      canRetry: chat.status === 'error' && last && last.role === 'user',
+      showChips: !chat.hasUserMessages && chat.messages.length > 0 && !loading,
+      chips: quick.map(label => ({ label, onClick: () => this.sendChat(label) })),
+      onDraft: e => this.setState({ draft: e.target.value }),
+      onInputFocus: () => this.setState({ inputFocus: true }),
+      onInputBlur: () => this.setState({ inputFocus: false }),
+      onChatSubmit: e => { e.preventDefault(); if (canSend) this.sendChat(draft); },
+      chatRetry: () => this.session && this.session.retry(),
+      chatReset: () => { this.session && this.session.reset(); this.setState({ draft: '' }); },
+      sendDisabled: !canSend,
+      sendBg: canSend ? '#E0E1DD' : '#1B263B',
+      sendFg: canSend ? '#0D1B2A' : '#778DA9',
+      inputBorder: inputFocus ? '#778DA9' : 'rgba(119,141,169,.25)',
+      inputFs: wide ? '14px' : '16px',
+      f, h, days, error, sent, notSent: !sent,
+      rubros: RUBROS.map(r => this.chip(f.rubro === r, () => this.setF('rubro', r), r)),
+      times: TIMES.map(t => this.chip(f.time === t, () => this.setF('time', t), t)),
+      summary: `${f.date} a las ${f.time} h`,
+      submit: () => {
+        if (!f.name.trim()) return this.setState({ error: 'Falta tu nombre.' });
+        if (!/^\S+@\S+\.\S+$/.test(f.email)) return this.setState({ error: 'Revisá el email.' });
+        if (!f.date || !f.time) return this.setState({ error: 'Elegí un día y un horario.' });
+        this.setState({ sent: true });
+      },
+      reset: () => this.setState(s => ({ sent: false, f: { ...s.f, date: '', time: '' } }))
+    };
+  }
+}
+</script>
+</body>
+</html>

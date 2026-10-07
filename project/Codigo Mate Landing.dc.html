@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Chivo:wght@400;500;700&family=Archivo:wght@400;500;800&display=swap" rel="stylesheet">
+<style>
+:root{--fh:"Instrument Serif",Georgia,serif;--fb:"Geist",system-ui,sans-serif;--fhw:400;--fhls:-0.01em}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#0D1B2A;color:#E0E1DD;font-family:var(--fb);-webkit-font-smoothing:antialiased}
+a{color:#E0E1DD;text-decoration:none}
+a:hover{color:#FFFFFF}
+input,textarea,button{font-family:inherit}
+::selection{background:#415A77;color:#E0E1DD}
+@keyframes cmIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes cmDot{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+@keyframes cmFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes cmPulse{0%{box-shadow:0 0 0 0 rgba(224,225,221,.35)}100%{box-shadow:0 0 0 10px rgba(224,225,221,0)}}
+</style>
+</helmet>
+
+<div style="position:relative;min-height:100vh;overflow:hidden">
+  <div style="position:absolute;top:-280px;left:50%;width:1100px;height:760px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(65,90,119,.55),rgba(65,90,119,0));pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background-image:linear-gradient(to right,rgba(119,141,169,.07) 1px,transparent 1px),linear-gradient(to bottom,rgba(119,141,169,.07) 1px,transparent 1px);background-size:80px 80px;-webkit-mask-image:radial-gradient(90% 60% at 50% 0%,#000,transparent 80%);mask-image:radial-gradient(90% 60% at 50% 0%,#000,transparent 80%);pointer-events:none"></div>
+
+  <nav data-screen-label="Nav" style="position:sticky;top:0;z-index:20;background:#0D1B2A;border-bottom:1px solid rgba(119,141,169,.16)">
+    <div style="max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+      <a href="#top" style="display:flex;align-items:center;flex-shrink:0;isolation:isolate;background:#0D1B2A;border-radius:8px">
+        <img src="uploads/logo.jpeg" alt="Código Mate" style="height:42px;width:auto;display:block;filter:brightness(3.4) saturate(.55);mix-blend-mode:screen">
+      </a>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;padding:5px;border:1px solid rgba(119,141,169,.2);border-radius:999px;background:rgba(27,38,59,.6)">
+        <a href="#demo" style="padding:8px 16px;border-radius:999px;font-size:14px;color:#AFBBCB;white-space:nowrap" style-hover="background:#1B263B;color:#E0E1DD">Servicio</a>
+        <a href="#como" style="padding:8px 16px;border-radius:999px;font-size:14px;color:#AFBBCB;white-space:nowrap" style-hover="background:#1B263B;color:#E0E1DD">Cómo trabajamos</a>
+        <a href="#agendar" style="padding:8px 16px;border-radius:999px;font-size:14px;color:#AFBBCB;white-space:nowrap" style-hover="background:#1B263B;color:#E0E1DD">Contacto</a>
+      </div>
+      <a href="#agendar" style="display:flex;align-items:center;gap:10px;white-space:nowrap;flex-shrink:0;padding:11px 18px;border-radius:999px;background:#E0E1DD;color:#0D1B2A;font-size:14px;font-weight:600;transition:transform .2s" style-hover="transform:translateY(-1px);color:#0D1B2A;background:#FFFFFF">Agendar una llamada <span style="font-size:16px">→</span></a>
+    </div>
+  </nav>
+
+  <header id="top" data-screen-label="Hero" style="position:relative;max-width:1200px;margin:0 auto;padding:72px 24px 96px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:56px;align-items:center">
+    <div style="display:flex;flex-direction:column;gap:28px;animation:cmIn .8s ease both">
+      <div style="display:flex;align-items:center;gap:10px;width:fit-content;white-space:nowrap;padding:7px 14px 7px 8px;border-radius:999px;border:1px solid rgba(119,141,169,.28);background:rgba(27,38,59,.7);font-size:13px;color:#AFBBCB">
+        <span style="width:8px;height:8px;border-radius:50%;background:#E0E1DD;margin-left:4px;animation:cmPulse 1.6s infinite"></span>
+        Agentes de IA para webs que ya existen
+      </div>
+      <h1 style="margin:0;font-family:var(--fh);font-weight:var(--fhw);letter-spacing:var(--fhls);font-size:clamp(46px,6.4vw,86px);line-height:.98;text-wrap:balance">Tu web ahora <span style="font-style:italic;color:#778DA9">atiende</span> a tus clientes.</h1>
+      <p style="margin:0;max-width:520px;font-size:18px;line-height:1.6;color:#AFBBCB;text-wrap:pretty">Sumamos un agente a tu sitio que responde dudas, sigue pedidos y resuelve problemas en el momento, las 24 horas. Cuando hace falta una persona, pasa la conversación a tu WhatsApp con todo el contexto.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="#agendar" style="display:flex;align-items:center;gap:10px;white-space:nowrap;padding:15px 24px;border-radius:999px;background:#E0E1DD;color:#0D1B2A;font-weight:600;font-size:15px;transition:transform .2s" style-hover="transform:translateY(-2px);color:#0D1B2A;background:#FFFFFF">Agendar una llamada <span>→</span></a>
+        <a href="#demo" style="display:flex;align-items:center;gap:10px;white-space:nowrap;padding:15px 24px;border-radius:999px;border:1px solid rgba(119,141,169,.4);color:#E0E1DD;font-weight:500;font-size:15px" style-hover="background:#1B263B">Ver cómo funciona</a>
+      </div>
+      <div style="display:flex;gap:28px;flex-wrap:wrap;padding-top:8px;font-size:14px;color:#778DA9">
+        <span>Se instala con una línea de código</span>
+        <span>Funciona en cualquier plataforma</span>
+      </div>
+    </div>
+
+    <div id="demo" style="position:relative;animation:cmIn 1s .15s ease both">
+      <div style="animation:cmFloat 7s ease-in-out infinite">
+        <div style="border-radius:18px;border:1px solid rgba(119,141,169,.28);background:#1B263B;box-shadow:0 40px 90px -30px rgba(0,0,0,.7);overflow:hidden">
+          <div style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(119,141,169,.18);background:#15202F">
+            <span style="width:10px;height:10px;border-radius:50%;background:#415A77"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#415A77"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#415A77"></span>
+            <div style="flex:1;margin-left:12px;padding:6px 12px;border-radius:8px;background:#0D1B2A;font-size:12px;color:#778DA9">tiendanomade.com.ar/mi-cuenta</div>
+          </div>
+          <div style="position:relative;height:540px;padding:22px;background:#1B263B">
+            <div style="display:flex;flex-direction:column;gap:12px;opacity:.55">
+              <div style="height:14px;width:38%;border-radius:4px;background:#415A77"></div>
+              <div style="height:120px;width:56%;border-radius:10px;background:#243349"></div>
+              <div style="height:10px;width:48%;border-radius:4px;background:#2E3F57"></div>
+              <div style="height:10px;width:40%;border-radius:4px;background:#2E3F57"></div>
+            </div>
+
+            <div style="position:absolute;right:18px;bottom:18px;top:18px;width:min(340px,calc(100% - 36px));display:flex;flex-direction:column;border-radius:16px;background:#0D1B2A;border:1px solid rgba(119,141,169,.3);box-shadow:0 24px 60px -20px rgba(0,0,0,.8);overflow:hidden">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#E0E1DD;color:#0D1B2A">
+                <div style="width:36px;height:36px;border-radius:50%;background:#0D1B2A;color:#E0E1DD;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px">M</div>
+                <div style="display:flex;flex-direction:column;gap:2px;flex:1">
+                  <span style="font-weight:600;font-size:14px">Mati · Asistente</span>
+                  <span style="font-size:12px;color:#415A77">En línea · responde al instante</span>
+                </div>
+              </div>
+              <div ref="{{ chatRef }}" style="flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:10px;scrollbar-width:none">
+                <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="2">
+                  <sc-if value="{{ m.isBot }}">
+                    <div style="align-self:flex-start;max-width:84%;padding:10px 13px;border-radius:14px 14px 14px 4px;background:#1B263B;font-size:13.5px;line-height:1.5;color:#E0E1DD;animation:cmIn .35s ease both">{{ m.text }}</div>
+                  </sc-if>
+                  <sc-if value="{{ m.isUser }}">
+                    <div style="align-self:flex-end;max-width:80%;padding:10px 13px;border-radius:14px 14px 4px 14px;background:#415A77;font-size:13.5px;line-height:1.5;color:#FFFFFF;animation:cmIn .35s ease both">{{ m.text }}</div>
+                  </sc-if>
+                  <sc-if value="{{ m.isChips }}">
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;animation:cmIn .35s ease both">
+                      <span style="padding:6px 11px;border-radius:999px;border:1px solid #415A77;font-size:12px;color:#AFBBCB">Seguir mi pedido</span>
+                      <span style="padding:6px 11px;border-radius:999px;border:1px solid #415A77;font-size:12px;color:#AFBBCB">Cambios y devoluciones</span>
+                      <span style="padding:6px 11px;border-radius:999px;border:1px solid #415A77;font-size:12px;color:#AFBBCB">Medios de pago</span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ m.isCard }}">
+                    <div style="align-self:flex-start;width:84%;padding:12px;border-radius:12px;border:1px solid rgba(119,141,169,.3);background:#15202F;display:flex;flex-direction:column;gap:8px;animation:cmIn .35s ease both">
+                      <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#778DA9">Pedido #4821</span><span style="color:#E0E1DD;font-weight:500">En camino</span></div>
+                      <div style="height:5px;border-radius:3px;background:#243349;overflow:hidden"><div style="width:66%;height:100%;background:#778DA9"></div></div>
+                      <div style="display:flex;justify-content:space-between;font-size:11px;color:#778DA9"><span>Preparado</span><span>Despachado</span><span>Entregado</span></div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ m.isHandoff }}">
+                    <div style="align-self:flex-start;display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:#E0E1DD;color:#0D1B2A;font-size:12.5px;font-weight:600;animation:cmIn .35s ease both">Continuar en WhatsApp con Lucía →</div>
+                  </sc-if>
+                </sc-for>
+                <sc-if value="{{ typing }}">
+                  <div style="align-self:flex-start;display:flex;gap:4px;padding:12px 14px;border-radius:14px 14px 14px 4px;background:#1B263B">
+                    <span style="width:6px;height:6px;border-radius:50%;background:#AFBBCB;animation:cmDot 1s infinite"></span>
+                    <span style="width:6px;height:6px;border-radius:50%;background:#AFBBCB;animation:cmDot 1s .15s infinite"></span>
+                    <span style="width:6px;height:6px;border-radius:50%;background:#AFBBCB;animation:cmDot 1s .3s infinite"></span>
+                  </div>
+                </sc-if>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;margin:0 12px 10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(119,141,169,.25);font-size:13px;color:#778DA9">
+                <span style="flex:1">Escribí tu consulta…</span><span style="color:#E0E1DD">↑</span>
+              </div>
+              <div style="padding:0 0 10px;text-align:center;font-size:10.5px;color:#5E7390">Hecho por Código Mate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+<section id="como" data-screen-label="Cómo trabajamos" style="border-top:1px solid rgba(119,141,169,.16);background:#0D1B2A">
+  <div style="max-width:1200px;margin:0 auto;padding:110px 24px;display:flex;flex-direction:column;gap:56px">
+    <div data-reveal="1" style="display:flex;flex-direction:column;gap:18px;max-width:720px">
+      <span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#778DA9">Cómo trabajamos</span>
+      <h2 style="margin:0;font-family:var(--fh);font-weight:var(--fhw);letter-spacing:var(--fhls);font-size:clamp(36px,4.6vw,60px);line-height:1.02;text-wrap:balance">De la primera charla a tu agente <span style="font-style:italic;color:#778DA9">en línea</span>.</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px">
+      <div data-reveal="1" style="padding:28px;border-radius:18px;background:#1B263B;border:1px solid rgba(119,141,169,.18);display:flex;flex-direction:column;gap:14px;min-height:240px" style-hover="border-color:rgba(119,141,169,.45)">
+        <span style="font-family:var(--fh);font-size:40px;color:#415A77;line-height:1">01</span>
+        <h3 style="margin:0;font-size:20px;font-weight:600">Entendemos tu negocio</h3>
+        <p style="margin:0;font-size:15px;line-height:1.6;color:#AFBBCB">Una llamada para conocer qué te preguntan tus clientes, tu horario, tus precios y tus políticas.</p>
+      </div>
+      <div data-reveal="1" style="padding:28px;border-radius:18px;background:#1B263B;border:1px solid rgba(119,141,169,.18);display:flex;flex-direction:column;gap:14px;min-height:240px" style-hover="border-color:rgba(119,141,169,.45)">
+        <span style="font-family:var(--fh);font-size:40px;color:#415A77;line-height:1">02</span>
+        <h3 style="margin:0;font-size:20px;font-weight:600">Entrenamos al agente</h3>
+        <p style="margin:0;font-size:15px;line-height:1.6;color:#AFBBCB">Lo armamos con tu información y tu tono de voz, y lo probamos con conversaciones reales antes de publicarlo.</p>
+      </div>
+      <div data-reveal="1" style="padding:28px;border-radius:18px;background:#1B263B;border:1px solid rgba(119,141,169,.18);display:flex;flex-direction:column;gap:14px;min-height:240px" style-hover="border-color:rgba(119,141,169,.45)">
+        <span style="font-family:var(--fh);font-size:40px;color:#415A77;line-height:1">03</span>
+        <h3 style="margin:0;font-size:20px;font-weight:600">Lo instalamos en tu web</h3>
+        <p style="margin:0;font-size:15px;line-height:1.6;color:#AFBBCB">Una línea de código en tu sitio y queda activo. Las consultas que necesitan una persona llegan a tu WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="agendar" data-screen-label="Agendar llamada" style="border-top:1px solid rgba(119,141,169,.16);background:#0B1724">
+  <div style="max-width:1200px;margin:0 auto;padding:110px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:56px;align-items:start">
+    <div data-reveal="1" style="display:flex;flex-direction:column;gap:22px">
+      <span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#778DA9">Agendá una llamada</span>
+      <h2 style="margin:0;font-family:var(--fh);font-weight:var(--fhw);letter-spacing:var(--fhls);font-size:clamp(36px,4.6vw,60px);line-height:1.02;text-wrap:balance">Contanos de tu web y <span style="font-style:italic;color:#778DA9">tomemos un mate</span>.</h2>
+      <p style="margin:0;max-width:440px;font-size:17px;line-height:1.6;color:#AFBBCB">30 minutos por videollamada. Revisamos tu sitio, las consultas que más recibís y te mostramos cómo quedaría tu agente.</p>
+      <div style="display:flex;flex-direction:column;gap:12px;padding-top:12px;border-top:1px solid rgba(119,141,169,.18);font-size:15px;color:#AFBBCB">
+        <span>Sin costo y sin compromiso</span>
+        <span>Te confirmamos por email y WhatsApp</span>
+      </div>
+    </div>
+
+    <div data-reveal="1" style="padding:28px;border-radius:20px;background:#1B263B;border:1px solid rgba(119,141,169,.22)">
+      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px">
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#AFBBCB">Nombre
+              <input value="{{ f.name }}" onChange="{{ h.name }}" placeholder="Tu nombre" style="padding:13px 14px;border-radius:12px;border:1px solid #415A77;background:#0D1B2A;color:#E0E1DD;font-size:15px;outline:none" style-focus="border-color:#E0E1DD">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#AFBBCB">Email
+              <input type="email" value="{{ f.email }}" onChange="{{ h.email }}" placeholder="vos@empresa.com" style="padding:13px 14px;border-radius:12px;border:1px solid #415A77;background:#0D1B2A;color:#E0E1DD;font-size:15px;outline:none" style-focus="border-color:#E0E1DD">
+            </label>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#AFBBCB">Tu sitio web
+            <input value="{{ f.web }}" onChange="{{ h.web }}" placeholder="www.tunegocio.com" style="padding:13px 14px;border-radius:12px;border:1px solid #415A77;background:#0D1B2A;color:#E0E1DD;font-size:15px;outline:none" style-focus="border-color:#E0E1DD">
+          </label>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:13px;color:#AFBBCB">Tipo de negocio</span>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ rubros }}" as="r" hint-placeholder-count="5">
+                <button type="button" onClick="{{ r.onClick }}" style="padding:8px 14px;border-radius:999px;border:1px solid {{ r.bd }};background:{{ r.bg }};color:{{ r.fg }};font-size:13px;cursor:pointer">{{ r.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:13px;color:#AFBBCB">Elegí un día</span>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px">
+              <sc-for list="{{ days }}" as="d" hint-placeholder-count="8">
+                <button type="button" onClick="{{ d.onClick }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border-radius:12px;border:1px solid {{ d.bd }};background:{{ d.bg }};color:{{ d.fg }};cursor:pointer">
+                  <span style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.8">{{ d.dow }}</span>
+                  <span style="font-size:20px;font-weight:600">{{ d.day }}</span>
+                  <span style="font-size:11px;opacity:.8">{{ d.mon }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:13px;color:#AFBBCB">Horario (hora Argentina)</span>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px">
+              <sc-for list="{{ times }}" as="t" hint-placeholder-count="5">
+                <button type="button" onClick="{{ t.onClick }}" style="padding:10px;border-radius:10px;border:1px solid {{ t.bd }};background:{{ t.bg }};color:{{ t.fg }};font-size:14px;cursor:pointer">{{ t.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#AFBBCB">¿Qué te gustaría resolver? (opcional)
+            <textarea value="{{ f.msg }}" onChange="{{ h.msg }}" rows="3" placeholder="Ej: nos escriben mucho por envíos y cambios" style="padding:13px 14px;border-radius:12px;border:1px solid #415A77;background:#0D1B2A;color:#E0E1DD;font-size:15px;outline:none;resize:vertical" style-focus="border-color:#E0E1DD"></textarea>
+          </label>
+          <sc-if value="{{ error }}">
+            <span style="font-size:13px;color:#E0E1DD;padding:10px 12px;border-radius:10px;background:#415A77">{{ error }}</span>
+          </sc-if>
+          <button type="button" onClick="{{ submit }}" style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-radius:999px;border:none;background:#E0E1DD;color:#0D1B2A;font-size:15px;font-weight:600;cursor:pointer;transition:transform .2s" style-hover="transform:translateY(-2px);background:#FFFFFF">Confirmar llamada <span>→</span></button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ sent }}">
+        <div style="display:flex;flex-direction:column;gap:18px;padding:12px 4px;animation:cmIn .5s ease both">
+          <div style="width:52px;height:52px;border-radius:50%;background:#E0E1DD;color:#0D1B2A;display:flex;align-items:center;justify-content:center;font-size:24px">✓</div>
+          <h3 style="margin:0;font-family:var(--fh);font-weight:var(--fhw);font-size:36px;line-height:1.05">¡Listo, {{ f.name }}!</h3>
+          <p style="margin:0;font-size:16px;line-height:1.6;color:#AFBBCB">Agendamos tu llamada para el <strong style="color:#E0E1DD">{{ summary }}</strong>. Te mandamos el link a {{ f.email }}.</p>
+          <button type="button" onClick="{{ reset }}" style="width:fit-content;padding:11px 18px;border-radius:999px;border:1px solid #415A77;background:transparent;color:#E0E1DD;font-size:14px;cursor:pointer" style-hover="background:#0D1B2A">Cambiar fecha</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</section>
+
+<footer style="border-top:1px solid rgba(119,141,169,.16);background:#0B1724">
+  <div style="max-width:1200px;margin:0 auto;padding:32px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;color:#778DA9">
+    <img src="uploads/logo.jpeg" alt="Código Mate" style="height:32px;width:auto;filter:brightness(3.4) saturate(.55);mix-blend-mode:screen">
+    <span>© 2026 Código Mate · Agentes de IA para tu web</span>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;fontPair&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Instrument Serif + Geist&quot;,&quot;Bricolage + Chivo&quot;,&quot;Archivo&quot;],&quot;default&quot;:&quot;Instrument Serif + Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Tipografía&quot;},&quot;chatAutoplay&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Demo&quot;}}">
+const SCRIPT = [
+  { k: 'bot', text: '¡Hola! Soy Mati, el asistente de Tienda Nómade. ¿En qué te ayudo?' },
+  { k: 'chips' },
+  { k: 'user', text: 'Quiero saber dónde está mi pedido #4821' },
+  { k: 'bot', text: 'Tu pedido salió hoy del depósito. Llega el jueves entre las 9 y las 13 h.' },
+  { k: 'card' },
+  { k: 'user', text: '¿Puedo cambiar la dirección de entrega?' },
+  { k: 'bot', text: 'Sí, todavía estamos a tiempo. Te paso con Lucía para confirmarla.' },
+  { k: 'handoff' }
+];
+const FONTS = {
+  'Instrument Serif + Geist': ['"Instrument Serif",Georgia,serif', '"Geist",system-ui,sans-serif', 400, '-0.01em'],
+  'Bricolage + Chivo': ['"Bricolage Grotesque",sans-serif', '"Chivo",system-ui,sans-serif', 800, '-0.035em'],
+  'Archivo': ['"Archivo",sans-serif', '"Archivo",system-ui,sans-serif', 800, '-0.03em']
+};
+const RUBROS = ['E-commerce', 'Servicios', 'Salud', 'Educación', 'Gastronomía', 'Otro'];
+const TIMES = ['10:00', '11:30', '14:00', '15:30', '17:00'];
+const DOW = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+const MON = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+class Component extends DCLogic {
+  state = { n: 0, typing: false, f: { name: '', email: '', web: '', msg: '', rubro: '', date: '', time: '' }, sent: false, error: '' };
+  chatRef = React.createRef();
+
+  componentDidMount() {
+    this.applyFonts();
+    if (this.props.chatAutoplay ?? true) this.timer = setTimeout(() => this.tick(), 900);
+    else this.setState({ n: SCRIPT.length });
+    this.reveal();
+  }
+  componentDidUpdate(pp) {
+    if (pp.fontPair !== this.props.fontPair) this.applyFonts();
+    const el = this.chatRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    if (pp.chatAutoplay !== this.props.chatAutoplay) {
+      clearTimeout(this.timer);
+      if (this.props.chatAutoplay ?? true) { this.setState({ n: 0, typing: false }); this.timer = setTimeout(() => this.tick(), 600); }
+      else this.setState({ n: SCRIPT.length, typing: false });
+    }
+  }
+  componentWillUnmount() { clearTimeout(this.timer); this.io && this.io.disconnect(); }
+
+  applyFonts() {
+    const p = FONTS[this.props.fontPair] || FONTS['Instrument Serif + Geist'];
+    const s = document.documentElement.style;
+    s.setProperty('--fh', p[0]); s.setProperty('--fb', p[1]); s.setProperty('--fhw', p[2]); s.setProperty('--fhls', p[3]);
+  }
+  reveal() {
+    const els = document.querySelectorAll('[data-reveal]');
+    if (!('IntersectionObserver' in window)) return;
+    this.io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'none'; this.io.unobserve(e.target); }
+    }), { threshold: 0.15 });
+    els.forEach((el, i) => {
+      el.style.opacity = '0'; el.style.transform = 'translateY(28px)';
+      el.style.transition = `opacity .8s ease ${(i % 3) * 0.08}s, transform .8s cubic-bezier(.2,.7,.2,1) ${(i % 3) * 0.08}s`;
+      this.io.observe(el);
+    });
+  }
+  tick() {
+    const { n, typing } = this.state;
+    if (n >= SCRIPT.length) { this.timer = setTimeout(() => { this.setState({ n: 0 }); this.timer = setTimeout(() => this.tick(), 900); }, 4500); return; }
+    const next = SCRIPT[n];
+    if (next.k === 'bot' && !typing) { this.setState({ typing: true }); this.timer = setTimeout(() => this.tick(), 1200); return; }
+    this.setState({ n: n + 1, typing: false });
+    const after = SCRIPT[n + 1];
+    this.timer = setTimeout(() => this.tick(), !after ? 0 : after.k === 'user' ? 1800 : after.k === 'bot' ? 500 : 450);
+  }
+  setF(k, v) { this.setState(s => ({ f: { ...s.f, [k]: v }, error: '' })); }
+  chip(sel, onClick, label, extra) {
+    return { label, onClick, ...extra, bg: sel ? '#E0E1DD' : '#0D1B2A', fg: sel ? '#0D1B2A' : '#E0E1DD', bd: sel ? '#E0E1DD' : '#415A77' };
+  }
+
+  renderVals() {
+    const { f, n, typing, sent, error } = this.state;
+    const msgs = SCRIPT.slice(0, n).map(m => ({ ...m, isBot: m.k === 'bot', isUser: m.k === 'user', isChips: m.k === 'chips', isCard: m.k === 'card', isHandoff: m.k === 'handoff' }));
+    const days = [];
+    const d = new Date(); d.setHours(12);
+    while (days.length < 8) {
+      d.setDate(d.getDate() + 1);
+      if (d.getDay() === 0 || d.getDay() === 6) continue;
+      const key = `${DOW[d.getDay()]} ${d.getDate()} de ${MON[d.getMonth()]}`;
+      days.push(this.chip(f.date === key, () => this.setF('date', key), key, { dow: DOW[d.getDay()], day: d.getDate(), mon: MON[d.getMonth()] }));
+    }
+    const h = {};
+    ['name', 'email', 'web', 'msg'].forEach(k => { h[k] = e => this.setF(k, e.target.value); });
+    return {
+      chatRef: this.chatRef, msgs, typing, f, h, days, error,
+      sent, notSent: !sent,
+      rubros: RUBROS.map(r => this.chip(f.rubro === r, () => this.setF('rubro', r), r)),
+      times: TIMES.map(t => this.chip(f.time === t, () => this.setF('time', t), t)),
+      summary: `${f.date} a las ${f.time} h`,
+      submit: () => {
+        if (!f.name.trim()) return this.setState({ error: 'Falta tu nombre.' });
+        if (!/^\S+@\S+\.\S+$/.test(f.email)) return this.setState({ error: 'Revisá el email.' });
+        if (!f.date || !f.time) return this.setState({ error: 'Elegí un día y un horario.' });
+        this.setState({ sent: true });
+      },
+      reset: () => this.setState(s => ({ sent: false, f: { ...s.f, date: '', time: '' } }))
+    };
+  }
+}
+</script>
+</body>
+</html>
