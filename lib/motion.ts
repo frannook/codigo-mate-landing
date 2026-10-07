@@ -1,7 +1,5 @@
-// Preferencia de movimiento. Por defecto sigue al sistema (prefers-reduced-motion); el interruptor de la barra
-// la sobrescribe y queda guardada. layout.tsx pone data-motion="on|off" en <html> antes del primer pintado.
-export const MOTION_KEY = 'cm-motion';
-
+// El movimiento está siempre activo: layout.tsx pone data-motion="on" en <html> antes del primer pintado.
+// Se mantiene la función para poder apagarlo desde un solo lugar si hiciera falta.
 export function motionOn(): boolean {
   return document.documentElement.dataset.motion !== 'off';
 }

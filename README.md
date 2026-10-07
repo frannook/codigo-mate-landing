@@ -46,7 +46,6 @@ app/api/booking/route.ts         Valida el formulario y manda 2 correos (aviso a
 components/ChatWidget.tsx        Chat: modo vitrina (hero, en loop) y modo real (sección del bot)
 components/Booking.tsx           Formulario de agendar con validación accesible y campo trampa anti-bots
 components/Motion.tsx            GSAP + Lenis: scroll suave, titulares, paralaje, cinta, botones magnéticos
-components/MotionToggle.tsx      Interruptor Motion on/off de la barra
 components/Testimonials.tsx      Carrusel (scroll-snap, flechas, puntos, avance automático)
 components/Steps.tsx             Línea de tiempo animada de "Cómo trabajamos"
 lib/chat/store.ts                System prompt de Mati: base de conocimiento por rubros y dudas de dueños de negocio
@@ -82,8 +81,9 @@ El horario es una **solicitud**, no una reserva: todavía no hay calendario que 
 
 ### Movimiento
 
-El movimiento sigue la preferencia del sistema (`prefers-reduced-motion`). Quien la tiene activada ve la web quieta; el interruptor
-**Motion on/off** de la barra lo sobrescribe y recuerda la elección. Sin movimiento no se arma nada de GSAP/Lenis y la página se ve completa.
+El movimiento está **siempre activo**, también para quien tiene "reducir movimiento" en el sistema (decisión del equipo).
+`app/layout.tsx` pone `data-motion="on"` en `<html>`; para apagarlo en todo el sitio, cambiarlo a `off` ahí. Con `off` no se arma
+nada de GSAP/Lenis y la página se ve completa y quieta. El marquee de testimonios tiene botón de pausa.
 
 ## Cómo venimos trabajando
 
@@ -93,7 +93,7 @@ Resumen de las etapas:
 1. **Diseño:** maqueta en Claude Design → handoff en `project/` → implementación en Next.js.
 2. **Pulido visual:** revisión con las skills de diseño (impeccable, taste), paleta navy/bone intacta, sin estilos de plantilla.
 3. **Estructura de la página:** hero, bot funcional, bento de capacidades, proceso, testimonios, agendar, footer. Se eliminó la FAQ: el bot la reemplaza.
-4. **Motion:** GSAP + Lenis, con interruptor para quien tiene las animaciones del sistema apagadas.
+4. **Motion:** GSAP + Lenis, siempre activo.
 5. **Infraestructura:** chat con Gemini, formulario por correo (Gmail), repositorio y despliegue.
 
 ### Flujo de trabajo del equipo

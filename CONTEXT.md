@@ -15,7 +15,7 @@ La landing de una agencia que instala agentes de IA en webs de negocios. La pág
 | 1. Maqueta | Diseño en Claude Design (`project/`, `chats/`) e implementación base en Next.js | Hecho |
 | 2. Bot | Chat conectado a Gemini con límite por IP y errores controlados | Hecho |
 | 3. Pulido visual | Hero, cinta, bento, testimonios, footer; se quitaron los eyebrows numerados; paleta y fuentes intactas | Hecho |
-| 4. Motion | GSAP + Lenis (scroll suave, titulares por palabra, paralaje, cinta por velocidad, botones magnéticos) e interruptor on/off | Hecho |
+| 4. Motion | GSAP + Lenis (scroll suave, titulares por palabra, paralaje, cinta por velocidad, botones magnéticos), siempre activo | Hecho |
 | 5. Bot como FAQ | Se eliminó la sección de preguntas; Mati responde dudas de todos los rubros (`lib/chat/store.ts`) | Hecho |
 | 6. Agendar por correo | `/api/booking` con Gmail SMTP: aviso al equipo + confirmación al cliente | Hecho y probado |
 | 7. Repositorio | Repo propio (antes el git colgaba de la carpeta de usuario), público en GitHub | Hecho |
@@ -32,7 +32,7 @@ La landing de una agencia que instala agentes de IA en webs de negocios. La pág
 - **El bot reemplaza a la FAQ.** Una FAQ estática no cubre todos los rubros; el agente es además la mejor demostración del producto.
 - **El bot no inventa.** Precios, plazos, métricas, clientes e integraciones concretas se derivan a la llamada. Es una decisión de negocio, no técnica.
 - **Modelo `gemini-3.1-flash-lite`.** Los modelos Flash más nuevos estaban saturados (503) y `gemini-2.5-flash` ya no está para cuentas nuevas.
-- **Movimiento con interruptor.** Todo el movimiento dependía de `prefers-reduced-motion`; quien lo tiene activo veía la web quieta. Se respeta el sistema por defecto y se puede sobrescribir.
+- **Movimiento siempre activo.** Primero dependía de `prefers-reduced-motion` y quien lo tenía activo veía la web quieta; después hubo un interruptor on/off. El equipo decidió sacarlo y dejar el movimiento siempre encendido. Contra: ignora la preferencia de accesibilidad de quien pidió menos movimiento. Se revierte en `app/layout.tsx`.
 - **Estilos propios, sin Tailwind.** El diseño vino del handoff en CSS; no se justificó agregar una dependencia.
 - **Fuentes y paleta.** Instrument Serif + Geist y la paleta navy/steel/bone vienen de la identidad del handoff y se mantienen.
 

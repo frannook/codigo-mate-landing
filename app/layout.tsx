@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{var d=document.documentElement,s=localStorage.getItem('cm-motion'),m=s||(matchMedia('(prefers-reduced-motion: reduce)').matches?'off':'on');d.dataset.motion=m;if(m==='on'&&'IntersectionObserver' in window)d.classList.add('reveal-on')}catch(e){}"
+              "var d=document.documentElement;d.dataset.motion='on';if('IntersectionObserver' in window)d.classList.add('reveal-on')"
           }}
         />
       </head>

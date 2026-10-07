@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import MotionToggle from '@/components/MotionToggle';
 import { ArrowRight } from '@/components/icons';
 import { motionOn } from '@/lib/motion';
 
@@ -124,7 +123,6 @@ export default function Nav() {
         </div>
 
         <div className="navp__right">
-          <MotionToggle />
           <a href="#agendar" className="nav__cta" onClick={() => setOpen(false)}>
             <span className="navp__cta-long">Agendar llamada</span>
             <span className="navp__cta-short">Agendar</span>

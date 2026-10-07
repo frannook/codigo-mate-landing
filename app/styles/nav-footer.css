@@ -59,7 +59,6 @@
 }
 
 .navp__right { display: flex; align-items: center; gap: 6px; flex: none; }
-.navp .motion-toggle { padding: 0 8px; }
 .navp .nav__cta { height: 44px; padding: 0 18px; gap: 8px; }
 .navp__cta-long { display: none; }
 @media (min-width: 560px) {

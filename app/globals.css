@@ -433,15 +433,5 @@ html.lenis, html.lenis body { height: auto; }
 .proof { display: flex; flex-direction: column; gap: clamp(40px, 5vw, 64px); }
 .proof__head { max-width: 760px; }
 
-/* ---------- Interruptor de movimiento ---------- */
-.motion-toggle {
-  display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 4px; border: none; background: transparent;
-  color: var(--mist); font-size: 13px; cursor: pointer; transition: color 0.2s; white-space: nowrap;
-}
-.motion-toggle:hover { color: var(--white); }
-.motion-toggle__track { width: 34px; height: 20px; border-radius: 10px; border: 1px solid var(--steel); position: relative; transition: background 0.3s, border-color 0.3s; }
-.motion-toggle__thumb { position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--slate); transition: transform 0.35s var(--ease-out), background 0.3s; }
-.motion-toggle[aria-checked='true'] .motion-toggle__track { background: var(--bone); border-color: var(--bone); }
-.motion-toggle[aria-checked='true'] .motion-toggle__thumb { transform: translateX(14px); background: var(--navy); }
 
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
