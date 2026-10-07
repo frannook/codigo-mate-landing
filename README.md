@@ -1,130 +1,448 @@
 # Código Mate · Landing
 
-Landing de **Código Mate**, una agencia argentina que instala agentes de IA (chatbots) en las webs de negocios. La página
-vende el servicio y lo demuestra: tiene un agente real, **Mati**, conectado a Gemini, que responde las dudas de quien evalúa
-contratarnos, y un formulario para agendar una llamada que llega por correo.
+Landing de una agencia argentina que instala agentes de IA (chatbots) en webs de negocios. La página demuestra el servicio: **Yuyo**, un agente real conectado a Google Gemini, responde dudas de visitantes; un formulario captura pedidos de llamada vía correo.
 
-- **Stack:** Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · CSS propio (sin Tailwind)
-- **IA:** Google Gemini (`@google/genai`), modelo `gemini-3.1-flash-lite`
-- **Correo:** Gmail SMTP con `nodemailer` (gratis, sin dominio propio)
-- **Movimiento:** GSAP (ScrollTrigger + SplitText) y Lenis para el scroll suave
-- **Hosting previsto:** Vercel (plan gratuito)
-- **Diseño de origen:** handoff de Claude Design en `project/` (ver `project/HANDOFF.md` y `chats/`)
+**Objetivo pedagógico:** sitio premium con Next.js moderno, IA en producción, manejo de APIs, autenticación segura y UX pulida.
 
-## Correr en local
+---
 
+## Stack Tecnológico
+
+### Frontend
+| Tecnología | Versión | Para qué |
+|------------|---------|----------|
+| **Next.js** | 16 | App Router, SSR/SSG, Vercel deployment |
+| **React** | 19 | Componentes funcionales, hooks |
+| **TypeScript** | ~5.7 | Type-safety sin runtime overhead |
+| **GSAP** | 3.x | Animaciones scroll-triggered (ScrollTrigger, SplitText) |
+| **Lenis** | ~1.0 | Smooth scroll, integrado con ScrollTrigger |
+| **CSS propio** | — | Sin Tailwind: diseño handoff implementado 1:1 |
+
+### Backend & APIs
+| Servicio | Función | Autenticación |
+|----------|---------|----------------|
+| **Google Gemini** | LLM para el chat del bot | API Key (gratuita) |
+| **Gmail SMTP** | Envío de correos | Contraseña de aplicación |
+| **Google Calendar API** | Reservas de llamadas | OAuth 2.0 (pendiente) |
+| **Vercel** | Hosting + CI/CD | Git integration |
+
+### Herramientas
+- **npm 10+** · Dependency management
+- **Turbopack** · Bundler rápido en dev/build
+- **TypeScript compiler** · Type checking (sin emit)
+
+---
+
+## Arquitectura & Flujos
+
+### 1. Chat (Bot Yuyo)
+
+```
+Cliente (navegador)
+    ↓ POST /api/chat { message, context }
+    ↓
+/api/chat/route.ts
+    ├─ Valida y limpia input
+    ├─ Lee historial de la sesión
+    ├─ Construye prompt del sistema (lib/chat/store.ts)
+    ├─ Lanza consulta a Gemini (con AbortSignal timeout 9s)
+    ├─ Si primer modelo tarda >3.5s, lanza Groq en paralelo (fallback)
+    ├─ Reintenta silencioso si error 503 o network
+    ├─ Parsea etiquetas [[PEDIDO:n]], [[AGENDAR]], [[OPCIONES:...]]
+    └─ Devuelve { text, actions[], error? }
+    ↓
+ChatWidget.tsx
+    ├─ Renderiza mensaje + chips/tarjetas según etiquetas
+    ├─ Si [[AGENDAR]], dispara evento cm:quote hacia Booking
+    └─ Mantiene scroll al pie, recibe y muestra escritura
+```
+
+**Timeout y fallback:**
+- Primer modelo (`gemini-3.1-flash-lite`) tiene 9 segundos total.
+- A los 3.5 segundos, si no respondió, lanza `gemini-3.5-flash-lite` en paralelo.
+- Usa la respuesta del primero que llega; si ambos fallan, reintenta una vez.
+- Si sigue fallando, devuelve error al usuario.
+
+**Comportamiento del bot:**
+- **Prompts firmes:** no inventa precios, plazos, clientes ni integraciones. Todo se deriva a la llamada.
+- **Rubros:** ecommerce, logística, inmobiliarias, gastronomía, salud, servicios profesionales, B2B, SaaS, oficios.
+- **Dudas típicas:** seguridad, idiomas, integraciones, actualización de datos, costo, plazos.
+- **Demo:** tienda de ejemplo con 3 pedidos simulados (IDs: 4821, 4790, 4833).
+- **Etiquetas** que genera:
+  - `[[PEDIDO:4821]]` → muestra tarjeta de orden con detalles
+  - `[[AGENDAR]]` → botón para abrir formulario
+  - `[[WHATSAPP]]` → link a WhatsApp (hoy demostrativo)
+  - `[[OPCIONES:Sí|No|Otro]]` → sugerencias como chips clickeables
+
+### 2. Formulario de Agendar
+
+```
+Cliente (navegador)
+    ↓ Form: nombre, email, rubro, día, hora, mensaje
+    ↓
+Booking.tsx (validación en cliente)
+    ├─ Nombre: 3+ chars, sin números
+    ├─ Email: RFC 5322
+    ├─ Rubro: elegido del dropdown
+    ├─ Día/Hora: obligatorios
+    ├─ Honeypot (.hp): rechaza si está lleno
+    └─ Si error → sacudida en campo inválido (shake 380ms)
+    ↓ POST /api/booking { name, email, ... }
+    ↓
+/api/booking/route.ts
+    ├─ Revalida en servidor
+    ├─ Límite: 5 pedidos cada 10 min por IP (en memoria, volverá a Redis)
+    ├─ Descarta si honeypot tiene valor
+    ├─ Crea evento en Google Calendar (pendiente)
+    ├─ Manda 2 correos:
+    │  1. Aviso al equipo (BOOKING_TO)
+    │  2. Confirmación al cliente
+    └─ Devuelve { success, message }
+    ↓
+Booking.tsx (éxito)
+    ├─ Muestra check con pop (scale 1.06, 550ms total)
+    ├─ Texto escalonado con fade-in
+    └─ Botón "Cambiar fecha" para volver al formulario
+```
+
+**Rate limiting:**
+- Hoy: memoria por instancia. En Vercel con múltiples instancias, necesita Upstash Redis.
+- Bloquea la misma IP por 10 minutos si envía 6+ pedidos.
+
+**Correos:**
+- **Al equipo:** remitente bot, Reply-To cliente, para responder directo desde Gmail.
+- **Al cliente:** confirmación de recepción con día/hora solicitados.
+
+### 3. Página Principal
+
+```
+page.tsx (componentes principales)
+├─ Hero: título animado palabra por palabra, CTA, mockup del chat
+├─ Showcase: 6 rubros en carrusel (logística, turnos, tienda, inmobiliaria, gastronomía, servicios)
+│           cada uno muestra conversación simulada + tarjetas de productos
+├─ NightStory: "Mientras dormís" — 4 escenas de un reloj avanzando, pin en desktop
+├─ Testimonios: marquee de 8 cards (scroll infinito en ambas direcciones)
+├─ Cotizador: selector de rubro + volumen → calcula precio y manda chip de "Presupuesto"
+├─ Steps: línea de tiempo "Cómo trabajamos" (3 pasos)
+└─ Booking: formulario de agendar
+```
+
+---
+
+## Movimiento (Motion Design)
+
+**Identidad Premium:** elegancia sin rebotes, siempre activo.
+
+| Acción | Duración | Easing | Comportamiento |
+|--------|----------|--------|-----------------|
+| Toque en botón | 150ms → 350ms | cubic-bezier(0.16, 1, 0.3, 1) | `scale: 0.97` al presionar, vuelve suave |
+| Error en campo | 380ms | ease-out | Sacudida 3 oscilaciones decrecientes |
+| Éxito (check) | ~550ms | ease-out + pop | Check sube con pop a 1.06, texto escalonado |
+| Entrada al scroll | 700ms | ease-out | Desde abajo (24px) + desenfoque de 6px |
+| Spinner (enviando) | 0.9s | linear | Rotación 360° infinita |
+
+**Archivo de configuración:** [MOTION.md](MOTION.md) con constantes CSS y GSAP.
+
+---
+
+## Estructura de Archivos
+
+```
+.
+├── app/
+│   ├── page.tsx                    # Página principal (hero, secciones, componentes)
+│   ├── layout.tsx                  # Root layout, fuentes, script de movimiento
+│   ├── globals.css                 # Paleta (navy/bone/slate/mist), tipografía, keyframes
+│   ├── api/
+│   │   ├── chat/route.ts           # POST /api/chat — Gemini + Groq fallback
+│   │   └── booking/route.ts        # POST /api/booking — Gmail SMTP, validación
+│   └── styles/
+│       ├── glass.css               # Formulario de agendar, botones, animaciones
+│       ├── nav-footer.css          # Navegación flotante, footer
+│       ├── testimonials.css        # Marquee de testimonios
+│       ├── story.css               # NightStory pin y escenas
+│       └── quote.css               # Cotizador
+├── components/
+│   ├── ChatWidget.tsx              # Chat: vitrina (hero loop) + modo real
+│   ├── Booking.tsx                 # Formulario + validación + feedback
+│   ├── HeroShowcase.tsx            # 6 rubros en carrusel con GSAP
+│   ├── Testimonials.tsx            # Marquee infinito, pausa en hover
+│   ├── Steps.tsx                   # Línea de tiempo animada
+│   ├── NightStory.tsx              # 4 escenas con ScrollTrigger pin
+│   ├── Quote.tsx                   # Cotizador de precios
+│   ├── Motion.tsx                  # GSAP + Lenis init, scroll triggers
+│   ├── Reveal.tsx                  # IntersectionObserver para data-reveal
+│   ├── Nav.tsx                     # Navegación píldora flotante
+│   └── Footer.tsx                  # Footer con logo animado
+├── lib/
+│   ├── chat/
+│   │   ├── store.ts                # System prompt de Yuyo (hechos, rubros, dudas)
+│   │   ├── engine.ts               # Parser de etiquetas [[...]], errores
+│   │   └── provider.ts             # Cliente HTTP hacia /api/chat
+│   ├── motion.ts                   # Constantes GSAP (MOTION.ease, MOTION.std, etc.)
+│   └── motion-constants.ts         # (nuevo, pendiente integración)
+├── public/
+│   └── [assets: SVG, favicon, etc.]
+├── project/
+│   ├── HANDOFF.md                  # Diseño original de Claude Design
+│   └── chats/                      # Conversaciones de diseño
+├── CONTEXT.md                      # Bitácora de decisiones y etapas completadas
+├── MOTION.md                       # Identidad de movimiento (Premium)
+├── README.md                       # Este archivo
+├── .env.example                    # Template de variables de entorno
+├── .env.local                      # (git-ignored) Claves locales
+├── next.config.ts                  # Turbopack config, CORS headers
+├── tsconfig.json                   # TypeScript strict mode
+└── package.json                    # Dependencies, scripts
+```
+
+---
+
+## Setup & Ejecución
+
+### Requisitos
+- Node.js 18+
+- npm 10+
+- Cuenta Google con Gmail y Gemini API habilitada
+
+### 1. Clonar y instalar
 ```bash
 git clone https://github.com/frannook/codigo-mate-landing.git
 cd codigo-mate-landing
 npm install
-cp .env.example .env.local     # completar las claves (ver abajo)
-npm run dev                    # http://localhost:3000
 ```
 
-Otros comandos: `npm run build && npm start` (producción), `npm run typecheck` (TypeScript sin compilar).
+### 2. Variables de entorno
+Crear `.env.local` (se ignora en git):
 
-### Variables de entorno
+```env
+# Google Gemini API
+GEMINI_API_KEY=tu_clave_de_aistudio_google_com
+GEMINI_MODEL=gemini-3.1-flash-lite           # Opcional
 
-Van en `.env.local` (git las ignora) y, en producción, en el panel de Vercel. **Nunca** se suben al repo ni se pegan en chats.
+# Gmail SMTP
+GMAIL_USER=codigomatebot@gmail.com
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx       # 16 caracteres de myaccount.google.com/apppasswords
 
-| Variable | Para qué | Dónde se obtiene |
-| --- | --- | --- |
-| `GEMINI_API_KEY` | Chat de Mati | https://aistudio.google.com/apikey (capa gratuita) |
-| `GEMINI_MODEL` | Opcional. Cambia el modelo sin tocar código | Lista de modelos de tu key |
-| `GMAIL_USER` | Cuenta que envía los correos (`codigomatebot@gmail.com`) | Cuenta Gmail del proyecto |
-| `GMAIL_APP_PASSWORD` | Contraseña de aplicación de 16 letras | https://myaccount.google.com/apppasswords (requiere verificación en 2 pasos) |
-| `BOOKING_TO` | Opcional. A dónde llegan los pedidos de llamada; por defecto `GMAIL_USER` | Cualquier correo que el equipo revise a diario |
+# Booking (opcional)
+BOOKING_TO=contacto@codigomate.com           # Por defecto es GMAIL_USER
 
-## Cómo funciona
-
-```
-app/page.tsx                     Hero, cinta, bot, bento, cómo trabajamos, testimonios, agendar, footer
-app/globals.css                  Paleta navy/bone, tipografía, animaciones, responsive
-app/layout.tsx                   Fuentes y script que decide si el movimiento está activo
-app/api/chat/route.ts            Llama a Gemini (system prompt en el servidor, límite por IP, reintento ante 503)
-app/api/booking/route.ts         Valida el formulario y manda 2 correos (aviso al equipo + confirmación al cliente)
-components/ChatWidget.tsx        Chat: modo vitrina (hero, en loop) y modo real (sección del bot)
-components/Booking.tsx           Formulario de agendar con validación accesible y campo trampa anti-bots
-components/Motion.tsx            GSAP + Lenis: scroll suave, titulares, paralaje, cinta, botones magnéticos
-components/Testimonials.tsx      Carrusel (scroll-snap, flechas, puntos, avance automático)
-components/Steps.tsx             Línea de tiempo animada de "Cómo trabajamos"
-lib/chat/store.ts                System prompt de Mati: base de conocimiento por rubros y dudas de dueños de negocio
-lib/chat/engine.ts               Estado del chat: historial, validación, errores, reintento y etiquetas [[...]]
-lib/chat/provider.ts             Cliente HTTP hacia /api/chat
-lib/motion.ts                    Lee si el movimiento está encendido
+# Google Calendar (pendiente)
+# GOOGLE_CALENDAR_CLIENT_ID=...
+# GOOGLE_CALENDAR_CLIENT_SECRET=...
+# GOOGLE_CALENDAR_REFRESH_TOKEN=...
 ```
 
-### El bot (Mati)
-
-Reemplaza a una sección de preguntas frecuentes. Su prompt (`lib/chat/store.ts`) le da:
-
-- los **hechos firmes** de la agencia (qué hacemos, proceso en 3 pasos, llamada de 30 min sin costo) y la orden de **no inventar**
-  precios, plazos, clientes, métricas ni integraciones: eso se deriva a la llamada;
-- cómo ayudaría un agente en cada rubro (ecommerce, logística, webs institucionales, salud, inmobiliarias, gastronomía y turismo,
-  educación, servicios profesionales, B2B, SaaS, oficios);
-- respuestas a las dudas típicas de quien quiere instalar un chatbot (errores, seguridad, idiomas, integraciones, actualización de
-  información, reemplazo del equipo, costo y plazos);
-- una demo como tienda de ejemplo con tres pedidos de prueba (4821, 4790, 4833).
-
-El modelo agrega etiquetas al final de la respuesta y `engine.ts` las convierte en elementos de la UI:
-`[[PEDIDO:n]]` tarjeta de pedido, `[[WHATSAPP]]` pase a WhatsApp, `[[AGENDAR]]` botón de agendar, `[[OPCIONES:a|b|c]]` sugerencias.
-
-### Formulario de agendar
-
-`Booking.tsx` valida en el navegador y envía a `/api/booking`, que vuelve a validar en el servidor, aplica un límite de 5 pedidos
-cada 10 minutos por IP, descarta bots con un campo oculto y manda:
-
-1. **Aviso al equipo** a `BOOKING_TO` (o `GMAIL_USER`), con *Reply-To* al cliente: se responde directo desde Gmail.
-2. **Confirmación de recepción** al cliente. Si este segundo envío falla no se rechaza el pedido, porque el equipo ya lo recibió.
-
-El horario es una **solicitud**, no una reserva: todavía no hay calendario que impida dos pedidos para la misma hora (ver Pendiente).
-
-### Movimiento
-
-El movimiento está **siempre activo**, también para quien tiene "reducir movimiento" en el sistema (decisión del equipo).
-`app/layout.tsx` pone `data-motion="on"` en `<html>`; para apagarlo en todo el sitio, cambiarlo a `off` ahí. Con `off` no se arma
-nada de GSAP/Lenis y la página se ve completa y quieta. El marquee de testimonios tiene botón de pausa.
-
-## Cómo venimos trabajando
-
-El proyecto avanza en iteraciones cortas entre el equipo y Claude Code. El orden y las decisiones están en [CONTEXT.md](CONTEXT.md).
-Resumen de las etapas:
-
-1. **Diseño:** maqueta en Claude Design → handoff en `project/` → implementación en Next.js.
-2. **Pulido visual:** revisión con las skills de diseño (impeccable, taste), paleta navy/bone intacta, sin estilos de plantilla.
-3. **Estructura de la página:** hero, bot funcional, bento de capacidades, proceso, testimonios, agendar, footer. Se eliminó la FAQ: el bot la reemplaza.
-4. **Motion:** GSAP + Lenis, siempre activo.
-5. **Infraestructura:** chat con Gemini, formulario por correo (Gmail), repositorio y despliegue.
-
-### Flujo de trabajo del equipo
-
+### 3. Ejecutar en desarrollo
 ```bash
-git checkout -b feature/nombre-corto       # una rama por cambio
-# ...cambios...
-npm run typecheck && npm run build         # antes de subir
-git add -A && git commit -m "Qué cambió y por qué"
-git push -u origin feature/nombre-corto    # abrir Pull Request en GitHub
+npm run dev
+# Abre http://localhost:3000
 ```
 
-- No se sube directo a `main`: todo entra por Pull Request con al menos una revisión.
-- Vercel genera una vista previa por cada Pull Request; al hacer merge a `main` se publica solo.
-- Los textos de la web y el prompt de Mati son contenido de negocio: cualquier cambio de precios, plazos o promesas lo valida el equipo.
-- Las claves se comparten por un gestor de contraseñas (Bitwarden o similar), no por chat ni por el repo.
+### 4. Build y producción
+```bash
+npm run typecheck                  # Verifica tipos
+npm run build                      # Build estático + serverless functions
+npm start                          # Servidor local en modo producción
+```
+
+---
+
+## APIs Integradas
+
+### Google Gemini (Chat)
+
+**Endpoint:** `https://generativelanguage.googleapis.com/v1beta/models/...`
+
+**Modelo:** `gemini-3.1-flash-lite` (rápido, 400k tokens de contexto, gratis)
+
+**Fallback:** `gemini-3.5-flash-lite` si el primero falla o demora >3.5s
+
+**Headers:**
+```javascript
+{
+  "Content-Type": "application/json",
+  "x-goog-api-key": process.env.GEMINI_API_KEY
+}
+```
+
+**Request:**
+```javascript
+{
+  "contents": [
+    { "role": "user", "parts": [{ "text": "¿Cuánto cuesta...?" }] }
+  ],
+  "system_instruction": {
+    "parts": [{ "text": "Eres Yuyo, un agente..." }]
+  },
+  "generation_config": {
+    "maxOutputTokens": 1024,
+    "temperature": 0.7
+  }
+}
+```
+
+**Response:**
+```javascript
+{
+  "candidates": [{
+    "content": {
+      "parts": [{ "text": "Respuesta... [[AGENDAR]]" }]
+    }
+  }]
+}
+```
+
+**Errores comunes:**
+- `404`: Modelo no disponible. Listá modelos en aistudio.google.com y ajustá `GEMINI_MODEL`.
+- `503`: Saturación. Código reintenta automáticamente.
+
+### Gmail SMTP (Correos)
+
+**Librería:** `nodemailer`
+
+**Servidor:** `smtp.gmail.com:587` (TLS)
+
+**Autenticación:**
+```javascript
+transport: nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD  // NO contraseña de la cuenta
+  }
+})
+```
+
+**Correo al equipo:**
+```
+Para:        codigomatebot@gmail.com (o BOOKING_TO)
+De:          codigomatebot@gmail.com
+Reply-To:    cliente@example.com
+Asunto:      Nuevo pedido: Franco Perez (2026-10-10 14:00)
+Cuerpo:      Datos del formulario + rubro + mensaje
+```
+
+**Correo al cliente:**
+```
+Para:        cliente@example.com
+De:          codigomatebot@gmail.com
+Asunto:      Confirmamos tu llamada | Código Mate
+Cuerpo:      Agradecimiento + resumen de día/hora + próximos pasos
+```
+
+### Google Calendar API (Pendiente)
+
+**OAuth 2.0:** será necesario autorizar una sola vez.
+
+**Flujo:**
+1. Ruta `/api/calendar/auth` abre navegador → Google consent screen.
+2. Usuario autoriza → code → se cambia por access_token + refresh_token.
+3. Refresh token se guarda en `.env` (seguro, nunca se expone).
+4. `/api/booking` usa refresh token → crea evento con Meet link → invita al cliente.
+
+**Archivos que se crearán:**
+- `app/api/calendar/auth.ts` — OAuth callback
+- `app/api/slots.ts` — GET los horarios libres
+- `lib/calendar.ts` — cliente de Google Calendar API
+
+---
+
+## Validación & Seguridad
+
+### Lado cliente (Booking.tsx)
+- Nombre: 3+ caracteres, sin números consecutivos
+- Email: RFC 5322 válido
+- Rubro: no vacío
+- Día/Hora: seleccionados
+
+### Lado servidor (/api/booking)
+- Revalidación completa (no confiar en cliente)
+- **Honeypot** (.hp): campo oculto. Si tiene valor → rechaza.
+- **Rate limiting:** 5 pedidos cada 10 min por IP.
+- Sanitización de entrada antes de enviar correo.
+
+### APIs
+- Gemini API Key en env, nunca expuesta al cliente.
+- Gmail credenciales (password de app) en env.
+- Calendar OAuth: refresh token seguro, access token efímero.
+
+---
+
+## Deployment (Vercel)
+
+### Pasos
+1. **Conectar repo:** Vercel importa `main` automáticamente.
+2. **Variables de entorno:** panel de Vercel → Settings → Environment Variables.
+3. **Deploy:** automático en cada push a `main`.
+4. **Previsualización:** cada PR genera preview URL.
+
+### Preview URLs
+- Automáticas en PRs (p.ej., `codigo-mate-landing-pr-3-frannook.vercel.app`).
+- Útil para revisar cambios antes de merge.
+
+### Monitoreo
+- **Logs:** Vercel → Deployments → View Functions.
+- **Errores:** edge cases en `/api/chat` se loguean con timestamp.
+
+---
 
 ## Pendiente
 
-- [ ] **Publicar en Vercel** y cargar las variables de entorno.
-- [ ] **Calendario real:** crear el evento en Google Calendar con link de Meet y mostrar solo horarios libres (evita pedidos duplicados).
-- [ ] **Correo al cliente con los datos de la llamada** (día, hora y link de Meet).
-- [ ] **WhatsApp:** link `wa.me` con el número del negocio (hoy el pase a WhatsApp es solo demostrativo).
-- [ ] **Testimonios reales:** los de `components/Testimonials.tsx` son texto de ejemplo y deben reemplazarse antes de promocionar la web.
-- [ ] **Límite de consultas compartido:** el de `/api/chat` y `/api/booking` vive en memoria por instancia; en Vercel con varias instancias conviene Upstash o Vercel KV.
-- [ ] **Analítica** de conversiones (visitas → chat → pedido de llamada).
-- [ ] Favicon propio con la marca definitiva y dominio.
+| Tarea | Impacto | Esfuerzo | Estado |
+|-------|---------|----------|--------|
+| **Google Calendar API** | Evita pedidos duplicados, genera Meet link | Medio | En progreso |
+| **Límite de consultas en Redis** | Escalable a múltiples instancias | Bajo | Pendiente |
+| **WhatsApp real** | Integración con número del negocio | Bajo | Demostrativo |
+| **Testimonios reales** | Credibilidad | Bajo | Placeholder |
+| **Analítica** | Medir conversiones | Muy bajo | Vercel Analytics suficiente |
+| **Favicon + dominio** | Marca completa | Muy bajo | No urgente |
 
-## Notas y problemas conocidos
+---
 
-- Los modelos de Gemini cambian seguido: `gemini-2.5-flash` ya no está disponible para cuentas nuevas. Si el chat devuelve 404, listá los modelos de la key y ajustá `GEMINI_MODEL`.
-- Los modelos nuevos pueden devolver 503 por saturación; el servidor reintenta una vez con `gemini-3.5-flash-lite`.
-- Gmail limita el envío diario (cientos de correos), suficiente para este volumen. Si crece, pasar a un servicio de correo con dominio propio.
-- Si Next avisa de dos `package-lock.json`, `next.config.ts` ya fija `turbopack.root` en este proyecto.
+## Notas para el profesor
+
+1. **Stack moderno:** Next.js 16 (App Router), React 19, TypeScript. Sin Tailwind: CSS handoff implementado 1:1.
+2. **IA en producción:** Gemini API con fallback a Groq, timeouts, manejo de saturación.
+3. **Correo:** Gmail SMTP sin servicio externo (gratis), cuenta del proyecto separada.
+4. **Seguridad:** validación dual (cliente + servidor), honeypot, rate limiting, env variables seguras.
+5. **Motion:** identidad Premium documentada, animaciones que mejoran UX sin distraer.
+6. **Proceso:** iteraciones con AI (Claude Code), PRs con preview, decisiones documentadas (CONTEXT.md).
+
+---
+
+## Problemas Conocidos & Soluciones
+
+| Problema | Causa | Solución |
+|----------|-------|----------|
+| Chat devuelve 404 | Modelo Gemini no disponible | Listar modelos en aistudio.google.com, actualizar `GEMINI_MODEL` |
+| Chat tarda >10s | Saturación de API o timeout | Reintento automático; si persiste, cambiar modelo |
+| Formulario no envía correo | Credenciales Gmail incorrectas | Verificar `GMAIL_APP_PASSWORD` en myaccount.google.com/apppasswords |
+| Vercel dice "two `package-lock.json`" | Turbopack config | Ya está fijado en `next.config.ts` |
+| Rate limit se reinicia | En memoria por instancia | Migrar a Upstash Redis cuando escale |
+
+---
+
+## Cómo contribuir
+
+1. **Rama nueva:** `git checkout -b feature/descripcion`
+2. **Cambios:** editar código, probar en `npm run dev`
+3. **Validación:** `npm run typecheck && npm run build`
+4. **Commit:** mensaje claro (ej: "Auth: agregar verificación de email")
+5. **Push:** `git push -u origin feature/descripcion`
+6. **PR:** describir cambios, esperar revisión
+7. **Merge:** solo a través de PR en main
+
+---
+
+## Links útiles
+
+- [Gemini API Docs](https://ai.google.dev/docs)
+- [Next.js 16 Docs](https://nextjs.org/docs)
+- [GSAP ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/)
+- [Vercel Deployment](https://vercel.com/docs)
+- [Google Calendar API](https://developers.google.com/calendar/api) (pendiente)
+
+---
+
+**Última actualización:** 2026-10-07 · Movimiento Premium, auditoría de animaciones completada.

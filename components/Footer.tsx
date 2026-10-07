@@ -47,7 +47,7 @@ export default function Footer() {
           <h3>Contacto</h3>
           <a href={`mailto:${EMAIL}`}>Escribinos por email</a>
           <a href="#agendar">Agendar una llamada</a>
-          <a href="#probalo">Hablar con Mati, el agente</a>
+          <a href="#probalo">Hablar con Yuyo, el agente</a>
         </div>
       </div>
 

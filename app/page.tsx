@@ -108,7 +108,7 @@ export default function Home() {
               Preguntale lo que quieras. <em className="accent">Es de verdad.</em>
             </h2>
             <p className="lead">
-              Mati es un agente real de Código Mate, igual al que instalamos en tu web. Reemplaza a las preguntas frecuentes: contale a qué te
+              Yuyo es un agente real de Código Mate, igual al que instalamos en tu web. Reemplaza a las preguntas frecuentes: contale a qué te
               dedicás y resolvé todas tus dudas, de logística, ecommerce, webs institucionales y más.
             </p>
             <ul className="try__asks">

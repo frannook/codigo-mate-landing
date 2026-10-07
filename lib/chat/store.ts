@@ -12,7 +12,7 @@ export type Store = {
 
 export const DEMO_STORE: Store = {
   name: 'Código Mate',
-  agent: 'Mati',
+  agent: 'Yuyo',
   human: 'Lucía',
   orders: {
     '4821': { status: 'En camino', step: 2, eta: 'el jueves entre las 9 y las 13 h' },

@@ -119,8 +119,15 @@ export default function Booking() {
     const e = validate(f);
     setErrors(e);
     setFailed(false);
-    const first = (['name', 'email', 'date', 'time'] as const).find(k => e[k]);
+    const bad = (['name', 'email', 'date', 'time'] as const).filter(k => e[k]);
+    const first = bad[0];
     if (first) {
+      bad.forEach(k =>
+        formRef.current?.querySelector(`#bk-${k}`)?.animate(
+          { translate: ['0', '-10px', '8px', '-5px', '3px', '0'] },
+          { duration: 380, easing: 'ease-out' }
+        )
+      );
       const sel = first === 'date' || first === 'time' ? `#bk-${first} button` : `#bk-${first}`;
       formRef.current?.querySelector<HTMLElement>(sel)?.focus();
       return;
@@ -346,7 +353,7 @@ export default function Booking() {
       )}
 
       <button type="submit" className="bk-submit" disabled={loading}>
-        {loading ? 'Enviando…' : 'Confirmar llamada'} {!loading && <ArrowRight />}
+        {loading ? 'Enviando…' : 'Confirmar llamada'} {loading ? <span aria-hidden="true" className="bk-spin" /> : <ArrowRight />}
       </button>
     </form>
   );

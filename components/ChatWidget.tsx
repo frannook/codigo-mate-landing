@@ -73,11 +73,11 @@ export default function ChatWidget() {
   const canRetry = !!chatError && last?.role === 'user';
 
   const chatSection = (
-    <section className="chat chat--page" aria-label="Chat con Mati, agente de Código Mate">
+    <section className="chat chat--page" aria-label="Chat con Yuyo, agente de Código Mate">
       <div className="chat__head">
-        <div aria-hidden="true" className="avatar">M</div>
+        <div aria-hidden="true" className="avatar">Y</div>
         <div className="chat__who">
-          <span className="chat__name">Mati · Código Mate</span>
+          <span className="chat__name">Yuyo · Código Mate</span>
           <span className="chat__state">En línea · responde al instante</span>
         </div>
         <button
@@ -141,7 +141,7 @@ export default function ChatWidget() {
         )}
 
         {loading && (
-          <div className="typing" role="status" aria-label="Mati está escribiendo">
+          <div className="typing" role="status" aria-label="Yuyo está escribiendo">
             <span />
             <span />
             <span />

@@ -16,7 +16,7 @@ La landing de una agencia que instala agentes de IA en webs de negocios. La pág
 | 2. Bot | Chat conectado a Gemini con límite por IP y errores controlados | Hecho |
 | 3. Pulido visual | Hero, cinta, bento, testimonios, footer; se quitaron los eyebrows numerados; paleta y fuentes intactas | Hecho |
 | 4. Motion | GSAP + Lenis (scroll suave, titulares por palabra, paralaje, cinta por velocidad, botones magnéticos), siempre activo | Hecho |
-| 5. Bot como FAQ | Se eliminó la sección de preguntas; Mati responde dudas de todos los rubros (`lib/chat/store.ts`) | Hecho |
+| 5. Bot como FAQ | Se eliminó la sección de preguntas; Yuyo responde dudas de todos los rubros (`lib/chat/store.ts`) | Hecho |
 | 6. Agendar por correo | `/api/booking` con Gmail SMTP: aviso al equipo + confirmación al cliente | Hecho y probado |
 | 7. Repositorio | Repo propio (antes el git colgaba de la carpeta de usuario), público en GitHub | Hecho |
 | 8. Despliegue | Vercel + variables de entorno | Pendiente |
@@ -35,6 +35,23 @@ La landing de una agencia que instala agentes de IA en webs de negocios. La pág
 - **Movimiento siempre activo.** Primero dependía de `prefers-reduced-motion` y quien lo tenía activo veía la web quieta; después hubo un interruptor on/off. El equipo decidió sacarlo y dejar el movimiento siempre encendido. Contra: ignora la preferencia de accesibilidad de quien pidió menos movimiento. Se revierte en `app/layout.tsx`.
 - **Estilos propios, sin Tailwind.** El diseño vino del handoff en CSS; no se justificó agregar una dependencia.
 - **Fuentes y paleta.** Instrument Serif + Geist y la paleta navy/steel/bone vienen de la identidad del handoff y se mantienen.
+
+## Auditoría de movimiento (2026-10-07)
+
+Identidad en [MOTION.md](MOTION.md): Premium, curva `cubic-bezier(0.16, 1, 0.3, 1)`, duraciones .15/.35/.7s (-20% en móvil), todo entra desde abajo.
+
+| Elemento | Antes | Regla que rompía | Gravedad | Ahora |
+| --- | --- | --- | --- | --- |
+| Botones (CTA, nav, chips, envío, opciones) | El scale de `:active` saltaba sin transición; 0.94–0.985 según el botón | Toque sin respuesta suave, inconsistente | CRITICAL | `scale: 0.97` en 150ms, vuelve en 350ms, una sola regla |
+| Errores del formulario | Solo cambiaba el borde | Error sin feedback de movimiento | CRITICAL | Sacudida de 3 oscilaciones decrecientes, 380ms, en cada campo inválido |
+| Éxito del formulario | Secuencia de ~1.1s, check sin pop | Celebración larga | HIGH | ~550ms: check con pop a 1.06, texto escalonado 60ms |
+| Enviando | Brillo que cruzaba el botón en loop | Indicador ambiguo | HIGH | Spinner lineal de 0.9s por vuelta |
+| Reveals de scroll | 0.9–1.2s, desde izquierda, derecha o abajo | Direcciones mezcladas, lento | HIGH | 700ms, todos desde abajo (24px) |
+| Hero (texto y demo) | Desde los costados (56px), 0.9–1.1s | Direcciones mezcladas | HIGH | Sube 24px con desenfoque de 6px, 700ms |
+| Tipeo del código en "Cómo trabajamos" | Anima `width` | Propiedad de layout | MEDIUM | Sin cambio (37 pasos, costo bajo) |
+| Transiciones de color en hover | 200–350ms | Ideal <100ms | MEDIUM | Sin cambio: con Premium se ven bien |
+
+El movimiento sigue siempre activo, también con `prefers-reduced-motion`. Lo decidió el equipo.
 
 ## Cosas a tener presentes
 
