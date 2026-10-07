@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChatSession, type ChatMessage, type ChatSnapshot } from '@/lib/chat/engine';
 import { httpProvider } from '@/lib/chat/provider';
 import { motionOn } from '@/lib/motion';
@@ -8,32 +8,10 @@ import { QUICK_REPLIES } from '@/lib/chat/store';
 import { FOCUS_CHAT_EVENT } from './FocusChatLink';
 import { ArrowRight, ArrowUp, RotateCcw } from './icons';
 
-// Conversación que se reproduce en loop hasta que alguien interactúa con el chat.
-const DEMO: ChatMessage[] = [
-  { id: 'd0', role: 'assistant', text: '¡Hola! Soy Mati, el asistente de Tienda Nómade. ¿En qué te ayudo?', attachments: [] },
-  { id: 'd1', role: 'user', text: 'Quiero saber dónde está mi pedido #4821', attachments: [] },
-  {
-    id: 'd2',
-    role: 'assistant',
-    text: 'Tu pedido salió hoy del depósito. Llega el jueves entre las 9 y las 13 h.',
-    attachments: [{ type: 'order', id: '4821', status: 'En camino', step: 2, eta: '' }]
-  },
-  { id: 'd3', role: 'user', text: '¿Puedo cambiar la dirección de entrega?', attachments: [] },
-  {
-    id: 'd4',
-    role: 'assistant',
-    text: 'Sí, todavía estamos a tiempo. Te paso con Lucía para confirmarla.',
-    attachments: [{ type: 'handoff', human: 'Lucía' }]
-  }
-];
-
 const STEPS = ['Preparado', 'Despachado', 'Entregado'];
 
-// showcase: vitrina del hero (loop de la tienda demo, sin escribir). Sin showcase: el bot real de Código Mate.
-export default function ChatWidget({ showcase = false }: { showcase?: boolean }) {
-  const [demo, setDemo] = useState(showcase);
-  const [demoN, setDemoN] = useState(0);
-  const [demoTyping, setDemoTyping] = useState(false);
+// El bot real de Código Mate (sección Probalo). La vitrina del hero está en HeroShowcase.
+export default function ChatWidget() {
   const [chat, setChat] = useState<ChatSnapshot>({ messages: [], status: 'idle', error: null });
   const [draft, setDraft] = useState('');
 
@@ -41,8 +19,6 @@ export default function ChatWidget({ showcase = false }: { showcase?: boolean })
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const reducedRef = useRef(false);
-  const demoRef = useRef(showcase);
-  const loopedRef = useRef(false);
 
   if (!sessionRef.current) {
     sessionRef.current = new ChatSession({ provider: httpProvider('/api/chat') });
@@ -53,43 +29,13 @@ export default function ChatWidget({ showcase = false }: { showcase?: boolean })
     session.onChange = setChat;
     setChat(session.snapshot());
     reducedRef.current = !motionOn();
-    if (reducedRef.current) setDemoN(DEMO.length);
     return () => {
       session.onChange = () => {};
     };
   }, []);
 
-  // Loop del demo: el asistente "escribe", aparece el mensaje, y al terminar vuelve a empezar.
-  useEffect(() => {
-    if (!demo || reducedRef.current) return;
-    let t: ReturnType<typeof setTimeout>;
-    if (demoN >= DEMO.length) {
-      t = setTimeout(() => {
-        loopedRef.current = true;
-        setDemoN(0);
-      }, 9000);
-    } else if (DEMO[demoN].role === 'assistant' && !demoTyping) {
-      t = setTimeout(() => setDemoTyping(true), demoN > 0 ? 450 : loopedRef.current ? 900 : 1400);
-    } else {
-      t = setTimeout(() => {
-        setDemoTyping(false);
-        setDemoN(n => n + 1);
-      }, demoTyping ? 1100 : 1700);
-    }
-    return () => clearTimeout(t);
-  }, [demo, demoN, demoTyping]);
-
-  const takeOver = useCallback(() => {
-    if (!demoRef.current) return;
-    demoRef.current = false;
-    sessionRef.current?.reset();
-    setDemo(false);
-    setDemoTyping(false);
-  }, []);
-
   const sendRef = useRef<(t: string) => void>(() => {});
   useEffect(() => {
-    if (showcase) return;
     const onFocus = (e: Event) => {
       const q = (e as CustomEvent<string | undefined>).detail;
       if (q) sendRef.current(q);
@@ -97,10 +43,10 @@ export default function ChatWidget({ showcase = false }: { showcase?: boolean })
     };
     window.addEventListener(FOCUS_CHAT_EVENT, onFocus);
     return () => window.removeEventListener(FOCUS_CHAT_EVENT, onFocus);
-  }, [showcase]);
+  }, []);
 
-  const list: ChatMessage[] = demo ? DEMO.slice(0, demoN) : chat.messages;
-  const loading = demo ? demoTyping : chat.status === 'loading';
+  const list: ChatMessage[] = chat.messages;
+  const loading = chat.status === 'loading';
   const last = list[list.length - 1];
 
   // Autoscroll al último mensaje.
@@ -108,10 +54,9 @@ export default function ChatWidget({ showcase = false }: { showcase?: boolean })
     const el = logRef.current;
     if (!el) return;
     requestAnimationFrame(() => el.scrollTo({ top: el.scrollHeight, behavior: reducedRef.current ? 'auto' : 'smooth' }));
-  }, [demo, demoN, demoTyping, chat.messages.length, chat.status]);
+  }, [chat.messages.length, chat.status]);
 
   const send = async (text: string) => {
-    takeOver();
     // El mensaje ya aparece en la charla: se vacía el campo al instante y vuelve si no se pudo enviar.
     setDraft('');
     const sent = await sessionRef.current!.send(text);
@@ -121,40 +66,32 @@ export default function ChatWidget({ showcase = false }: { showcase?: boolean })
   sendRef.current = send;
 
   let chipLabels: string[] = [];
-  if (showcase) chipLabels = [];
-  else if (!loading && last && last.role === 'assistant') chipLabels = last.options?.length ? last.options : QUICK_REPLIES;
+  if (!loading && last && last.role === 'assistant') chipLabels = last.options?.length ? last.options : QUICK_REPLIES;
 
-  const canSend = !!draft.trim() && !(!demo && chat.status === 'loading');
-  const chatError = !demo && chat.status === 'error' ? chat.error : null;
+  const canSend = !!draft.trim() && chat.status !== 'loading';
+  const chatError = chat.status === 'error' ? chat.error : null;
   const canRetry = !!chatError && last?.role === 'user';
 
   const chatSection = (
-    <section
-      className={showcase ? 'chat' : 'chat chat--page'}
-      aria-label={showcase ? 'Ejemplo: Mati, asistente de Tienda Nómade' : 'Chat con Mati, agente de Código Mate'}
-      {...(showcase ? { 'aria-hidden': true, inert: true } : null)}
-    >
+    <section className="chat chat--page" aria-label="Chat con Mati, agente de Código Mate">
       <div className="chat__head">
         <div aria-hidden="true" className="avatar">M</div>
         <div className="chat__who">
-          <span className="chat__name">{showcase ? 'Mati · Tienda Nómade' : 'Mati · Código Mate'}</span>
+          <span className="chat__name">Mati · Código Mate</span>
           <span className="chat__state">En línea · responde al instante</span>
         </div>
-        {!showcase && (
-          <button
+        <button
             type="button"
             className="chat__reset"
             aria-label="Empezar una conversación nueva"
             title="Nueva conversación"
             onClick={() => {
-              takeOver();
               sessionRef.current?.reset();
               setDraft('');
             }}
           >
             <RotateCcw />
           </button>
-        )}
       </div>
 
       <div ref={logRef} className="chat__log" data-lenis-prevent role="log" aria-live="polite" aria-relevant="additions">
@@ -233,8 +170,7 @@ export default function ChatWidget({ showcase = false }: { showcase?: boolean })
         )}
       </div>
 
-      {!showcase && (
-        <form
+      <form
           className="composer"
           onSubmit={e => {
             e.preventDefault();
@@ -258,36 +194,9 @@ export default function ChatWidget({ showcase = false }: { showcase?: boolean })
             <ArrowUp />
           </button>
         </form>
-      )}
       <div className="chat__credit">Hecho por Código Mate</div>
     </section>
   );
 
-  if (!showcase) return <div id="demo" className="demo demo--page">{chatSection}</div>;
-
-  return (
-    <div className="demo">
-      <div className="browser">
-        <div className="browser__bar">
-          <span aria-hidden="true" className="browser__dot" />
-          <span aria-hidden="true" className="browser__dot" />
-          <span aria-hidden="true" className="browser__dot" />
-          <div className="browser__url">tiendanomade.com.ar/mi-cuenta</div>
-        </div>
-        <div className="browser__body">
-          <div aria-hidden="true" className="browser__skeleton">
-            <div />
-            <div />
-            <div />
-            <div />
-          </div>
-          {chatSection}
-        </div>
-      </div>
-      <div className="demo__caption">
-        <span aria-hidden="true" className="demo__dot is-live" />
-        <span>Así atiende tu web: consulta de pedido y pase a WhatsApp.</span>
-      </div>
-    </div>
-  );
+  return <div id="demo" className="demo demo--page">{chatSection}</div>;
 }

@@ -1,0 +1,100 @@
+/* Vitrina del hero (components/HeroShowcase.tsx). Reusa .browser, .chat, .bubble-*, .typing y .order de globals.css. */
+
+.sc .chat { display: flex; flex-direction: column; }
+.sc__scenes { position: relative; flex: 1; min-height: 0; }
+.sc__scene { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.sc__scene[hidden] { display: none; }
+
+/* La charla crece desde abajo; lo viejo se va por arriba con un desvanecido. */
+.sc__log {
+  flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px;
+  padding: 16px 14px 12px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 56px); mask-image: linear-gradient(to bottom, transparent 0, #000 56px);
+}
+.sc__botstep { align-self: flex-start; max-width: 88%; display: flex; flex-direction: column; gap: 8px; }
+.sc__bot { max-width: 100%; }
+
+/* GSAP maneja las entradas: se apagan las animaciones CSS de los mensajes reutilizados. */
+.sc .bubble-user, .sc .msg-bot, .sc .typing, .sc .handoff { animation: none; }
+.sc .order__fill { animation: none; transform-origin: left; width: 100%; }
+.sc .order { width: 236px; }
+
+/* ---------- Tarjetas ---------- */
+.sc__card { max-width: 100%; }
+.sc__slots { display: flex; flex-wrap: wrap; gap: 6px; }
+.sc__slot {
+  padding: 7px 11px; border-radius: 999px; border: 1px solid var(--steel); background: transparent;
+  font-size: 12.5px; color: var(--mist);
+}
+.sc__confirm, .sc__product, .sc__property {
+  display: flex; align-items: center; gap: 12px; width: 248px; padding: 12px; border-radius: 12px;
+  background: var(--navy-800); border: 1px solid rgba(119, 141, 169, 0.28);
+}
+.sc__check {
+  width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; background: var(--bone); color: var(--navy);
+  display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;
+}
+.sc__confirm > span:last-child, .sc__pinfo { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sc__confirm strong, .sc__pinfo strong { font-size: 13px; font-weight: 600; color: var(--bone); }
+.sc__confirm small, .sc__pinfo small { font-size: 12px; color: var(--mist); }
+.sc__pinfo b { margin-top: 2px; font-size: 13px; font-weight: 600; color: var(--bone); }
+.sc__product { flex-wrap: wrap; }
+.sc__thumb, .sc__photo {
+  width: 52px; height: 52px; flex-shrink: 0; border-radius: 9px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(224, 225, 221, 0.35), transparent 55%),
+    linear-gradient(140deg, var(--steel), var(--navy-600));
+}
+.sc__photo {
+  background:
+    linear-gradient(to top, rgba(13, 27, 42, 0.55), transparent 60%),
+    linear-gradient(160deg, var(--slate), var(--navy-500) 70%);
+}
+.sc__cta {
+  flex-basis: 100%; text-align: center; padding: 8px; border-radius: 8px; background: var(--bone); color: var(--navy);
+  font-size: 12.5px; font-weight: 600;
+}
+.sc__chip {
+  display: inline-flex; align-self: flex-start; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--slate);
+  font-size: 12.5px; color: var(--bone);
+}
+.sc__handoff { display: flex; flex-direction: column; gap: 8px; }
+.sc__handoff .handoff { align-self: flex-start; }
+.sc__handoff small {
+  max-width: 248px; padding: 10px 12px; border-radius: 10px; background: var(--navy-800); border: 1px solid var(--rule);
+  font-size: 12px; line-height: 1.45; color: var(--mist);
+}
+
+/* ---------- Campo de escritura (decorativo) ---------- */
+.sc__composer {
+  position: relative; display: flex; align-items: center; gap: 8px; margin: 0 12px 12px; padding: 4px 4px 4px 14px; min-height: 48px;
+  border-radius: 12px; border: 1px solid rgba(119, 141, 169, 0.25); background: var(--navy);
+}
+.sc__field { flex: 1; min-width: 0; font-size: 14px; color: var(--bone); white-space: nowrap; overflow: hidden; }
+.sc__field:not(:empty)::after {
+  content: ''; display: inline-block; width: 1.5px; height: 1.05em; margin-left: 1px; vertical-align: -0.15em;
+  background: var(--bone); animation: cmCaret 1s steps(1) infinite;
+}
+.sc__placeholder { position: absolute; left: 14px; font-size: 14px; color: var(--slate); pointer-events: none; }
+.sc__field:not(:empty) + .sc__placeholder { display: none; }
+.sc__send {
+  width: 40px; height: 40px; flex-shrink: 0; border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  background: var(--navy-700); color: var(--slate);
+}
+.sc__field:not(:empty) ~ .sc__send { background: var(--bone); color: var(--navy); }
+
+/* ---------- Rubros (pestañas con progreso) ---------- */
+.sc__tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin: 0 -8px; }
+.sc__tabs::-webkit-scrollbar { display: none; }
+.sc__tab {
+  position: relative; flex-shrink: 0; min-height: 44px; padding: 10px 8px 12px; border: none; white-space: nowrap; background: transparent; cursor: pointer;
+  font-size: 13px; color: var(--slate); transition: color 0.25s;
+}
+.sc__tab:hover, .sc__tab[aria-pressed='true'] { color: var(--bone); }
+.sc__tab::after { content: ''; position: absolute; left: 8px; right: 8px; bottom: 6px; height: 2px; border-radius: 1px; background: var(--navy-600); }
+.sc__bar {
+  position: absolute; left: 8px; right: 8px; bottom: 6px; z-index: 1; height: 2px; border-radius: 1px; background: var(--bone);
+  transform: scaleX(0); transform-origin: left;
+}
+html[data-motion='off'] .sc__tab[aria-pressed='true'] .sc__bar { transform: none; }
+html[data-motion='off'] .sc .typing { display: none; }

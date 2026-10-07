@@ -2,6 +2,7 @@ import Booking from '@/components/Booking';
 import ChatWidget from '@/components/ChatWidget';
 import FocusChatLink from '@/components/FocusChatLink';
 import Footer from '@/components/Footer';
+import HeroShowcase from '@/components/HeroShowcase';
 import Motion from '@/components/Motion';
 import Nav from '@/components/Nav';
 import NightStory from '@/components/NightStory';
@@ -83,7 +84,7 @@ export default function Home() {
           </div>
 
           <div className="hero__visual">
-            <ChatWidget showcase />
+            <HeroShowcase />
           </div>
         </header>
       </div>
