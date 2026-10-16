@@ -9,12 +9,12 @@
   position: relative; display: grid; gap: clamp(32px, 5vw, 88px); align-items: center;
   padding-bottom: clamp(64px, 9vw, 120px);
 }
-@media (min-width: 900px) { .ab__hero { grid-template-columns: minmax(0, 460px) minmax(0, 1fr); } }
+@media (min-width: 900px) { .ab__hero { grid-template-columns: minmax(0, 520px) minmax(0, 1fr); } }
 
 /* Foto: retrato con marco de vidrio y un resplandor ámbar muy suave detrás. */
 .ab__photo {
-  position: relative; isolation: isolate; margin: 0; width: 100%; max-width: 460px; justify-self: center;
-  aspect-ratio: 4 / 5; border-radius: 28px; overflow: hidden;
+  position: relative; isolation: isolate; margin: 0; width: 100%; max-width: 520px; justify-self: center;
+  aspect-ratio: 1 / 1; border-radius: 28px; overflow: hidden;
   border: 1px solid rgba(175, 187, 203, 0.2);
   background: var(--navy-700);
   box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.12), 0 40px 80px -40px rgba(0, 0, 0, 0.75);
@@ -24,7 +24,7 @@
   content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit;
   background: radial-gradient(80% 50% at 20% 105%, rgba(233, 162, 59, 0.16), transparent 70%);
 }
-@media (max-width: 899px) { .ab__photo { aspect-ratio: 4 / 3; max-width: 560px; } }
+@media (max-width: 899px) { .ab__photo { aspect-ratio: 5 / 4; max-width: 560px; } .ab__photo img { object-position: 50% 12%; } }
 .ab__photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 /* Panel de marca: se ve mientras no hay foto del equipo. */

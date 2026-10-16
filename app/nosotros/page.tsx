@@ -43,7 +43,7 @@ export default function Nosotros() {
         <div className="wrap ab__hero">
           <figure className="ab__photo">
             {photo ? (
-              <Image src={photo} alt="El equipo de Código Mate" width={1200} height={1500} priority sizes="(min-width: 900px) 460px, 100vw" />
+              <Image src={photo} alt="El equipo de Código Mate, seis personas posando juntas" width={1620} height={1620} priority quality={90} sizes="(min-width: 900px) 520px, 100vw" />
             ) : (
               <div className="ab__mark" role="img" aria-label="Código Mate">
                 <Image src="/logo-color.png" alt="" width={1307} height={406} priority />

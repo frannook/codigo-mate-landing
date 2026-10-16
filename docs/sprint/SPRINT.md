@@ -70,7 +70,7 @@ El logo más grande entra en la barra a 360 px sin desborde. Pendiente de revisa
 
 ## Para completar
 
-- **Foto del equipo:** guardarla como `public/nosotros.jpg` (también acepta `.webp` o `.png`). Hasta entonces la página muestra el logo en un panel de marca. Recomendado: retrato vertical, al menos 1200×1500 px.
+- **Foto del equipo:** guardarla como `public/nosotros.jpg` (también acepta `.webp` o `.png`). Hasta entonces la página muestra el logo en un panel de marca. Recomendado: foto cuadrada o casi, al menos 1500 px de lado.
 - **Texto de Nosotros:** es una descripción general armada con lo que ya dice la web (qué hacemos, cómo trabajamos). Falta sumar nombres y roles del equipo si se quieren mostrar.
 
 ## Cómo probarlo

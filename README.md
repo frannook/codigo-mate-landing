@@ -390,6 +390,8 @@ Cuerpo:      Agradecimiento + resumen de día/hora + próximos pasos
 
 ## Pendiente
 
+El paso a paso completo (qué hace cada integrante y qué hace el código) está en [docs/PLAN_CONEXIONES.md](docs/PLAN_CONEXIONES.md).
+
 | Tarea | Impacto | Esfuerzo | Estado |
 |-------|---------|----------|--------|
 | **Google Calendar API** | Evita pedidos duplicados, genera Meet link | Medio | En progreso |
