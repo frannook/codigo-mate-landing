@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { track } from '@vercel/analytics';
 import { ArrowRight } from './icons';
 
 // Formulario para agendar la llamada. Valida y envía el pedido por correo (app/api/booking/route.ts).
@@ -136,6 +137,7 @@ export default function Booking() {
     try {
       await submit({ ...f, name: f.name.trim(), email: f.email.trim(), company: honeypot.current?.value || '' });
       setSent(true);
+      track('booking_submit');
     } catch {
       setFailed(true);
     } finally {

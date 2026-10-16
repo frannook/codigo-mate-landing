@@ -11,6 +11,8 @@ import '../styles/about.css';
 
 export const metadata: Metadata = {
   title: 'Nosotros · Código Mate',
+  alternates: { canonical: '/nosotros' },
+  openGraph: { type: 'website', locale: 'es_AR', siteName: 'Código Mate', url: '/nosotros', title: 'Nosotros · Código Mate' },
   description:
     'Somos Código Mate, una agencia argentina que instala agentes de IA en las webs de negocios. Conocé al equipo y cómo trabajamos.'
 };

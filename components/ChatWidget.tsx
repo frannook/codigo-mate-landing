@@ -6,6 +6,7 @@ import { httpProvider } from '@/lib/chat/provider';
 import { motionOn } from '@/lib/motion';
 import { QUICK_REPLIES } from '@/lib/chat/store';
 import { FOCUS_CHAT_EVENT } from './FocusChatLink';
+import { track } from '@vercel/analytics';
 import { ArrowRight, ArrowUp, RotateCcw } from './icons';
 
 const STEPS = ['Preparado', 'Despachado', 'Entregado'];
@@ -61,6 +62,7 @@ export default function ChatWidget() {
     setDraft('');
     const sent = await sessionRef.current!.send(text);
     if (!sent) setDraft(d => d || text);
+    else track('chat_message');
   };
 
   sendRef.current = send;
