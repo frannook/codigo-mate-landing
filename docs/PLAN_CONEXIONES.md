@@ -11,7 +11,9 @@ Cómo leerlo: cada paso dice **qué hacés vos** (cuentas, claves, clics) y **qu
 | Despliegue automático (GitHub → Vercel) | Funciona | Cada push a `main` publica solo |
 | Chat con Yuyo (Gemini) | Funciona en producción | Se probó `/api/chat` en el sitio publicado y respondió |
 | Formulario de agendar (correo por Gmail) | Funciona | Llegó el correo en las pruebas; conviene repetir una prueba en producción |
-| Respaldo del chat en Groq | **Sin confirmar** | Depende de si `GROQ_API_KEY` está cargada en Vercel (paso 3) |
+| Respaldo del chat en Groq | **Código listo, falta la clave** | Se activa solo al cargar `GROQ_API_KEY` en Vercel (paso 3) |
+| SEO básico (`robots.txt`, `sitemap.xml`, imagen al compartir, datos estructurados) | Hecho y publicado | Verificado en el sitio publicado (paso 6) |
+| Analítica | Código listo; **falta activarla** en Vercel | Panel de Vercel → Analytics → Enable (paso 5) |
 
 ## 2. Qué falta, en orden
 
@@ -71,19 +73,17 @@ Hoy el límite vive en la memoria de cada instancia de Vercel y se reinicia solo
 
 **Yo:** armo el link `https://wa.me/<número>?text=...` en el botón de pase a WhatsApp del chat y en el footer. Si querés que el pase lleve un resumen de la charla, también lo agrego.
 
-## Paso 5 · Analítica
+## Paso 5 · Analítica (código hecho)
 
-**Vos:** en Vercel → tu proyecto → pestaña **Analytics** → "Enable".
+**Vos:** en Vercel → tu proyecto → pestaña **Analytics** → "Enable". Sin ese clic no se registra nada.
 
-**Yo:** agrego `@vercel/analytics` y eventos para medir: abrió el chat, mandó un mensaje, pidió una llamada.
+**Ya hecho:** el sitio envía los eventos `chat_message` (cada mensaje al chat) y `booking_submit` (pedido de llamada enviado), además de las visitas.
 
-## Paso 6 · SEO básico
+## Paso 6 · SEO básico (hecho)
 
-Hoy `robots.txt` y `sitemap.xml` devuelven 404 y no hay imagen para compartir el link.
+**Ya hecho:** `robots.txt`, `sitemap.xml` (con `/` y `/nosotros`), `metadataBase`, imagen de vista previa (Open Graph y Twitter) y datos estructurados de la organización. La dirección pública vive en `lib/site.ts`; con dominio propio se define `NEXT_PUBLIC_SITE_URL` en Vercel.
 
-**Yo:** agrego `robots.txt`, `sitemap.xml` (con `/` y `/nosotros`), `metadataBase`, imagen de vista previa (Open Graph) y descripción por página.
-
-**Vos:** nada hasta tener dominio; después, dar de alta el sitio en https://search.google.com/search-console.
+**Vos:** dar de alta el sitio en https://search.google.com/search-console y enviar `https://codigo-mate-landing.vercel.app/sitemap.xml`.
 
 ## Paso 7 · Dominio propio
 
