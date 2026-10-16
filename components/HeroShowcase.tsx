@@ -319,7 +319,7 @@ export default function HeroShowcase() {
               {SCENES.map((sc, i) => (
                 <div key={sc.tab} className="sc__scene" hidden={i !== active}>
                   <div className="chat__head">
-                    <div className="avatar">{sc.business[0]}</div>
+                    <div className={`avatar av-${i % 6}`}>{sc.business[0]}</div>
                     <div className="chat__who">
                       <span className="chat__name">{sc.business}</span>
                       <span className="chat__state">Asistente · responde al instante</span>

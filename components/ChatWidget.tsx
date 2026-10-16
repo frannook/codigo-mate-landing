@@ -75,7 +75,7 @@ export default function ChatWidget() {
   const chatSection = (
     <section className="chat chat--page" aria-label="Chat con Yuyo, agente de Código Mate">
       <div className="chat__head">
-        <div aria-hidden="true" className="avatar">Y</div>
+        <div aria-hidden="true" className="avatar av-1">Y</div>
         <div className="chat__who">
           <span className="chat__name">Yuyo · Código Mate</span>
           <span className="chat__state">En línea · responde al instante</span>

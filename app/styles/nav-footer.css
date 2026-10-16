@@ -40,7 +40,7 @@
 }
 
 .navp__brand { display: flex; align-items: center; flex: none; min-height: 44px; border-radius: 8px; }
-.navp__brand img { display: block; flex: none; height: 30px; width: auto; max-width: none; }
+.navp__brand img { display: block; flex: none; height: 38px; width: auto; max-width: none; }
 
 .navp__links { position: relative; display: none; align-items: center; }
 .navp__link {
@@ -139,7 +139,7 @@
   font-size: 16px; color: var(--bone); overflow-wrap: anywhere;
 }
 .foot__mail::after {
-  content: ''; position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: var(--steel);
+  content: ''; position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: rgba(233, 162, 59, 0.6);
   transform-origin: right; transition: transform 0.5s var(--ease-out), background 0.3s;
 }
 .foot__mail:hover::after { background: var(--amber); animation: footLine 0.7s var(--ease-out); }
@@ -152,7 +152,7 @@
 @media (min-width: 900px) { .foot__grid { grid-template-columns: 2fr 1fr 1fr; } }
 .foot__brand { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
 /* El logo nunca se estira: alto fijo, ancho por proporción, sin estirarse en el eje cruzado del flex. */
-.foot__brand img { display: block; flex: none; align-self: flex-start; height: 32px; width: auto; max-width: none; }
+.foot__brand img { display: block; flex: none; align-self: flex-start; height: 44px; width: auto; max-width: none; }
 .foot__brand p { margin: 0; max-width: 36ch; font-size: 15px; line-height: 1.65; color: var(--mist); }
 .foot__col { display: flex; flex-direction: column; align-items: flex-start; }
 .foot__col h3 { margin: 0 0 6px; font-size: 14px; font-weight: 500; color: var(--slate); }
@@ -167,7 +167,7 @@
 .foot__mark {
   margin: 0; padding-bottom: 0.2em; white-space: nowrap; user-select: none;
   font-family: var(--fh); font-weight: 400; font-size: min(22.5cqi, 300px); line-height: 0.9; letter-spacing: -0.02em;
-  color: var(--steel);
+  color: rgba(65, 90, 119, 0.75);
 }
 .foot__mark span { display: inline-block; }
 .foot__mark span:last-child { font-style: italic; color: var(--amber); opacity: 0.88; }

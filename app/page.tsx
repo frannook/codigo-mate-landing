@@ -49,22 +49,27 @@ export default function Home() {
               <span>Agentes de IA para webs que ya existen</span>
             </div>
             <h1 className="hero__title" aria-label="Tu web ahora atiende a tus clientes.">
-              {HEADLINE.map(([word, delay, em], i) => {
-                const style = { animationDelay: `${delay}s`, ...(em ? { animationDuration: '1s' } : null) };
-                return (
-                  <span key={word} aria-hidden="true">
-                    {i > 0 && (word === 'tus' || word === 'clientes.' ? ' ' : ' ')}
-                    {em ? (
-                      <em className="hero__word accent" style={style}>
-                        {word}
-                      </em>
-                    ) : (
-                      <span className="hero__word" style={style}>
-                        {word}
-                      </span>
-                    )}
-                  </span>
-                );
+              {[HEADLINE.slice(0, 4), HEADLINE.slice(4)].map((group, g) => {
+                const words = group.map(([word, delay, em], j) => {
+                  const i = g === 0 ? j : j + 4;
+                  const style = { animationDelay: `${delay}s`, ...(em ? { animationDuration: '1s' } : null) };
+                  return (
+                    <span key={word} aria-hidden="true">
+                      {i > 0 && ' '}
+                      {em ? (
+                        <em className="hero__word accent" style={style}>
+                          {word}
+                        </em>
+                      ) : (
+                        <span className="hero__word" style={style}>
+                          {word}
+                        </span>
+                      )}
+                    </span>
+                  );
+                });
+                // "a tus clientes." viaja junto: nunca queda una "a" sola al final de la línea.
+                return g === 0 ? words : <span key="tail" style={{ whiteSpace: 'nowrap' }}>{words}</span>;
               })}
             </h1>
             <p className="hero__lead">

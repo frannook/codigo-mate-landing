@@ -77,7 +77,7 @@ function Card({ t }: { t: Item }) {
       <span className="tm__chip">{t.chip}</span>
       <blockquote className="tm__quote">{t.quote}</blockquote>
       <figcaption className="tm__who">
-        <span className="tm__avatar" aria-hidden="true">
+        <span className={`tm__avatar av-${[...t.name].reduce((n, c) => n + c.charCodeAt(0), 0) % 6}`} aria-hidden="true">
           {initials(t.name)}
         </span>
         <span className="tm__id">

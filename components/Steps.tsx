@@ -82,7 +82,7 @@ export default function Steps() {
               <span className="code__caret" />
             </div>
             <div className="wa anim">
-              <span className="wa__icon">W</span>
+              <span className="wa__icon av-3">W</span>
               <span className="wa__text">
                 <span className="wa__title">Nueva consulta en WhatsApp</span>
                 <span className="wa__sub">Con todo el contexto de la charla</span>

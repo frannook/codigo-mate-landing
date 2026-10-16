@@ -25,7 +25,7 @@ function Status({ time }: { time: string }) {
 function WebHead() {
   return (
     <div className="ns__app">
-      <span className="ns__avatar" aria-hidden="true">
+      <span className="ns__avatar av-2" aria-hidden="true">
         T
       </span>
       <span className="ns__who">
@@ -250,7 +250,7 @@ export default function NightStory() {
                 </span>
               </div>
               <div className="wa ns__notif" data-step>
-                <span className="wa__icon" aria-hidden="true">
+                <span className="wa__icon av-3" aria-hidden="true">
                   W
                 </span>
                 <span className="wa__text">
@@ -281,7 +281,7 @@ export default function NightStory() {
             <div className="ns__vis">
               <Status time="09:00" />
               <div className="ns__app ns__app--wa">
-                <span className="ns__avatar" aria-hidden="true">
+                <span className="ns__avatar av-4" aria-hidden="true">
                   A
                 </span>
                 <span className="ns__who">

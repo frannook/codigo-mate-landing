@@ -159,7 +159,7 @@
 .ns__reel { display: flex; flex-direction: column; will-change: transform; }
 .ns__reel span { display: block; height: 1em; }
 .ns__night { position: relative; height: 2px; border-radius: 1px; background: rgba(119, 141, 169, 0.2); }
-.ns__fill { position: absolute; inset: 0; border-radius: inherit; background: var(--slate); transform-origin: left; transform: scaleX(0.075); }
+.ns__fill { position: absolute; inset: 0; border-radius: inherit; background: var(--amber); transform-origin: left; transform: scaleX(0.075); }
 .ns__tick { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--bone); }
 .ns__ends { display: flex; justify-content: space-between; font-size: 13px; color: var(--slate); }
 

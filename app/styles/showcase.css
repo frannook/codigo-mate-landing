@@ -93,7 +93,7 @@
 .sc__tab:hover, .sc__tab[aria-pressed='true'] { color: var(--bone); }
 .sc__tab::after { content: ''; position: absolute; left: 8px; right: 8px; bottom: 6px; height: 2px; border-radius: 1px; background: var(--navy-600); }
 .sc__bar {
-  position: absolute; left: 8px; right: 8px; bottom: 6px; z-index: 1; height: 2px; border-radius: 1px; background: var(--bone);
+  position: absolute; left: 8px; right: 8px; bottom: 6px; z-index: 1; height: 2px; border-radius: 1px; background: var(--amber);
   transform: scaleX(0); transform-origin: left;
 }
 html[data-motion='off'] .sc__tab[aria-pressed='true'] .sc__bar { transform: none; }
@@ -109,4 +109,9 @@ html[data-motion='off'] .sc .typing { display: none; }
   .sc__chip { font-size: 13px; }
   .sc__handoff small { font-size: 13px; }
   .sc__tab { font-size: 14px; }
+}
+
+/* Móvil: las pestañas de rubro se desvanecen en el borde para avisar que hay más. */
+@media (max-width: 640px) {
+  .sc__tabs { -webkit-mask-image: linear-gradient(to right, #000 88%, transparent); mask-image: linear-gradient(to right, #000 88%, transparent); padding-right: 24px; }
 }

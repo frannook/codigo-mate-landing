@@ -17,6 +17,17 @@ Fecha: 2026-10-16 · Repo: https://github.com/frannook/codigo-mate-landing
 | Legibilidad móvil | Todo texto de interfaz sube a 13 px como mínimo (cuerpo 14 px); botones del chat de 40 px de alto; eyebrow con menos tracking y más contraste; titular del hero ya no deja una "a" sola en una línea. | `app/globals.css` y archivos de `app/styles/` (bloque `@media (max-width: 640px)`) |
 | Pulido | Foto de Nosotros en proporción 4:3 en móvil para que el texto entre en la primera pantalla; indicador de desarrollo de Next oculto. | `app/styles/about.css`, `next.config.ts`, `app/page.tsx` |
 
+## Segunda tanda: logo, avatares y último pulido
+
+| Entrega | Detalle | Archivos |
+| --- | --- | --- |
+| **Logo con color cálido** | El mate, el vapor y la bombilla, el cursor `_` y el recuadro pasan a ámbar `#E9A23B`; el texto "Código Mate" queda en bone. Se probaron ámbar, durazno y miel (y variantes con solo el mate, mate + cursor, y mate + cursor + recuadro): ganó ámbar con recuadro. Más grande en el menú (38 px) y el footer (44 px) para que se note el color. | `public/logo-color.png`, `components/Nav.tsx`, `components/Footer.tsx`, `app/nosotros/page.tsx` |
+| **Avatares de chat que rotan** | 6 tonos claros entre el azul y el durazno (`--av-0` a `--av-5`) con letra navy, contraste mayor a 9:1. Aplican a los 6 chats de la vitrina, Yuyo, los testimonios y las escenas de "Mientras dormís" y "Cómo trabajamos". | `app/globals.css`, `components/*.tsx` |
+| **Ámbar en lo interactivo** | Toggles y chip activo del cotizador, barras de progreso, nodos y línea de "Mientras dormís", viñetas, pestaña activa de la vitrina, punto "en línea", subrayado del email, hover de chips y botones y anillo de foco. | `app/globals.css`, `app/styles/*.css` |
+| **Pulido móvil** | Titular del hero sin "a" suelta; botones del hero con el mismo ancho; pestañas de la vitrina con degradé en el borde; días y horarios del formulario se ven como botones. | `app/page.tsx`, `app/globals.css`, `app/styles/showcase.css`, `app/styles/glass.css` |
+
+Revisión hecha por dos agentes independientes (uno en móvil a 360/390/430 px y otro en escritorio a 1440 px). Quedaron fuera, a propósito: la barra flotante de precio del cotizador (es el diseño, la sección ya tiene espacio extra) y el alto fijo de las tarjetas de chat de la vitrina.
+
 ## Colores cálidos evaluados
 
 Contraste calculado sobre el navy de la web (`#0D1B2A`). Mínimo exigido para texto normal: 4,5:1.
@@ -55,7 +66,7 @@ Medido con Chrome automatizado (Playwright) a 390 px de ancho, en `/` y `/nosotr
 | Errores en consola del navegador | 0 |
 | Contraste del ámbar sobre navy | 8,0:1 (cumple AA y AAA) |
 
-Pendiente de revisar a mano: probar en un celular real y confirmar el aspecto de la foto cuando se cargue la definitiva.
+El logo más grande entra en la barra a 360 px sin desborde. Pendiente de revisar a mano: probar en un celular real y confirmar el aspecto de la foto cuando se cargue la definitiva.
 
 ## Para completar
 

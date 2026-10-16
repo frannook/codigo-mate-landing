@@ -46,7 +46,7 @@ export default function Nosotros() {
               <Image src={photo} alt="El equipo de Código Mate" width={1200} height={1500} priority sizes="(min-width: 900px) 460px, 100vw" />
             ) : (
               <div className="ab__mark" role="img" aria-label="Código Mate">
-                <Image src="/logo-light.png" alt="" width={1307} height={406} priority />
+                <Image src="/logo-color.png" alt="" width={1307} height={406} priority />
               </div>
             )}
           </figure>
