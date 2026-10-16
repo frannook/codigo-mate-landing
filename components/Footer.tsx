@@ -4,10 +4,11 @@ import { ArrowRight, ArrowUp } from '@/components/icons';
 const EMAIL = 'codigomatebot@gmail.com';
 
 const LINKS: [string, string][] = [
-  ['#probalo', 'Probalo'],
-  ['#como', 'Cómo funciona'],
-  ['#cotizador', 'Cotizador'],
-  ['#testimonios', 'Clientes']
+  ['/#probalo', 'Probalo'],
+  ['/#como', 'Cómo funciona'],
+  ['/#cotizador', 'Cotizador'],
+  ['/#testimonios', 'Clientes'],
+  ['/nosotros', 'Nosotros']
 ];
 
 export default function Footer() {
@@ -20,7 +21,7 @@ export default function Footer() {
         <div className="foot__act">
           <p className="foot__lead">Una videollamada de 30 minutos, sin costo y sin compromiso. O, si preferís, escribinos.</p>
           <div className="foot__ctas">
-            <a href="#agendar" className="btn btn--solid">
+            <a href="/#agendar" className="btn btn--solid">
               Agendar una llamada <ArrowRight />
             </a>
             <a href={`mailto:${EMAIL}`} className="foot__mail">
@@ -46,8 +47,8 @@ export default function Footer() {
         <div className="foot__col">
           <h3>Contacto</h3>
           <a href={`mailto:${EMAIL}`}>Escribinos por email</a>
-          <a href="#agendar">Agendar una llamada</a>
-          <a href="#probalo">Hablar con Yuyo, el agente</a>
+          <a href="/#agendar">Agendar una llamada</a>
+          <a href="/#probalo">Hablar con Yuyo, el agente</a>
         </div>
       </div>
 

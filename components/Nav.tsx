@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from '@/components/icons';
 import { motionOn } from '@/lib/motion';
@@ -11,11 +12,16 @@ const LINKS: [string, string][] = [
   ['cotizador', 'Cotizador'],
   ['testimonios', 'Clientes']
 ];
+const ABOUT = 'nosotros';
 
 // Barra flotante de vidrio: marca la sección visible con una pastilla que se desliza, se esconde al bajar
 // y vuelve al subir (solo con movimiento activo). En pantallas chicas los links pasan a un panel.
 export default function Nav() {
-  const [active, setActive] = useState<string | null>(null);
+  const path = usePathname();
+  const onAbout = path === '/nosotros';
+  // En la home los links son anclas; desde otra página vuelven a la home.
+  const base = path === '/' ? '' : '/';
+  const [active, setActive] = useState<string | null>(onAbout ? ABOUT : null);
   const [hover, setHover] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -100,7 +106,7 @@ export default function Nav() {
   return (
     <header className="navp" data-hidden={hidden && !open} data-top={atTop} data-open={open}>
       <nav className="navp__bar" aria-label="Principal">
-        <a href="#top" className="navp__brand" aria-label="Código Mate, inicio" onClick={() => setOpen(false)}>
+        <a href={`${base}#top`} className="navp__brand" aria-label="Código Mate, inicio" onClick={() => setOpen(false)}>
           <Image src="/logo-light.png" alt="" width={1307} height={406} priority style={{ height: 30, width: 'auto' }} />
         </a>
 
@@ -109,7 +115,7 @@ export default function Nav() {
           {LINKS.map(([id, label]) => (
             <a
               key={id}
-              href={`#${id}`}
+              href={`${base}#${id}`}
               data-id={id}
               className="navp__link"
               aria-current={active === id ? 'location' : undefined}
@@ -120,10 +126,21 @@ export default function Nav() {
               {label}
             </a>
           ))}
+          <a
+            href="/nosotros"
+            data-id={ABOUT}
+            className="navp__link"
+            aria-current={onAbout ? 'page' : undefined}
+            onPointerEnter={() => setHover(ABOUT)}
+            onFocus={() => setHover(ABOUT)}
+            onBlur={() => setHover(null)}
+          >
+            Nosotros
+          </a>
         </div>
 
         <div className="navp__right">
-          <a href="#agendar" className="nav__cta" onClick={() => setOpen(false)}>
+          <a href={`${base}#agendar`} className="nav__cta" onClick={() => setOpen(false)}>
             <span className="navp__cta-long">Agendar llamada</span>
             <span className="navp__cta-short">Agendar</span>
             <ArrowRight />
@@ -147,12 +164,18 @@ export default function Nav() {
         <ul>
           {LINKS.map(([id, label], i) => (
             <li key={id} style={{ '--i': i } as React.CSSProperties}>
-              <a href={`#${id}`} aria-current={active === id ? 'location' : undefined} onClick={() => setOpen(false)}>
+              <a href={`${base}#${id}`} aria-current={active === id ? 'location' : undefined} onClick={() => setOpen(false)}>
                 {label}
                 <ArrowRight size={20} />
               </a>
             </li>
           ))}
+          <li style={{ '--i': LINKS.length } as React.CSSProperties}>
+            <a href="/nosotros" aria-current={onAbout ? 'page' : undefined} onClick={() => setOpen(false)}>
+              Nosotros
+              <ArrowRight size={20} />
+            </a>
+          </li>
         </ul>
       </div>
     </header>

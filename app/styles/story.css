@@ -45,7 +45,7 @@
 .ns__dawn {
   position: absolute; inset: 0; opacity: 0;
   background:
-    radial-gradient(70% 55% at 30% 105%, rgba(119, 141, 169, 0.32), transparent 70%),
+    radial-gradient(70% 55% at 30% 105%, rgba(233, 162, 59, 0.26), transparent 70%),
     linear-gradient(to top, rgba(65, 90, 119, 0.45), rgba(36, 51, 73, 0.2) 45%, transparent 80%);
   /* El amanecer se apaga antes del borde: sin corte duro contra la sección siguiente. */
   -webkit-mask-image: linear-gradient(to top, transparent, #000 30%);
@@ -164,3 +164,14 @@
 .ns__ends { display: flex; justify-content: space-between; font-size: 13px; color: var(--slate); }
 
 html[data-motion='off'] .ns__caret { animation: none; }
+
+/* ---------- Móvil: texto chico más legible (≥13px, cuerpo ≥14px) ---------- */
+@media (max-width: 640px) {
+  .ns__status { font-size: 13px; }
+  .ns__avatar { font-size: 14px; }
+  .ns__who strong { font-size: 14px; }
+  .ns__who small { font-size: 13px; }
+  .ns__summary strong { font-size: 14px; }
+  .ns__summary span:nth-child(2) { font-size: 13px; }
+  .ns__ends { font-size: 14px; }
+}

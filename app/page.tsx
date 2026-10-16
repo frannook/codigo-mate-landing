@@ -53,7 +53,7 @@ export default function Home() {
                 const style = { animationDelay: `${delay}s`, ...(em ? { animationDuration: '1s' } : null) };
                 return (
                   <span key={word} aria-hidden="true">
-                    {i > 0 && ' '}
+                    {i > 0 && (word === 'tus' || word === 'clientes.' ? ' ' : ' ')}
                     {em ? (
                       <em className="hero__word accent" style={style}>
                         {word}

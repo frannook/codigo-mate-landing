@@ -130,7 +130,7 @@
   margin: 0; max-width: 13ch; font-family: var(--fh); font-weight: 400; letter-spacing: -0.015em;
   font-size: clamp(44px, 6.6vw, 92px); line-height: 1; text-wrap: balance; color: var(--bone);
 }
-.foot__title em { font-style: italic; color: var(--slate); padding-right: 0.04em; }
+.foot__title em { font-style: italic; color: var(--amber); padding-right: 0.04em; }
 .foot__act { display: flex; flex-direction: column; gap: 28px; }
 .foot__lead { margin: 0; max-width: 40ch; font-size: 17px; line-height: 1.65; color: var(--mist); text-wrap: pretty; }
 .foot__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
@@ -142,7 +142,7 @@
   content: ''; position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: var(--steel);
   transform-origin: right; transition: transform 0.5s var(--ease-out), background 0.3s;
 }
-.foot__mail:hover::after { background: var(--bone); animation: footLine 0.7s var(--ease-out); }
+.foot__mail:hover::after { background: var(--amber); animation: footLine 0.7s var(--ease-out); }
 @keyframes footLine { 0% { transform: scaleX(1); transform-origin: right; } 45% { transform: scaleX(0); transform-origin: right; } 55% { transform: scaleX(0); transform-origin: left; } 100% { transform: scaleX(1); transform-origin: left; } }
 
 .foot__grid {
@@ -160,7 +160,7 @@
   display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; color: var(--mist);
   transition: color 0.25s, transform 0.4s var(--ease-out);
 }
-.foot__col a:hover { color: var(--white); transform: translateX(4px); }
+.foot__col a:hover { color: var(--amber-hi); transform: translateX(4px); }
 
 /* Marca gigante: el tamaño sale del ancho del contenedor (cqi), así nunca desborda. */
 .foot__markwrap { container-type: inline-size; margin-top: clamp(56px, 8vw, 112px); }
@@ -170,7 +170,7 @@
   color: var(--steel);
 }
 .foot__mark span { display: inline-block; }
-.foot__mark span:last-child { font-style: italic; color: var(--slate); }
+.foot__mark span:last-child { font-style: italic; color: var(--amber); opacity: 0.88; }
 /* Revelado: sube desde una máscara al entrar (Reveal pone .is-in en el contenedor).
    El clip-path va en el hijo: si estuviera en el elemento observado, IntersectionObserver lo ve recortado y nunca dispara. */
 .reveal-on .foot__markwrap[data-reveal] { opacity: 1; transform: none; }
@@ -196,3 +196,8 @@
 .foot__top { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--mist); }
 .foot__top svg { transition: transform 0.4s var(--ease-out); }
 .foot__top:hover svg { transform: translateY(-3px); }
+
+/* ---------- Móvil: texto chico más legible (≥13px, cuerpo ≥14px) ---------- */
+@media (max-width: 640px) {
+  .foot__legal { font-size: 14px; }
+}

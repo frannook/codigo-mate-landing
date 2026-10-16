@@ -151,6 +151,7 @@ page.tsx (componentes principales)
 .
 ├── app/
 │   ├── page.tsx                    # Página principal (hero, secciones, componentes)
+│   ├── nosotros/page.tsx           # Página Nosotros: foto (public/nosotros.jpg) + descripción + principios
 │   ├── layout.tsx                  # Root layout, fuentes, script de movimiento
 │   ├── globals.css                 # Paleta (navy/bone/slate/mist), tipografía, keyframes
 │   ├── api/

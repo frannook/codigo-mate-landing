@@ -98,3 +98,15 @@
 }
 html[data-motion='off'] .sc__tab[aria-pressed='true'] .sc__bar { transform: none; }
 html[data-motion='off'] .sc .typing { display: none; }
+
+/* ---------- Móvil: texto chico más legible (≥13px, cuerpo ≥14px) ---------- */
+@media (max-width: 640px) {
+  .sc__slot { font-size: 13px; }
+  .sc__confirm strong, .sc__pinfo strong { font-size: 14px; }
+  .sc__confirm small, .sc__pinfo small { font-size: 13px; }
+  .sc__pinfo b { font-size: 14px; }
+  .sc__cta { font-size: 13px; }
+  .sc__chip { font-size: 13px; }
+  .sc__handoff small { font-size: 13px; }
+  .sc__tab { font-size: 14px; }
+}

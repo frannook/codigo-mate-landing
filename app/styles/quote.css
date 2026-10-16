@@ -138,3 +138,13 @@
     border: 1px solid rgba(119, 141, 169, 0.4); font-size: 14px;
   }
 }
+
+/* ---------- Móvil: texto chico más legible (≥13px, cuerpo ≥14px) ---------- */
+@media (max-width: 640px) {
+  .qt__segopt--tall strong small { font-size: 14px; }
+  .qt__segopt--tall > span > small { font-size: 14px; }
+  .qt__featprice { font-size: 14px; }
+  .qt__tag { font-size: 13px; }
+  .qt__totallabel { font-size: 14px; }
+  .qt__note { font-size: 14px; }
+}

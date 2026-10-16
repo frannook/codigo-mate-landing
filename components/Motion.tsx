@@ -26,8 +26,10 @@ export default function Motion() {
 
       const top = { trigger: '.top', start: 'top top', end: 'bottom top', scrub: true };
       gsap.to('.top__glow', { yPercent: 30, ease: 'none', scrollTrigger: top });
-      gsap.to('.hero__visual', { yPercent: -7, ease: 'none', scrollTrigger: top });
-      gsap.to('.hero__copy', { yPercent: 8, opacity: 0.35, ease: 'none', scrollTrigger: top });
+      if (document.querySelector('.hero__visual')) {
+        gsap.to('.hero__visual', { yPercent: -7, ease: 'none', scrollTrigger: top });
+        gsap.to('.hero__copy', { yPercent: 8, opacity: 0.35, ease: 'none', scrollTrigger: top });
+      }
 
       // Titulares: cada palabra sube desde una máscara, con desenfoque que se aclara.
       gsap.utils.toArray<HTMLElement>('[data-headline]').forEach(el => {

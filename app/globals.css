@@ -17,6 +17,9 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  /* Acento cálido (ámbar miel): 8:1 sobre navy. Cambiar solo estas dos líneas para probar otro tono. */
+  --amber: #e9a23b;
+  --amber-hi: #f3b65a;
   --dur-quick: 0.15s;
   --dur-std: 0.35s;
   --dur-slow: 0.7s;
@@ -39,7 +42,7 @@ a { color: var(--bone); text-decoration: none; }
 a:hover { color: var(--white); }
 input, textarea, button { font-family: inherit; }
 :focus-visible { outline: 2px solid var(--slate); outline-offset: 3px; }
-::selection { background: var(--steel); color: var(--bone); }
+::selection { background: var(--amber); color: var(--navy); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 @keyframes cmIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
@@ -117,7 +120,7 @@ html.lenis, html.lenis body { height: auto; }
   transition: background 0.25s, scale var(--dur-std) var(--ease-out);
 }
 .nav__cta svg, .btn svg { transition: transform 0.3s var(--ease-out); }
-.nav__cta:hover { background: var(--white); color: var(--navy); }
+.nav__cta:hover { background: var(--amber-hi); color: var(--navy); }
 .nav__cta:hover svg, .btn:hover svg { transform: translateX(3px); }
 /* Toque: se hunde rápido (--dur-quick) y vuelve con --dur-std. Usa `scale` para no pisar los transform de hover. */
 :is(.btn, .nav__cta, .chip, .chat-error button, .composer button:not(:disabled), .bk-opt, .bk-submit:not(:disabled), .bk-ghost, .bk-quote button):active {
@@ -138,7 +141,7 @@ html.lenis, html.lenis body { height: auto; }
   display: flex; align-items: center; gap: 12px; font-size: 12px; letter-spacing: 0.14em; line-height: 1.5;
   text-transform: uppercase; color: var(--slate); text-wrap: balance;
 }
-.eyebrow__rule { width: 24px; height: 1px; flex-shrink: 0; background: var(--slate); }
+.eyebrow__rule { width: 24px; height: 1px; flex-shrink: 0; background: var(--amber); }
 .eyebrow__num { font-family: var(--fm); letter-spacing: 0.04em; }
 .hero .eyebrow { animation: cmUp var(--dur-slow) var(--ease-out) both; }
 .hero__title {
@@ -146,7 +149,7 @@ html.lenis, html.lenis body { height: auto; }
   font-size: clamp(46px, 6vw, 80px); line-height: 1; text-wrap: balance;
 }
 .hero__word { display: inline-block; animation: cmWord 0.9s var(--ease-out) both; }
-.accent { font-style: italic; color: var(--slate); padding-right: 0.04em; }
+.accent { font-style: italic; color: var(--amber); padding-right: 0.04em; }
 .hero__lead {
   margin: 0; max-width: 500px; font-size: clamp(16px, 1.4vw, 18px); line-height: 1.65; color: var(--mist);
   text-wrap: pretty; animation: cmUp var(--dur-slow) var(--ease-out) 0.5s both;
@@ -162,7 +165,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 .btn:focus-visible, .nav__cta:focus-visible { outline-offset: 3px; }
 .btn--solid { background: var(--bone); color: var(--navy); border: none; transition: background 0.25s, scale var(--dur-std) var(--ease-out); }
-.btn--solid:hover { background: var(--white); color: var(--navy); }
+.btn--solid:hover { background: var(--amber-hi); color: var(--navy); }
 .btn--ghost {
   border: 1px solid rgba(119, 141, 169, 0.4); color: var(--bone); background: transparent;
   transition: border-color 0.25s, background 0.25s, scale var(--dur-std) var(--ease-out);
@@ -386,7 +389,7 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---------- Progreso de scroll ---------- */
 .progress {
-  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 30; background: var(--slate);
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 30; background: var(--amber);
   transform: scaleX(0); transform-origin: left; pointer-events: none;
 }
 
@@ -441,3 +444,28 @@ html.lenis, html.lenis body { height: auto; }
 
 
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+/* ---------- Móvil: texto chico más legible (≥13px, cuerpo ≥14px) ---------- */
+@media (max-width: 640px) {
+  .eyebrow { font-size: 13px; letter-spacing: 0.1em; color: var(--mist); }
+  .hero__notes { font-size: 15px; color: var(--mist); }
+  .chip, .chat-error button { min-height: 40px; }
+  .browser__url { font-size: 13px; }
+  .chat__state { font-size: 13px; }
+  .order__top { font-size: 13px; }
+  .order__id { font-size: 13px; }
+  .order__steps { font-size: 13px; }
+  .handoff { font-size: 13px; }
+  .chip { font-size: 13px; }
+  .chat-error { font-size: 14px; }
+  .chat-error button { font-size: 13px; }
+  .chat__credit { font-size: 13px; }
+  .demo__caption { font-size: 14px; }
+  .q-bubble { font-size: 14px; }
+  .tag { font-size: 13px; }
+  .bar__label { font-size: 13px; }
+  .code { font-size: 13px; }
+  .wa__icon { font-size: 13px; }
+  .wa__title { font-size: 13px; }
+  .wa__sub { font-size: 13px; }
+}

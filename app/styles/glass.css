@@ -308,3 +308,6 @@ textarea.bk-input { padding: 14px 16px; min-height: 108px; resize: vertical; }
 .bk-ghost:hover { background: rgba(175, 187, 203, 0.14); border-color: rgba(175, 187, 203, 0.5); }
 
 .bk-live:empty { margin-top: -8px; }
+
+/* Móvil: día y mes del selector de fecha, al mínimo legible. */
+@media (max-width: 640px) { .bk-opt--day .dow, .bk-opt--day .mon { font-size: 13px; } }

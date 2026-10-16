@@ -81,3 +81,10 @@
 .tm__pause:hover { border-color: var(--slate); background: rgba(119, 141, 169, 0.1); }
 .tm__pause[aria-pressed='true'] { background: var(--bone); color: var(--navy); border-color: var(--bone); }
 .tm__pause:focus-visible { outline: 2px solid var(--bone); outline-offset: 3px; }
+
+/* ---------- Móvil: texto chico más legible (≥13px, cuerpo ≥14px) ---------- */
+@media (max-width: 640px) {
+  .tm__chip { font-size: 13px; }
+  .tm__avatar { font-size: 14px; }
+  .tm__id { font-size: 14px; }
+}

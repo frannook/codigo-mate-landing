@@ -1,0 +1,64 @@
+/* =========================================================
+   Nosotros (/nosotros): foto + descripción corta + tres principios.
+   Mobile first; usa los mismos tokens que la home.
+   ========================================================= */
+
+.ab { padding-top: clamp(112px, 12vw, 148px); }
+
+.ab__hero {
+  position: relative; display: grid; gap: clamp(32px, 5vw, 88px); align-items: center;
+  padding-bottom: clamp(64px, 9vw, 120px);
+}
+@media (min-width: 900px) { .ab__hero { grid-template-columns: minmax(0, 460px) minmax(0, 1fr); } }
+
+/* Foto: retrato con marco de vidrio y un resplandor ámbar muy suave detrás. */
+.ab__photo {
+  position: relative; isolation: isolate; margin: 0; width: 100%; max-width: 460px; justify-self: center;
+  aspect-ratio: 4 / 5; border-radius: 28px; overflow: hidden;
+  border: 1px solid rgba(175, 187, 203, 0.2);
+  background: var(--navy-700);
+  box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.12), 0 40px 80px -40px rgba(0, 0, 0, 0.75);
+  animation: cmUp var(--dur-slow) var(--ease-out) 0.1s both;
+}
+.ab__photo::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit;
+  background: radial-gradient(80% 50% at 20% 105%, rgba(233, 162, 59, 0.16), transparent 70%);
+}
+@media (max-width: 899px) { .ab__photo { aspect-ratio: 4 / 3; max-width: 560px; } }
+.ab__photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* Panel de marca: se ve mientras no hay foto del equipo. */
+.ab__mark {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(70% 45% at 30% 100%, rgba(233, 162, 59, 0.22), transparent 70%),
+    radial-gradient(90% 60% at 50% 0%, rgba(65, 90, 119, 0.5), transparent 75%),
+    var(--navy-700);
+}
+.ab__mark img { width: 56%; height: auto; opacity: 0.95; }
+
+.ab__copy { display: flex; flex-direction: column; gap: 22px; max-width: 560px; }
+.ab__title {
+  margin: 0; font-family: var(--fh); font-weight: 400; letter-spacing: -0.015em;
+  font-size: clamp(40px, 5.4vw, 68px); line-height: 1.02; text-wrap: balance;
+}
+.ab__lead { margin: 0; font-size: clamp(17px, 1.5vw, 19px); line-height: 1.65; color: var(--bone); text-wrap: pretty; }
+.ab__text { margin: 0; font-size: 17px; line-height: 1.65; color: var(--mist); text-wrap: pretty; }
+.ab__ctas { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 6px; }
+
+/* Principios */
+.ab__values {
+  padding-top: clamp(56px, 7vw, 96px); padding-bottom: clamp(80px, 11vw, 140px);
+  display: flex; flex-direction: column; gap: clamp(32px, 4vw, 56px);
+  border-top: 1px solid var(--rule);
+}
+.ab__values .h2 { max-width: 14ch; }
+.ab__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+@media (min-width: 900px) { .ab__list { grid-template-columns: repeat(3, 1fr); column-gap: clamp(32px, 4vw, 64px); } }
+.ab__list li { padding: 24px 0; border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 10px; }
+.ab__list h3 {
+  margin: 0; display: flex; align-items: center; gap: 12px;
+  font-family: var(--fh); font-weight: 400; font-size: clamp(26px, 2.4vw, 32px); line-height: 1.1; color: var(--bone);
+}
+.ab__list h3::before { content: ''; width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--amber); }
+.ab__list p { margin: 0; max-width: 38ch; font-size: 16px; line-height: 1.65; color: var(--mist); text-wrap: pretty; }

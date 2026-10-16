@@ -53,6 +53,13 @@ Identidad en [MOTION.md](MOTION.md): Premium, curva `cubic-bezier(0.16, 1, 0.3, 
 
 El movimiento sigue siempre activo, también con `prefers-reduced-motion`. Lo decidió el equipo.
 
+## Sprint 2026-10-16: acento cálido, Nosotros y móvil
+
+- **Acento ámbar miel `#E9A23B`** (8:1 sobre navy), usado con parsimonia como token `--amber` en `app/globals.css`. Se eligió sobre terracota, cobre y durazno por contraste y por su relación con el mate. Cambiarlo es editar dos variables.
+- **Página `/nosotros`** como ruta aparte (no una sección de la home). La foto va en `public/nosotros.jpg`; sin foto se muestra un panel de marca.
+- **Legibilidad móvil:** mínimo 13 px en texto de interfaz, 14 px en cuerpo.
+- Evidencia con capturas y mediciones en [docs/sprint/SPRINT.md](docs/sprint/SPRINT.md).
+
 ## Cosas a tener presentes
 
 - Los testimonios de `components/Testimonials.tsx` son **texto de ejemplo**: reemplazar antes de promocionar la web.
