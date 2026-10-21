@@ -61,11 +61,39 @@ Hoy el límite vive en la memoria de cada instancia de Vercel y se reinicia solo
 
 **Yo:** cambio el límite de `/api/chat` y `/api/booking` para que use Redis (ventana de 10 minutos por IP).
 
-## Paso 3 · Respaldo en Groq
+## Paso 3 · Respaldo del chat (Groq u otro proveedor)
 
-**Vos:** creá una cuenta en https://console.groq.com/keys (gratis, sin tarjeta), generá una clave y cargala en Vercel como `GROQ_API_KEY` (entornos Production y Preview). Después hacé un "Redeploy".
+Sirve para que el chat siga andando si Gemini se satura. Es opcional: sin esto el chat funciona igual, solo que sin red de seguridad.
 
-**Yo:** nada; el código ya lo usa cuando está la clave.
+**Opción A · Groq (gratis, sin tarjeta)**
+1. Entrá a https://console.groq.com y creá la cuenta (GitHub, Google o correo).
+2. Menú "API Keys" → "Create API Key" → copiá la clave (se muestra una sola vez).
+3. En Vercel → proyecto → Settings → Environment Variables: `GROQ_API_KEY` = la clave, en Production y Preview.
+4. Deployments → los tres puntos del último deploy → **Redeploy**.
+
+**Si no te deja iniciar sesión con GitHub** (probá en este orden):
+1. Abrí una **ventana privada** y probá de nuevo: descarta extensiones, bloqueadores de anuncios y cookies viejas.
+2. Permití las cookies de terceros para `console.groq.com` y `github.com` (Chrome: candado de la barra → Configuración del sitio). El inicio con GitHub se cuelga si el navegador las bloquea.
+3. Probá otro navegador (Edge o Firefox) o el celular.
+4. Entrá con **otro método** en la misma pantalla: Google o correo. No necesitás GitHub para tener la cuenta.
+5. Revisá que tu GitHub tenga el correo verificado (github.com → Settings → Emails).
+6. Mirá https://groqstatus.com por si la plataforma está caída.
+7. Si GitHub pide algo y la ventana se cierra, entrá a github.com → Settings → Applications → **Authorized OAuth Apps**, borrá Groq si aparece y repetí el inicio.
+8. Esperá unos minutos si hiciste muchos intentos seguidos: puede bloquear temporalmente.
+
+**Opción B · otro proveedor gratuito (si Groq no anda)**
+
+El código ya acepta cualquier proveedor con API compatible con OpenAI. Cargá estas tres variables en Vercel (Production y Preview) y hacé Redeploy:
+
+| Proveedor | `FALLBACK_BASE_URL` | `FALLBACK_MODEL` (ejemplo) | Inicio de sesión |
+| --- | --- | --- | --- |
+| OpenRouter | `https://openrouter.ai/api/v1/chat/completions` | `meta-llama/llama-3.3-70b-instruct:free` | GitHub, Google o correo |
+| Cerebras | `https://api.cerebras.ai/v1/chat/completions` | el que figure en su panel (familia Llama) | Google o correo |
+| Mistral | `https://api.mistral.ai/v1/chat/completions` | `mistral-small-latest` | Correo (pide verificar el teléfono) |
+
+`FALLBACK_API_KEY` = la clave de ese proveedor. Los nombres de modelos gratuitos cambian seguido: copialos de la lista del panel de cada servicio. Con `FALLBACK_API_KEY` cargada, `GROQ_API_KEY` ya no hace falta.
+
+**Cómo comprobar que funciona:** en Vercel → Logs, si Gemini falla aparece una línea con `respaldo/…` y el chat sigue respondiendo.
 
 ## Paso 4 · WhatsApp real
 
@@ -130,7 +158,7 @@ Hoy el límite vive en la memoria de cada instancia de Vercel y se reinicia solo
 | `GEMINI_API_KEY` | Sí (ya está) | aistudio.google.com/apikey | — |
 | `GMAIL_USER`, `GMAIL_APP_PASSWORD` | Sí (ya están) | myaccount.google.com/apppasswords | — |
 | `BOOKING_TO` | No | Correo que revisa el equipo | — |
-| `GROQ_API_KEY` | Recomendada | console.groq.com/keys | 3 |
+| `GROQ_API_KEY` (o `FALLBACK_API_KEY`, `FALLBACK_BASE_URL`, `FALLBACK_MODEL`) | Recomendada | console.groq.com/keys u otro proveedor | 3 |
 | `KV_REST_API_URL`, `KV_REST_API_TOKEN` | Recomendadas | Vercel → Storage → Upstash | 2 |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN` | Para el calendario | Google Cloud Console | 1 |
 | `WHATSAPP_NUMBER` | Para el pase a WhatsApp | El número del negocio | 4 |

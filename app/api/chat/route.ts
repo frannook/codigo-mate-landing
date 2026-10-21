@@ -14,8 +14,11 @@ const MODELS = [...new Set([process.env.GEMINI_MODEL, 'gemini-3.5-flash-lite', '
 // Consultas escalonadas: si el modelo en curso no contestó en HEDGE_MS (o falló), se lanza el siguiente en paralelo
 // y gana la primera respuesta. Así una consulta encolada no deja al visitante esperando.
 const HEDGE_MS = 3_500;
-// Respaldo opcional en otra infraestructura: Groq (capa gratuita, API compatible con OpenAI). Solo si hay GROQ_API_KEY.
-const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+// Respaldo opcional en otra infraestructura: cualquier proveedor con API compatible con OpenAI (Groq, OpenRouter, Cerebras, Mistral...).
+// Por defecto Groq con GROQ_API_KEY; para otro proveedor: FALLBACK_API_KEY, FALLBACK_BASE_URL y FALLBACK_MODEL.
+const FALLBACK_KEY = process.env.FALLBACK_API_KEY || process.env.GROQ_API_KEY;
+const FALLBACK_URL = process.env.FALLBACK_BASE_URL || 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = process.env.FALLBACK_MODEL || process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 const DEADLINE_MS = 22_000;
 const MAX_MESSAGES = 16;
 const MAX_LEN = 2000;
@@ -97,9 +100,9 @@ export async function POST(req: Request) {
   };
 
   const groq = async () => {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const res = await fetch(FALLBACK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${FALLBACK_KEY}` },
       body: JSON.stringify({
         model: GROQ_MODEL,
         max_tokens: 600,
@@ -108,10 +111,10 @@ export async function POST(req: Request) {
       }),
       signal: done.signal
     });
-    if (!res.ok) throw new Error(`groq ${res.status} ${(await res.text()).slice(0, 160)}`);
+    if (!res.ok) throw new Error(`respaldo ${res.status} ${(await res.text()).slice(0, 160)}`);
     const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
     const reply = (data.choices?.[0]?.message?.content || '').trim();
-    if (!reply) throw new Error('groq respuesta vacía');
+    if (!reply) throw new Error('respaldo respuesta vacía');
     return reply;
   };
 
@@ -119,7 +122,7 @@ export async function POST(req: Request) {
   const [first, ...rest] = MODELS;
   const candidates: [string, () => Promise<string>][] = [
     [first, () => gemini(first)],
-    ...(process.env.GROQ_API_KEY ? [[`groq/${GROQ_MODEL}`, groq] as [string, () => Promise<string>]] : []),
+    ...(FALLBACK_KEY ? [[`respaldo/${GROQ_MODEL}`, groq] as [string, () => Promise<string>]] : []),
     ...rest.map(m => [m, () => gemini(m)] as [string, () => Promise<string>])
   ];
 
