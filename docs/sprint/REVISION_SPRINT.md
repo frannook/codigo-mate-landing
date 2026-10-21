@@ -50,20 +50,23 @@ Tener una landing publicada que **explique el servicio, lo demuestre con un agen
 
 ## 4. Calidad: mediciones
 
-### Lighthouse sobre el sitio publicado (2026-10-16)
+### Lighthouse sobre el sitio publicado
 
-| Categoría | Móvil | Escritorio | Objetivo |
-| --- | --- | --- | --- |
-| Accesibilidad | **98** | **98** | ≥ 95 → cumple |
-| Buenas prácticas | **100** | **100** | ≥ 95 → cumple |
-| SEO | **100** | **100** | — → cumple |
-| Rendimiento | **53** | **70** | ≥ 90 → **no cumple** |
+| Categoría | Móvil 16/10 | Móvil 21/10 | Escritorio 16/10 | Escritorio 21/10 | Objetivo |
+| --- | --- | --- | --- | --- | --- |
+| Accesibilidad | 98 | **100** | 98 | **100** | ≥ 95 → cumple |
+| Buenas prácticas | 100 | **100** | 100 | **100** | ≥ 95 → cumple |
+| SEO | 100 | **100** | 100 | **100** | — → cumple |
+| Rendimiento (mediana de 5 corridas) | 53 | **81** (rango 67–88) | 70 | **96** (rango 74–98) | ≥ 90 → escritorio cumple; móvil, parcial |
+| Rendimiento (mejor corrida) | — | 93 | — | 100 | |
+
+Contenido principal (LCP): móvil 4,0 s → 2,9 s (mediana; hasta 1,8 s en las mejores corridas); escritorio 0,8 s → 0,7 s. Bloqueo total: móvil 2.520 ms → 776 ms; escritorio 800 ms → 128 ms. Saltos de diseño casi nulos (CLS 0,017 en móvil, 0,001 en escritorio). La dispersión entre corridas es grande porque Lighthouse corre en una PC común; por eso se informa la mediana y el rango.
 
 Detalle del rendimiento (primera medición): en móvil el contenido principal tarda 4,0 s en aparecer (LCP) y el tiempo de bloqueo total es de 2,5 s; en escritorio, 0,8 s y 0,8 s. No hay saltos de diseño (CLS 0 en los dos). La causa era el peso del movimiento (GSAP, scroll suave y efectos de vidrio) y la carga de las fuentes.
 
 ### Optimización de rendimiento (2026-10-20)
 
-Se midió con Lighthouse sobre un build de producción local, **mediana de 3 corridas** (la máquina de prueba varía mucho entre corridas, por eso no se usa una sola).
+Primero se midió con Lighthouse sobre un build de producción local, **mediana de 3 corridas**; después se confirmó en el sitio publicado (tabla de arriba).
 
 | Métrica | Móvil antes | Móvil después | Escritorio antes | Escritorio después |
 | --- | --- | --- | --- | --- |
@@ -72,7 +75,7 @@ Se midió con Lighthouse sobre un build de producción local, **mediana de 3 cor
 | Índice de velocidad | 2,8 s | 1,9 s | 0,9 s | 0,9 s |
 | Contenido principal (LCP) | 3,4 s | 3,3 s | 0,9 s | 0,7 s |
 
-Qué se hizo: fuentes sin precarga (competían con el CSS y retrasaban el primer pintado de 0,8 a 2,7 s con red lenta), movimiento que se arma bajo demanda, modo liviano en celulares (sin desenfoque, scroll suave, paralaje ni botones magnéticos), textos del hero visibles desde el primer cuadro, CSS en línea y logos con tamaño real. Se probó y se descartó precargar solo la tipografía del titular (empeoró el móvil). Pendiente: el LCP móvil simulado sigue en 3,3 s.
+Qué se hizo: fuentes sin precarga (competían con el CSS y retrasaban el primer pintado de 0,8 a 2,7 s con red lenta), movimiento que se arma bajo demanda, modo liviano en celulares (sin desenfoque, scroll suave, paralaje ni botones magnéticos), textos del hero visibles desde el primer cuadro, CSS en línea y logos con tamaño real. Se probó y se descartó precargar solo la tipografía del titular (empeoró el móvil). Pendiente: en móvil la mediana (81) todavía queda por debajo de 90.
 
 ### Pruebas en pantalla (Chrome automatizado, 390 px de ancho)
 
@@ -132,7 +135,7 @@ Todas en [`evidencias/`](evidencias/): capturas "antes" y "después" en escritor
 
 | Prioridad | Tarea | Detalle |
 | --- | --- | --- |
-| Alta | Rendimiento móvil: último tramo | Local en 88; llevar el LCP simulado por debajo de 2,5 s y confirmar ≥ 90 en el sitio publicado |
+| Alta | Rendimiento móvil: último tramo | Hoy 81 de mediana en el sitio publicado; llevar la mediana a ≥ 90 (LCP bajo 2,5 s y bloqueo bajo 300 ms) |
 | Alta | Google Calendar y Meet | Evita pedidos duplicados y genera el link de la videollamada |
 | Alta | Límite de uso compartido (Redis) y respaldo en Groq | Robustez en producción |
 | Media | Número de WhatsApp real | El pase hoy es demostrativo |
