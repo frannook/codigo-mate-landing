@@ -5,10 +5,11 @@ const EMAIL = 'codigomatebot@gmail.com';
 
 const LINKS: [string, string][] = [
   ['/#probalo', 'Probalo'],
-  ['/#como', 'Cómo funciona'],
   ['/#cotizador', 'Cotizador'],
-  ['/#testimonios', 'Clientes'],
-  ['/nosotros', 'Nosotros']
+  ['/servicios', 'Servicios'],
+  ['/proyectos', 'Proyectos'],
+  ['/nosotros', 'Nosotros'],
+  ['/#agendar', 'Contacto']
 ];
 
 export default function Footer() {

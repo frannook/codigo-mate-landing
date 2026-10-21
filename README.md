@@ -4,6 +4,9 @@ Landing de una agencia argentina que instala agentes de IA (chatbots) en webs de
 
 **Objetivo pedagógico:** sitio premium con Next.js moderno, IA en producción, manejo de APIs, autenticación segura y UX pulida.
 
+**Sitio publicado:** https://codigo-mate-landing.vercel.app · **Páginas:** Inicio, `/servicios`, `/proyectos`, `/nosotros`, contacto (`/#agendar`).
+**Documentación de la materia (brief, backlog, decisiones, pruebas, informe):** [docs/entrega/](docs/entrega/)
+
 ---
 
 ## Stack Tecnológico

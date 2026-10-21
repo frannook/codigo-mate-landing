@@ -8,20 +8,23 @@ import { motionOn } from '@/lib/motion';
 
 const LINKS: [string, string][] = [
   ['probalo', 'Probalo'],
-  ['como', 'Cómo funciona'],
-  ['cotizador', 'Cotizador'],
-  ['testimonios', 'Clientes']
+  ['cotizador', 'Cotizador']
 ];
-const ABOUT = 'nosotros';
+// Páginas propias: [id, ruta, texto].
+const PAGES: [string, string, string][] = [
+  ['servicios', '/servicios', 'Servicios'],
+  ['proyectos', '/proyectos', 'Proyectos'],
+  ['nosotros', '/nosotros', 'Nosotros']
+];
 
 // Barra flotante de vidrio: marca la sección visible con una pastilla que se desliza, se esconde al bajar
 // y vuelve al subir (solo con movimiento activo). En pantallas chicas los links pasan a un panel.
 export default function Nav() {
   const path = usePathname();
-  const onAbout = path === '/nosotros';
+  const current = PAGES.find(([, href]) => href === path)?.[0] ?? null;
   // En la home los links son anclas; desde otra página vuelven a la home.
   const base = path === '/' ? '' : '/';
-  const [active, setActive] = useState<string | null>(onAbout ? ABOUT : null);
+  const [active, setActive] = useState<string | null>(current);
   const [hover, setHover] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -126,17 +129,20 @@ export default function Nav() {
               {label}
             </a>
           ))}
-          <a
-            href="/nosotros"
-            data-id={ABOUT}
-            className="navp__link"
-            aria-current={onAbout ? 'page' : undefined}
-            onPointerEnter={() => setHover(ABOUT)}
-            onFocus={() => setHover(ABOUT)}
-            onBlur={() => setHover(null)}
-          >
-            Nosotros
-          </a>
+          {PAGES.map(([id, href, label]) => (
+            <a
+              key={id}
+              href={href}
+              data-id={id}
+              className="navp__link"
+              aria-current={current === id ? 'page' : undefined}
+              onPointerEnter={() => setHover(id)}
+              onFocus={() => setHover(id)}
+              onBlur={() => setHover(null)}
+            >
+              {label}
+            </a>
+          ))}
         </div>
 
         <div className="navp__right">
@@ -170,12 +176,14 @@ export default function Nav() {
               </a>
             </li>
           ))}
-          <li style={{ '--i': LINKS.length } as React.CSSProperties}>
-            <a href="/nosotros" aria-current={onAbout ? 'page' : undefined} onClick={() => setOpen(false)}>
-              Nosotros
-              <ArrowRight size={20} />
-            </a>
-          </li>
+          {PAGES.map(([id, href, label], i) => (
+            <li key={id} style={{ '--i': LINKS.length + i } as React.CSSProperties}>
+              <a href={href} aria-current={current === id ? 'page' : undefined} onClick={() => setOpen(false)}>
+                {label}
+                <ArrowRight size={20} />
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
     </header>
