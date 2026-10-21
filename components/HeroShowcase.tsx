@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { motionOn } from '@/lib/motion';
+import { isLite, motionOn } from '@/lib/motion';
 import { ArrowRight, ArrowUp } from './icons';
 import '@/app/styles/showcase.css';
 
@@ -193,85 +193,102 @@ function CardView({ c }: { c: Card }) {
 export default function HeroShowcase() {
   const root = useRef<HTMLDivElement>(null);
   const master = useRef<gsap.core.Timeline | null>(null);
+  const buildUpTo = useRef<(i: number) => void>(() => {});
   const [active, setActive] = useState(0);
 
   useEffect(() => {
     const el = root.current;
     if (!el || !motionOn()) return;
 
-    const ctx = gsap.context(() => {
-      const url = el.querySelector<HTMLElement>('.sc__url')!;
-      const field = el.querySelector<HTMLElement>('.sc__field')!;
-      const scenes = gsap.utils.toArray<HTMLElement>('.sc__scene', el);
-      const bars = gsap.utils.toArray<HTMLElement>('.sc__bar', el);
+    const lite = isLite(); // sin desenfoque en celulares: cuesta mucho y casi no se nota
+    const blur = (px: number, to: boolean) => (lite ? null : { filter: `blur(${to ? 0 : px}px)` });
+    const url = el.querySelector<HTMLElement>('.sc__url')!;
+    const field = el.querySelector<HTMLElement>('.sc__field')!;
+    const scenes = gsap.utils.toArray<HTMLElement>('.sc__scene', el);
+    const bars = gsap.utils.toArray<HTMLElement>('.sc__bar', el);
 
-      // Escribe un texto letra por letra en un elemento.
-      const type = (target: HTMLElement, text: string, speed: number) => {
-        const p = { n: 0 };
-        return gsap.to(p, {
-          n: text.length,
-          duration: text.length * speed,
-          ease: 'none',
-          onUpdate: () => void (target.textContent = text.slice(0, Math.round(p.n))),
-          onReverseComplete: () => void (target.textContent = '')
-        });
-      };
+    // Escribe un texto letra por letra en un elemento.
+    const type = (target: HTMLElement, text: string, speed: number) => {
+      const p = { n: 0 };
+      return gsap.to(p, {
+        n: text.length,
+        duration: text.length * speed,
+        ease: 'none',
+        onUpdate: () => void (target.textContent = text.slice(0, Math.round(p.n))),
+        onReverseComplete: () => void (target.textContent = '')
+      });
+    };
 
-      const tl = gsap.timeline({ repeat: -1, defaults: { ease: 'expo.out', duration: 0.5 } });
+    const tl = gsap.timeline({ repeat: -1, defaults: { ease: 'expo.out', duration: 0.5 } });
+    master.current = tl;
 
-      scenes.forEach((scene, i) => {
-        const s = gsap.timeline({ defaults: { ease: 'expo.out', duration: 0.5 } });
-        const steps = gsap.utils.toArray<HTMLElement>('.sc__step', scene);
-        s.call(() => setActive(i))
-          .set(scenes, { display: 'none' })
-          .set(steps, { display: 'none' })
-          .set(scene, { display: 'flex' })
-          .call(() => void (field.textContent = ''))
-          .add(type(url, SCENES[i].url, 0.022))
-          .fromTo(scene, { autoAlpha: 0, y: 14, filter: 'blur(8px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.7 }, '<');
+    // Una escena = un tramo del timeline maestro. Se arman de a una y en orden: la primera al cargar y el resto
+    // mientras la anterior se reproduce (cada una dura más de 10 s), para no bloquear la carga.
+    let built = 0;
+    const buildScene = (i: number) => {
+      const scene = scenes[i];
+      const s = gsap.timeline({ defaults: { ease: 'expo.out', duration: 0.5 } });
+      const steps = gsap.utils.toArray<HTMLElement>('.sc__step', scene);
+      s.call(() => setActive(i))
+        .set(scenes, { display: 'none' })
+        .set(steps, { display: 'none' })
+        .set(scene, { display: 'flex' })
+        .call(() => void (field.textContent = ''))
+        .add(type(url, SCENES[i].url, 0.022))
+        .fromTo(scene, { autoAlpha: 0, y: 14, ...blur(8, false) }, { autoAlpha: 1, y: 0, ...blur(8, true), duration: 0.7 }, '<');
 
-        steps.forEach(step => {
-          if (step.dataset.who === 'user') {
-            s.add(type(field, step.dataset.text || '', 0.032), '+=0.35')
-              .call(() => void (field.textContent = ''), undefined, '+=0.25')
-              .set(step, { display: 'flex' })
-              .fromTo(step, { autoAlpha: 0, y: 22, scale: 0.94, transformOrigin: '100% 100%' }, { autoAlpha: 1, y: 0, scale: 1 }, '<');
-          } else {
-            const dots = step.querySelector('.typing')!;
-            const msg = step.querySelector('.sc__bot')!;
-            const card = step.querySelector('.sc__card');
-            s.set(step, { display: 'flex' }, '+=0.3')
-              .set(msg, { display: 'none' })
-              .set(dots, { display: 'flex' })
-              .fromTo(dots, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.3 })
-              .set(dots, { display: 'none' }, '+=0.85')
-              .set(msg, { display: 'flex' })
-              .fromTo(msg, { autoAlpha: 0, y: 16, scale: 0.96, transformOrigin: '0% 100%' }, { autoAlpha: 1, y: 0, scale: 1 });
-            if (card) {
-              s.fromTo(card, { autoAlpha: 0, y: 14, filter: 'blur(6px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.6 }, '-=0.2');
-              const fill = card.querySelector('.sc__fill');
-              if (fill) s.fromTo(fill, { scaleX: 0 }, { scaleX: 2 / 3, duration: 1.2, ease: 'power3.inOut' }, '<0.1');
-              const slots = card.querySelectorAll('.sc__slot');
-              if (slots.length) s.from(slots, { autoAlpha: 0, y: 8, stagger: 0.08, duration: 0.4 }, '<');
-              const pick = card.querySelector('.sc__slot[data-pick]');
-              if (pick) s.fromTo(pick, { backgroundColor: 'rgba(224, 225, 221, 0)', borderColor: '#415a77', color: '#afbbcb' }, { backgroundColor: '#e0e1dd', borderColor: '#e0e1dd', color: '#0d1b2a', duration: 0.35, ease: 'power2.out' }, '+=0.6');
-              const check = card.querySelector('.sc__check');
-              if (check) s.from(check, { scale: 0, rotate: -40, duration: 0.6, ease: 'back.out(2)' }, '<0.15');
-            }
+      steps.forEach(step => {
+        if (step.dataset.who === 'user') {
+          s.add(type(field, step.dataset.text || '', 0.032), '+=0.35')
+            .call(() => void (field.textContent = ''), undefined, '+=0.25')
+            .set(step, { display: 'flex' })
+            .fromTo(step, { autoAlpha: 0, y: 22, scale: 0.94, transformOrigin: '100% 100%' }, { autoAlpha: 1, y: 0, scale: 1 }, '<');
+        } else {
+          const dots = step.querySelector('.typing')!;
+          const msg = step.querySelector('.sc__bot')!;
+          const card = step.querySelector('.sc__card');
+          s.set(step, { display: 'flex' }, '+=0.3')
+            .set(msg, { display: 'none' })
+            .set(dots, { display: 'flex' })
+            .fromTo(dots, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.3 })
+            .set(dots, { display: 'none' }, '+=0.85')
+            .set(msg, { display: 'flex' })
+            .fromTo(msg, { autoAlpha: 0, y: 16, scale: 0.96, transformOrigin: '0% 100%' }, { autoAlpha: 1, y: 0, scale: 1 });
+          if (card) {
+            s.fromTo(card, { autoAlpha: 0, y: 14, ...blur(6, false) }, { autoAlpha: 1, y: 0, ...blur(6, true), duration: 0.6 }, '-=0.2');
+            const fill = card.querySelector('.sc__fill');
+            if (fill) s.fromTo(fill, { scaleX: 0 }, { scaleX: 2 / 3, duration: 1.2, ease: 'power3.inOut' }, '<0.1');
+            const slots = card.querySelectorAll('.sc__slot');
+            if (slots.length) s.from(slots, { autoAlpha: 0, y: 8, stagger: 0.08, duration: 0.4 }, '<');
+            const pick = card.querySelector('.sc__slot[data-pick]');
+            if (pick) s.fromTo(pick, { backgroundColor: 'rgba(224, 225, 221, 0)', borderColor: '#415a77', color: '#afbbcb' }, { backgroundColor: '#e0e1dd', borderColor: '#e0e1dd', color: '#0d1b2a', duration: 0.35, ease: 'power2.out' }, '+=0.6');
+            const check = card.querySelector('.sc__check');
+            if (check) s.from(check, { scale: 0, rotate: -40, duration: 0.6, ease: 'back.out(2)' }, '<0.15');
           }
-          s.to({}, { duration: 0.9 });
-        });
-
-        s.to(scene, { autoAlpha: 0, y: -12, filter: 'blur(8px)', duration: 0.5, ease: 'power2.in' }, '+=1.6').set(scene, { display: 'none' });
-
-        tl.addLabel(`s${i}`);
-        tl.add(s, `s${i}`);
-        tl.fromTo(bars[i], { scaleX: 0 }, { scaleX: 1, duration: s.duration(), ease: 'none' }, `s${i}`);
-        tl.set(bars[i], { scaleX: 0 });
+        }
+        s.to({}, { duration: 0.9 });
       });
 
-      master.current = tl;
-    }, el);
+      s.to(scene, { autoAlpha: 0, y: -12, ...blur(8, false), duration: 0.5, ease: 'power2.in' }, '+=1.6').set(scene, { display: 'none' });
+
+      tl.addLabel(`s${i}`);
+      tl.add(s, `s${i}`);
+      tl.fromTo(bars[i], { scaleX: 0 }, { scaleX: 1, duration: s.duration(), ease: 'none' }, `s${i}`);
+      tl.set(bars[i], { scaleX: 0 });
+      built = i + 1;
+    };
+
+    const ctx = gsap.context(() => buildScene(0), el);
+    buildUpTo.current = (i: number) => ctx.add(() => void (built <= i && [...Array(i + 1 - built)].forEach(() => buildScene(built))));
+
+    // El resto de las escenas, de a una por tarea (con la página ya pintada).
+    let timer = 0;
+    const next = () => {
+      if (built >= scenes.length) return;
+      ctx.add(() => buildScene(built));
+      timer = window.setTimeout(next, 120);
+    };
+    timer = window.setTimeout(next, 600);
 
     // Fuera de pantalla o con la pestaña oculta, no corre.
     let visible = true;
@@ -284,15 +301,18 @@ export default function HeroShowcase() {
     document.addEventListener('visibilitychange', sync);
 
     return () => {
+      clearTimeout(timer);
       io.disconnect();
       document.removeEventListener('visibilitychange', sync);
       ctx.revert();
+      buildUpTo.current = () => {};
       master.current = null;
     };
   }, []);
 
   const jump = (i: number) => {
     setActive(i);
+    buildUpTo.current(i);
     master.current?.play(`s${i}`);
   };
 

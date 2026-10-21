@@ -7,9 +7,10 @@ import './styles/testimonials.css';
 import { Analytics } from '@vercel/analytics/next';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/site';
 
-const serif = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-serif' });
-const sans = Geist({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-sans' });
-const mono = Geist_Mono({ subsets: ['latin'], weight: '400', variable: '--font-mono' });
+// Sin precarga: las fuentes no compiten con el CSS por el ancho de banda; el texto sale primero con una tipografía de respaldo ajustada.
+const serif = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-serif', display: 'swap', preload: false });
+const sans = Geist({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-sans', display: 'swap', preload: false });
+const mono = Geist_Mono({ subsets: ['latin'], weight: '400', variable: '--font-mono', display: 'swap', preload: false });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

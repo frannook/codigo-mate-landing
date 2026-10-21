@@ -41,3 +41,14 @@ Siempre la misma dirección: todo entra desde abajo.
 
 - CSS: `app/globals.css` (`:root`).
 - GSAP: `lib/motion.ts` (`MOTION`).
+
+## Rendimiento: qué cambia en celulares y tablets
+
+El movimiento sigue siempre activo, pero en pantallas táctiles o de menos de 900 px (`isLite()` en `lib/motion.ts`) se omiten los efectos más caros:
+
+- Sin desenfoque (`blur`) en las entradas de la vitrina y de los titulares.
+- Sin scroll suave (Lenis): el scroll nativo ya es fluido.
+- Sin paralaje del hero ni botones magnéticos; la barra de progreso usa un listener simple en vez de ScrollTrigger.
+- La cinta de capacidades usa su animación CSS (sin JavaScript).
+
+En todos los dispositivos, el movimiento se arma de forma perezosa: los titulares y la cinta de testimonios cuando están por entrar en pantalla, las escenas móviles de "Mientras dormís" una por una, y la vitrina del hero arma la primera escena al cargar y las otras cinco de a una, en segundo plano. El titular y los textos del hero parten con opacidad 0,3 (no 0) para contar como contenido visible desde el primer cuadro.

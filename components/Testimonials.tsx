@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { motionOn } from '@/lib/motion';
+import { motionOn, whenNear } from '@/lib/motion';
 
 // TODO: textos de ejemplo. Reemplazar por testimonios reales (con permiso) antes de publicar.
 type Item = { quote: string; name: string; role: string; chip: string };
@@ -104,8 +104,18 @@ export default function Testimonials() {
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    const el = root.current;
-    if (!el || !motionOn()) return;
+    const host = root.current;
+    if (!host || !motionOn()) return;
+    // La cinta se arma cuando la sección está por entrar en pantalla, no al cargar la página.
+    let teardown: (() => void) | undefined;
+    const stopWatching = whenNear(host, () => (teardown = start(host)), '700px');
+    return () => {
+      stopWatching();
+      teardown?.();
+    };
+  }, []);
+
+  const start = (el: HTMLDivElement) => {
     const ac = new AbortController();
     const on = { signal: ac.signal };
     const wrap = gsap.utils.wrap(0, 1);
@@ -197,7 +207,7 @@ export default function Testimonials() {
       });
       rows.current = [];
     };
-  }, []);
+  };
 
   const toggle = () => {
     const next = !pausedRef.current;

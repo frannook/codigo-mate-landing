@@ -33,7 +33,7 @@ export default function Footer() {
 
       <div className="wrap foot__grid">
         <div className="foot__brand">
-          <Image src="/logo-color.png" alt="Código Mate" width={1307} height={406} style={{ height: 44, width: 'auto' }} />
+          <Image src="/logo-color.png" alt="Código Mate" width={1307} height={406} sizes="144px" style={{ height: 44, width: 'auto' }} />
           <p>Agentes de IA que atienden a tus clientes desde tu web y te pasan a WhatsApp cuando hace falta.</p>
         </div>
         <nav className="foot__col" aria-label="Pie de página">

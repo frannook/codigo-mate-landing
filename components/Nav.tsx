@@ -107,7 +107,7 @@ export default function Nav() {
     <header className="navp" data-hidden={hidden && !open} data-top={atTop} data-open={open}>
       <nav className="navp__bar" aria-label="Principal">
         <a href={`${base}#top`} className="navp__brand" aria-label="Código Mate, inicio" onClick={() => setOpen(false)}>
-          <Image src="/logo-color.png" alt="" width={1307} height={406} priority style={{ height: 38, width: 'auto' }} />
+          <Image src="/logo-color.png" alt="" width={1307} height={406} sizes="124px" priority style={{ height: 38, width: 'auto' }} />
         </a>
 
         <div className="navp__links" ref={linksRef} onPointerLeave={() => setHover(null)}>

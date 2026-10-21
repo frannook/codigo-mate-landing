@@ -63,6 +63,15 @@ El movimiento sigue siempre activo, también con `prefers-reduced-motion`. Lo de
 - **Plan de conexiones** para terminar la infraestructura: [docs/PLAN_CONEXIONES.md](docs/PLAN_CONEXIONES.md).
 - Evidencia con capturas y mediciones en [docs/sprint/SPRINT.md](docs/sprint/SPRINT.md).
 
+## Rendimiento (2026-10-20)
+
+- Lighthouse local (build de producción, mediana de 3 corridas): móvil 56–64 → 88 y escritorio 78–85 → 99. Bloqueo total móvil: 2.500 ms → 240 ms.
+- **Fuentes sin precarga** (`preload: false` en `app/layout.tsx`): precargar las cuatro (71 KB) competía con el CSS y retrasaba el primer pintado de 0,8 s a 2,7 s con red lenta. Contra: el texto sale un instante con la tipografía de respaldo y luego cambia.
+- **CSS dentro del HTML** (`experimental.inlineCss`), logos con `sizes`, `content-visibility` en agendar y footer, y `<main>` en la home.
+- Movimiento liviano en celulares y armado perezoso de las animaciones: ver [MOTION.md](MOTION.md).
+- Se probó y se descartó precargar solo la tipografía del titular (empeoró el móvil).
+- Lighthouse varía mucho entre corridas en esta máquina: comparar siempre con medianas.
+
 ## Cosas a tener presentes
 
 - Los testimonios de `components/Testimonials.tsx` son **texto de ejemplo**: reemplazar antes de promocionar la web.

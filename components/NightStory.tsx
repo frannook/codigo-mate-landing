@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { motionOn } from '@/lib/motion';
+import { motionOn, whenNear } from '@/lib/motion';
 import '@/app/styles/story.css';
 
 // "Mientras dormís": una noche de un agente en cuatro momentos.
@@ -101,27 +101,39 @@ export default function NightStory() {
     });
 
     // Móvil: cada escena entra cuando aparece; los mensajes llegan en orden.
-    mm.add('(max-width: 899px)', () => {
+    mm.add('(max-width: 899px)', context => {
+      // Cada escena arma su animación cuando está por entrar (no hay pin: el alto de la página no cambia).
+      const stops: Array<() => void> = [];
       q('.ns__scene').forEach((scene: HTMLElement, i: number) => {
-        const tl = gsap.timeline({
-          defaults: { ease: 'power3.out', duration: 0.7 },
-          scrollTrigger: { trigger: scene, start: 'top 78%', once: true }
-        });
-        tl.from(scene.querySelector('.ns__copy'), { autoAlpha: 0, y: 28 })
-          .from(scene.querySelector('.ns__vis'), { autoAlpha: 0, y: 36 }, '<0.1')
-          .from(steps(scene.querySelector('.ns__vis')!), { autoAlpha: 0, y: 12, stagger: 0.35, duration: 0.5 }, '<0.3');
-        if (i === 1) tl.fromTo(scene.querySelector('.order__fill'), { scaleX: 0 }, { scaleX: 0.66, duration: 0.9 }, '>');
-        if (i === 3)
-          tl.from(scene.querySelector('.ns__install'), { autoAlpha: 0, y: 16 }, '<').fromTo(
-            scene.querySelector('.ns__code-text'),
-            { clipPath: 'inset(0 100% 0 0)' },
-            typeCode,
-            '>'
-          );
+        stops.push(
+          whenNear(
+            scene,
+            () =>
+              context.add(() => {
+                const tl = gsap.timeline({
+                  defaults: { ease: 'power3.out', duration: 0.7 },
+                  scrollTrigger: { trigger: scene, start: 'top 78%', once: true }
+                });
+                tl.from(scene.querySelector('.ns__copy'), { autoAlpha: 0, y: 28 })
+                  .from(scene.querySelector('.ns__vis'), { autoAlpha: 0, y: 36 }, '<0.1')
+                  .from(steps(scene.querySelector('.ns__vis')!), { autoAlpha: 0, y: 12, stagger: 0.35, duration: 0.5 }, '<0.3');
+                if (i === 1) tl.fromTo(scene.querySelector('.order__fill'), { scaleX: 0 }, { scaleX: 0.66, duration: 0.9 }, '>');
+                if (i === 3)
+                  tl.from(scene.querySelector('.ns__install'), { autoAlpha: 0, y: 16 }, '<').fromTo(
+                    scene.querySelector('.ns__code-text'),
+                    { clipPath: 'inset(0 100% 0 0)' },
+                    typeCode,
+                    '>'
+                  );
+              }),
+            '1000px'
+          )
+        );
       });
+      return () => stops.forEach(f => f());
     });
 
-    ScrollTrigger.refresh();
+    if (window.matchMedia('(min-width: 900px)').matches) ScrollTrigger.refresh(); // solo el pin necesita recalcular posiciones
     return () => mm.revert();
   }, []);
 

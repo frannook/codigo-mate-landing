@@ -54,8 +54,12 @@ input, textarea, button { font-family: inherit; }
 
 @keyframes cmIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @keyframes cmUp { from { opacity: 0; transform: translateY(24px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
+/* Entrada del hero: nunca parte invisible, así el texto cuenta como contenido visible desde el primer cuadro. */
+@keyframes cmHero { from { opacity: 0.3; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 @keyframes cmSpin { to { transform: rotate(360deg); } }
-@keyframes cmWord { from { opacity: 0; transform: translateY(0.35em); filter: blur(10px); } to { opacity: 1; transform: none; filter: blur(0); } }
+/* El titular nunca parte invisible (opacity 0): así cuenta como primer contenido visible desde el primer cuadro. */
+@keyframes cmWord { from { opacity: 0.25; transform: translateY(0.35em); filter: blur(10px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@media (max-width: 899px) { @keyframes cmWord { from { opacity: 0.25; transform: translateY(0.35em); } to { opacity: 1; transform: none; } } }
 @keyframes cmDot { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-2px); } }
 @keyframes cmBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 @keyframes cmPop { from { opacity: 0; transform: translateY(10px) scale(0.96); } to { opacity: 1; transform: none; } }
@@ -150,7 +154,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 .eyebrow__rule { width: 24px; height: 1px; flex-shrink: 0; background: var(--amber); }
 .eyebrow__num { font-family: var(--fm); letter-spacing: 0.04em; }
-.hero .eyebrow { animation: cmUp var(--dur-slow) var(--ease-out) both; }
+.hero .eyebrow { animation: cmHero var(--dur-slow) var(--ease-out) both; }
 .hero__title {
   margin: 0; font-family: var(--fh); font-weight: 400; letter-spacing: -0.015em;
   font-size: clamp(46px, 6vw, 80px); line-height: 1; text-wrap: balance;
@@ -159,12 +163,12 @@ html.lenis, html.lenis body { height: auto; }
 .accent { font-style: italic; color: var(--amber); padding-right: 0.04em; }
 .hero__lead {
   margin: 0; max-width: 500px; font-size: clamp(16px, 1.4vw, 18px); line-height: 1.65; color: var(--mist);
-  text-wrap: pretty; animation: cmUp var(--dur-slow) var(--ease-out) 0.5s both;
+  text-wrap: pretty; animation: cmHero var(--dur-slow) var(--ease-out) 0.3s both;
 }
-.hero__ctas { display: flex; gap: 12px; flex-wrap: wrap; padding-top: 4px; animation: cmUp var(--dur-slow) var(--ease-out) 0.58s both; }
+.hero__ctas { display: flex; gap: 12px; flex-wrap: wrap; padding-top: 4px; animation: cmHero var(--dur-slow) var(--ease-out) 0.38s both; }
 .hero__notes {
   display: flex; gap: 12px 24px; flex-wrap: wrap; padding-top: 20px; margin-top: 8px; border-top: 1px solid var(--rule);
-  font-size: 14px; line-height: 1.5; color: var(--slate); animation: cmUp var(--dur-slow) var(--ease-out) 0.66s both;
+  font-size: 14px; line-height: 1.5; color: var(--slate); animation: cmHero var(--dur-slow) var(--ease-out) 0.46s both;
 }
 .btn {
   display: flex; align-items: center; gap: 10px; white-space: nowrap; height: 52px; padding: 0 24px;
@@ -182,7 +186,7 @@ html.lenis, html.lenis body { height: auto; }
 /* ---------- Browser mockup + chat ---------- */
 .demo {
   position: relative; scroll-margin-top: 96px; display: flex; flex-direction: column; gap: 14px;
-  animation: cmUp var(--dur-slow) var(--ease-out) 0.3s both;
+  animation: cmHero var(--dur-slow) var(--ease-out) 0.2s both;
 }
 .browser {
   border-radius: 14px; border: 1px solid rgba(119, 141, 169, 0.24); background: var(--navy-700);
@@ -488,3 +492,6 @@ html :is(.avatar, .tm__avatar, .ns__avatar, .wa__icon).av-5 { background: var(--
 @media (max-width: 560px) {
   .hero__ctas .btn { width: 100%; justify-content: center; }
 }
+
+/* Rendimiento: lo que está lejos de la pantalla no se calcula hasta que se acerca. */
+.section--book, .foot { content-visibility: auto; contain-intrinsic-size: auto 900px; }

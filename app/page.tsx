@@ -38,6 +38,7 @@ export default function Home() {
       <Reveal />
       <Motion />
       <Nav />
+      <main>
       <div className="top">
         <div aria-hidden="true" className="top__glow" />
         <div aria-hidden="true" className="top__grid" />
@@ -181,6 +182,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </>
