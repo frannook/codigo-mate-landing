@@ -59,7 +59,20 @@ Tener una landing publicada que **explique el servicio, lo demuestre con un agen
 | SEO | **100** | **100** | — → cumple |
 | Rendimiento | **53** | **70** | ≥ 90 → **no cumple** |
 
-Detalle del rendimiento: en móvil el contenido principal tarda 4,0 s en aparecer (LCP) y el tiempo de bloqueo total es de 2,5 s; en escritorio, 0,8 s y 0,8 s. No hay saltos de diseño (CLS 0 en los dos). La causa probable es el peso del movimiento (GSAP, scroll suave y efectos de vidrio) en celulares simulados de gama media. Está planteado como trabajo del próximo sprint.
+Detalle del rendimiento (primera medición): en móvil el contenido principal tarda 4,0 s en aparecer (LCP) y el tiempo de bloqueo total es de 2,5 s; en escritorio, 0,8 s y 0,8 s. No hay saltos de diseño (CLS 0 en los dos). La causa era el peso del movimiento (GSAP, scroll suave y efectos de vidrio) y la carga de las fuentes.
+
+### Optimización de rendimiento (2026-10-20)
+
+Se midió con Lighthouse sobre un build de producción local, **mediana de 3 corridas** (la máquina de prueba varía mucho entre corridas, por eso no se usa una sola).
+
+| Métrica | Móvil antes | Móvil después | Escritorio antes | Escritorio después |
+| --- | --- | --- | --- | --- |
+| Rendimiento | 56–64 | **88** | 78–85 | **99** |
+| Tiempo de bloqueo total | 2.510 ms | 240 ms | 360 ms | 28 ms |
+| Índice de velocidad | 2,8 s | 1,9 s | 0,9 s | 0,9 s |
+| Contenido principal (LCP) | 3,4 s | 3,3 s | 0,9 s | 0,7 s |
+
+Qué se hizo: fuentes sin precarga (competían con el CSS y retrasaban el primer pintado de 0,8 a 2,7 s con red lenta), movimiento que se arma bajo demanda, modo liviano en celulares (sin desenfoque, scroll suave, paralaje ni botones magnéticos), textos del hero visibles desde el primer cuadro, CSS en línea y logos con tamaño real. Se probó y se descartó precargar solo la tipografía del titular (empeoró el móvil). Pendiente: el LCP móvil simulado sigue en 3,3 s.
 
 ### Pruebas en pantalla (Chrome automatizado, 390 px de ancho)
 
@@ -119,7 +132,7 @@ Todas en [`evidencias/`](evidencias/): capturas "antes" y "después" en escritor
 
 | Prioridad | Tarea | Detalle |
 | --- | --- | --- |
-| Alta | Mejorar rendimiento móvil | Meta: Lighthouse ≥ 90. Cargar GSAP y los efectos solo cuando hacen falta, reducir blur en celulares |
+| Alta | Rendimiento móvil: último tramo | Local en 88; llevar el LCP simulado por debajo de 2,5 s y confirmar ≥ 90 en el sitio publicado |
 | Alta | Google Calendar y Meet | Evita pedidos duplicados y genera el link de la videollamada |
 | Alta | Límite de uso compartido (Redis) y respaldo en Groq | Robustez en producción |
 | Media | Número de WhatsApp real | El pase hoy es demostrativo |
