@@ -1,24 +1,15 @@
-// Recibe el formulario de agendar y manda dos correos por Gmail SMTP (gratis, sin dominio propio):
-// el aviso al equipo (con Reply-To al cliente) y la confirmación de recepción al cliente.
-// Credenciales solo en el servidor: GMAIL_USER, GMAIL_APP_PASSWORD (contraseña de aplicación), BOOKING_TO (opcional).
+// Recibe el formulario de agendar. Con Google Calendar configurado (lib/calendar.ts) reserva el horario, crea el evento con
+// link de Meet y Google le manda la invitación al cliente. Siempre manda por Gmail SMTP el aviso al equipo (con Reply-To al
+// cliente) y la confirmación al cliente. Sin calendario, o si Google falla, funciona solo por correo.
+// Credenciales solo en el servidor: GMAIL_USER, GMAIL_APP_PASSWORD, BOOKING_TO (opcional) y, para la planilla de contactos
+// (opcional), LEADS_WEBHOOK_URL.
 
 import nodemailer from 'nodemailer';
+import { calendarEnabled, createCall, freeTimes } from '@/lib/calendar';
+import { clientIp, rateLimit } from '@/lib/ratelimit';
+import { isIsoDate, isOfferable } from '@/lib/slots';
 
 export const runtime = 'nodejs';
-
-// Límite simple por IP: 5 pedidos cada 10 minutos. En memoria, por instancia (ver README).
-const WINDOW_MS = 10 * 60_000;
-const MAX_PER_WINDOW = 5;
-const hits = new Map<string, number[]>();
-
-function rateLimited(ip: string) {
-  const now = Date.now();
-  const recent = (hits.get(ip) || []).filter(t => now - t < WINDOW_MS);
-  recent.push(now);
-  hits.set(ip, recent);
-  if (hits.size > 2000) hits.clear();
-  return recent.length > MAX_PER_WINDOW;
-}
 
 const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 // Evita inyección de encabezados en nombre/asunto.
@@ -29,8 +20,8 @@ export async function POST(req: Request) {
   const pass = process.env.GMAIL_APP_PASSWORD;
   if (!user || !pass) return Response.json({ error: 'not_configured' }, { status: 503 });
 
-  const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || 'unknown';
-  if (rateLimited(ip)) return Response.json({ error: 'rate_limited' }, { status: 429 });
+  // 5 pedidos cada 10 minutos por IP (compartido entre instancias si hay Redis; ver lib/ratelimit.ts).
+  if (await rateLimit(`booking:${clientIp(req)}`, 5, 600)) return Response.json({ error: 'rate_limited' }, { status: 429 });
 
   const b = (await req.json().catch(() => null)) as Record<string, unknown> | null;
   if (!b) return Response.json({ error: 'invalid' }, { status: 400 });
@@ -41,11 +32,31 @@ export async function POST(req: Request) {
   const name = oneLine(str(b.name, 100));
   const email = oneLine(str(b.email, 200));
   const date = oneLine(str(b.date, 40));
+  const dateISO = str(b.dateISO, 10);
   const time = oneLine(str(b.time, 10));
   const web = oneLine(str(b.web, 200));
   const rubro = oneLine(str(b.rubro, 40));
   const msg = str(b.msg, 1500);
   if (!name || !/^\S+@\S+\.\S+$/.test(email) || !date || !time) return Response.json({ error: 'invalid' }, { status: 400 });
+
+  const details = [`Web: ${web || '-'}`, `Rubro: ${rubro || '-'}`, '', `Mensaje:\n${msg || '-'}`].join('\n');
+
+  // Reserva en el calendario: se vuelve a comprobar que el horario siga libre y se crea el evento con Meet.
+  let meet: string | undefined;
+  let eventLink: string | undefined;
+  if (calendarEnabled() && isIsoDate(dateISO)) {
+    try {
+      if (!isOfferable(dateISO, time) || !(await freeTimes(dateISO)).includes(time)) {
+        return Response.json({ error: 'slot_taken' }, { status: 409 });
+      }
+      const ev = await createCall({ date: dateISO, time, name, email, description: `${email}\n${details}` });
+      meet = ev.meet;
+      eventLink = ev.link;
+    } catch (error) {
+      // Google falló: el pedido no se pierde, sigue por correo y el equipo confirma a mano.
+      console.error('[api/booking] calendario', error);
+    }
+  }
 
   const transport = nodemailer.createTransport({ service: 'gmail', auth: { user, pass } });
   const to = process.env.BOOKING_TO || user;
@@ -59,16 +70,21 @@ export async function POST(req: Request) {
       text: [
         `Nombre: ${name}`,
         `Email: ${email}`,
-        `Web: ${web || '-'}`,
-        `Rubro: ${rubro || '-'}`,
+        details.split('\n\n')[0],
         `Día y hora pedidos: ${date} a las ${time} h (hora Argentina)`,
+        meet ? `Videollamada (Meet): ${meet}` : 'Sin evento en el calendario: confirmar el horario con el cliente.',
+        eventLink ? `Evento: ${eventLink}` : '',
         '',
         `Mensaje:\n${msg || '-'}`
-      ].join('\n')
+      ]
+        .filter((l, i, a) => l !== '' || a[i - 1] !== '')
+        .join('\n')
     });
   } catch (error) {
     console.error('[api/booking] envío al equipo', error);
-    return Response.json({ error: 'send_failed' }, { status: 502 });
+    // Con el evento ya creado, Google le mandó la invitación al cliente y el equipo lo ve en el calendario:
+    // no se muestra error (reintentar chocaría con el horario recién reservado).
+    if (!meet) return Response.json({ error: 'send_failed' }, { status: 502 });
   }
 
   // La confirmación al cliente es secundaria: si falla, el pedido ya llegó al equipo.
@@ -76,12 +92,16 @@ export async function POST(req: Request) {
     await transport.sendMail({
       from: `Código Mate <${user}>`,
       to: email,
-      subject: 'Recibimos tu pedido de llamada · Código Mate',
+      subject: meet ? 'Llamada confirmada · Código Mate' : 'Recibimos tu pedido de llamada · Código Mate',
       text: [
         `Hola ${name},`,
         '',
-        `Recibimos tu pedido para hablar el ${date} a las ${time} h (hora Argentina).`,
-        'Te confirmamos el horario por este mismo medio y te enviamos el link de la videollamada.',
+        meet
+          ? `Tu llamada quedó confirmada para el ${date} a las ${time} h (hora Argentina). Duración: 30 minutos.`
+          : `Recibimos tu pedido para hablar el ${date} a las ${time} h (hora Argentina).`,
+        meet
+          ? `Te llegó también una invitación de Google Calendar. Link de la videollamada: ${meet}`
+          : 'Te confirmamos el horario por este mismo medio y te enviamos el link de la videollamada.',
         '',
         '¡Gracias!',
         'Equipo de Código Mate'
@@ -91,5 +111,16 @@ export async function POST(req: Request) {
     console.warn('[api/booking] confirmación al cliente', error);
   }
 
-  return Response.json({ ok: true });
+  // Planilla de contactos (opcional): un webhook de Google Apps Script que agrega una fila. No bloquea ni rompe el pedido.
+  const hook = process.env.LEADS_WEBHOOK_URL;
+  if (hook) {
+    await fetch(hook, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, web, rubro, date, time, msg, meet: meet || '', createdAt: new Date().toISOString() }),
+      signal: AbortSignal.timeout(4000)
+    }).catch(error => console.warn('[api/booking] planilla', error));
+  }
+
+  return Response.json({ ok: true, confirmed: !!meet });
 }

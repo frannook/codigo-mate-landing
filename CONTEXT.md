@@ -72,6 +72,14 @@ El movimiento sigue siempre activo, también con `prefers-reduced-motion`. Lo de
 - Se probó y se descartó precargar solo la tipografía del titular (empeoró el móvil).
 - Lighthouse varía mucho entre corridas en esta máquina: comparar siempre con medianas.
 
+## Conexiones y automatización (2026-10-21)
+
+- **WhatsApp real** (+54 9 379 453-0578) en el chat (con la última consulta del visitante), el footer y los datos estructurados.
+- **Calendario**: `/api/slots` y `/api/booking` reservan en Google Calendar con link de Meet cuando están las variables `GOOGLE_*`; si falta alguna, o si Google falla, el formulario sigue por correo. Se probó contra un Google simulado. El token se saca con `scripts/google-auth.mjs` (nunca se guarda en el repo).
+- **Límite compartido** (`lib/ratelimit.ts`): usa Upstash Redis si está conectado y cae a memoria si no.
+- **Aviso de caídas**: workflow `.github/workflows/uptime.yml` (cada 30 minutos). **Planilla de contactos**: `LEADS_WEBHOOK_URL`.
+- Lo que falta de tu lado está en [docs/PLAN_CONEXIONES.md](docs/PLAN_CONEXIONES.md).
+
 ## Cosas a tener presentes
 
 - Los testimonios de `components/Testimonials.tsx` son **texto de ejemplo**: reemplazar antes de promocionar la web.

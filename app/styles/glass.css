@@ -316,3 +316,7 @@ textarea.bk-input { padding: 14px 16px; min-height: 108px; resize: vertical; }
 .bk-opt--day:not([aria-pressed='true']), .bk-opt--time:not([aria-pressed='true']) {
   background: rgba(175, 187, 203, 0.05); border-color: rgba(175, 187, 203, 0.1);
 }
+
+.bk-note { font-size: 14px; line-height: 1.4; color: var(--mist); }
+.bk-opt:disabled { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+.bk-opt:disabled:hover { background: transparent; }

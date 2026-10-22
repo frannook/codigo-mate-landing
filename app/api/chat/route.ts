@@ -3,6 +3,7 @@
 
 import { ApiError, GoogleGenAI, ThinkingLevel, type Content } from '@google/genai';
 import { buildSystemPrompt } from '@/lib/chat/store';
+import { clientIp, rateLimit } from '@/lib/ratelimit';
 
 export const runtime = 'nodejs';
 // Margen para recorrer la cadena de modelos en Vercel.
@@ -24,20 +25,8 @@ const MAX_MESSAGES = 16;
 const MAX_LEN = 2000;
 const SYSTEM = buildSystemPrompt();
 
-// Límite simple por IP: 20 consultas por minuto. Vive en memoria, así que es por instancia;
-// en serverless con varias instancias conviene reemplazarlo por uno compartido (Upstash, Vercel KV).
-const WINDOW_MS = 60_000;
+// Límite por IP: 20 consultas por minuto (compartido entre instancias si hay Redis; ver lib/ratelimit.ts).
 const MAX_PER_WINDOW = 20;
-const hits = new Map<string, number[]>();
-
-function rateLimited(ip: string) {
-  const now = Date.now();
-  const recent = (hits.get(ip) || []).filter(t => now - t < WINDOW_MS);
-  recent.push(now);
-  hits.set(ip, recent);
-  if (hits.size > 5000) hits.clear();
-  return recent.length > MAX_PER_WINDOW;
-}
 
 type WireMessage = { role: 'user' | 'assistant'; content: string };
 
@@ -65,7 +54,7 @@ export async function POST(req: Request) {
   if (!apiKey) return Response.json({ error: 'not_configured' }, { status: 503 });
 
   const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || 'unknown';
-  if (rateLimited(ip)) return Response.json({ error: 'rate_limited' }, { status: 429 });
+  if (await rateLimit(`chat:${ip}`, MAX_PER_WINDOW, 60)) return Response.json({ error: 'rate_limited' }, { status: 429 });
 
   const body = (await req.json().catch(() => null)) as { messages?: unknown } | null;
   const messages = body?.messages;

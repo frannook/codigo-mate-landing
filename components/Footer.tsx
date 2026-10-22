@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { ArrowRight, ArrowUp } from '@/components/icons';
+import { waLink } from '@/lib/site';
 
 const EMAIL = 'codigomatebot@gmail.com';
 
@@ -47,6 +48,9 @@ export default function Footer() {
         </nav>
         <div className="foot__col">
           <h3>Contacto</h3>
+          <a href={waLink('Hola, vengo de la web de Código Mate y quiero hacer una consulta.')} target="_blank" rel="noopener noreferrer">
+            Escribinos por WhatsApp
+          </a>
           <a href={`mailto:${EMAIL}`}>Escribinos por email</a>
           <a href="/#agendar">Agendar una llamada</a>
           <a href="/#probalo">Hablar con Yuyo, el agente</a>

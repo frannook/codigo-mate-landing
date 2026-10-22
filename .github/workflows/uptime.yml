@@ -1,0 +1,21 @@
+# Avisa si el sitio se cae: cada 30 minutos pide la home y /nosotros. Si fallan, el workflow queda en rojo y GitHub
+# manda un correo a quien lo configuró. Gratis. También se puede correr a mano desde la pestaña Actions.
+name: Uptime
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Home y Nosotros responden
+        run: |
+          for path in "" "nosotros"; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --retry 3 --retry-delay 10 --max-time 20 "https://codigo-mate-landing.vercel.app/$path")
+            echo "/$path -> $code"
+            [ "$code" = "200" ] || exit 1
+          done

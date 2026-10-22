@@ -5,11 +5,19 @@ import { ChatSession, type ChatMessage, type ChatSnapshot } from '@/lib/chat/eng
 import { httpProvider } from '@/lib/chat/provider';
 import { motionOn } from '@/lib/motion';
 import { QUICK_REPLIES } from '@/lib/chat/store';
+import { waLink } from '@/lib/site';
 import { FOCUS_CHAT_EVENT } from './FocusChatLink';
 import { track } from '@vercel/analytics';
 import { ArrowRight, ArrowUp, RotateCcw } from './icons';
 
 const STEPS = ['Preparado', 'Despachado', 'Entregado'];
+
+// Texto con el que se abre WhatsApp: quién escribe y la última consulta hecha en el chat, para no repetirla.
+function whatsappMessage(list: ChatMessage[], upTo: number): string {
+  const last = [...list.slice(0, upTo)].reverse().find(m => m.role === 'user');
+  const q = last?.text?.trim().slice(0, 300);
+  return q ? `Hola, vengo de la web de Código Mate. Estaba hablando con Yuyo y quiero seguir con una persona. Mi consulta: ${q}` : 'Hola, vengo de la web de Código Mate y quiero hablar con una persona.';
+}
 
 // El bot real de Código Mate (sección Probalo). La vitrina del hero está en HeroShowcase.
 export default function ChatWidget() {
@@ -97,7 +105,7 @@ export default function ChatWidget() {
       </div>
 
       <div ref={logRef} className="chat__log" data-lenis-prevent role="log" aria-live="polite" aria-relevant="additions">
-        {list.map(m =>
+        {list.map((m, mi) =>
           m.role === 'assistant' ? (
             <div key={m.id} className="msg-bot">
               {m.text && <div className="bubble-bot">{m.text}</div>}
@@ -129,9 +137,16 @@ export default function ChatWidget() {
                     Agendar una llamada <ArrowRight size={14} />
                   </a>
                 ) : (
-                  <div key={j} className="handoff">
-                    Continuar en WhatsApp con {a.human} <ArrowRight size={14} />
-                  </div>
+                  <a
+                    key={j}
+                    href={waLink(whatsappMessage(list, mi))}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="handoff handoff--link"
+                    onClick={() => track('whatsapp_click')}
+                  >
+                    Seguir por WhatsApp con una persona <ArrowRight size={14} />
+                  </a>
                 )
               )}
             </div>

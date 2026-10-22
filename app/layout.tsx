@@ -5,7 +5,7 @@ import './styles/glass.css';
 import './styles/nav-footer.css';
 import './styles/testimonials.css';
 import { Analytics } from '@vercel/analytics/next';
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/site';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, WHATSAPP_NUMBER } from '@/lib/site';
 
 // Sin precarga: las fuentes no compiten con el CSS por el ancho de banda; el texto sale primero con una tipografía de respaldo ajustada.
 const serif = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-serif', display: 'swap', preload: false });
@@ -38,6 +38,7 @@ const JSON_LD = {
   logo: `${SITE_URL}/logo-color.png`,
   description: SITE_DESCRIPTION,
   email: 'codigomatebot@gmail.com',
+  telephone: `+${WHATSAPP_NUMBER}`,
   areaServed: 'AR',
   inLanguage: 'es-AR'
 };

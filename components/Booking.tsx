@@ -2,37 +2,38 @@
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { track } from '@vercel/analytics';
+import { TIME_ZONE, TIMES } from '@/lib/slots';
 import { ArrowRight } from './icons';
 
 // Formulario para agendar la llamada. Valida y envía el pedido por correo (app/api/booking/route.ts).
 
 const RUBROS = ['E-commerce', 'Servicios', 'Salud', 'Educación', 'Gastronomía', 'Otro'];
-const TIMES = ['10:00', '11:30', '14:00', '15:30', '17:00'];
 const DOW = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 const MON = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
-type Day = { key: string; dow: string; day: number; mon: string };
-type Form = { name: string; email: string; web: string; msg: string; rubro: string; date: string; time: string };
+type Day = { key: string; iso: string; dow: string; day: number; mon: string };
+type Form = { name: string; email: string; web: string; msg: string; rubro: string; date: string; dateISO: string; time: string };
 
-// Próximos 8 días hábiles. Se calcula en el navegador para usar la fecha del visitante.
+// Próximos 8 días hábiles, contados desde hoy en hora Argentina (la que usa el calendario).
 function nextWeekdays(): Day[] {
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE }).format(new Date()); // YYYY-MM-DD
+  const d = new Date(`${today}T12:00:00Z`);
   const days: Day[] = [];
-  const d = new Date();
-  d.setHours(12);
   while (days.length < 8) {
-    d.setDate(d.getDate() + 1);
-    if (d.getDay() === 0 || d.getDay() === 6) continue;
+    d.setUTCDate(d.getUTCDate() + 1);
+    if (d.getUTCDay() === 0 || d.getUTCDay() === 6) continue;
     days.push({
-      key: `${DOW[d.getDay()]} ${d.getDate()} de ${MON[d.getMonth()]}`,
-      dow: DOW[d.getDay()],
-      day: d.getDate(),
-      mon: MON[d.getMonth()]
+      key: `${DOW[d.getUTCDay()]} ${d.getUTCDate()} de ${MON[d.getUTCMonth()]}`,
+      iso: d.toISOString().slice(0, 10),
+      dow: DOW[d.getUTCDay()],
+      day: d.getUTCDate(),
+      mon: MON[d.getUTCMonth()]
     });
   }
   return days;
 }
 
-const EMPTY: Form = { name: '', email: '', web: '', msg: '', rubro: '', date: '', time: '' };
+const EMPTY: Form = { name: '', email: '', web: '', msg: '', rubro: '', date: '', dateISO: '', time: '' };
 
 type Errors = Partial<Record<'name' | 'email' | 'date' | 'time', string>>;
 
@@ -47,13 +48,25 @@ function validate(f: Form): Errors {
 }
 
 // Envío a /api/booking (correo por Gmail). Si rechaza, el formulario muestra un error y deja reintentar.
-async function submit(data: Form & { company: string }): Promise<void> {
+async function submit(data: Form & { company: string }): Promise<{ confirmed: boolean }> {
   const res = await fetch('/api/booking', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
   if (!res.ok) throw new Error(String(res.status));
+  return { confirmed: !!((await res.json().catch(() => null)) as { confirmed?: boolean } | null)?.confirmed };
+}
+
+// Horarios libres de un día (si no hay calendario conectado, son todos los que ofrecemos).
+async function loadSlots(iso: string): Promise<string[]> {
+  try {
+    const res = await fetch(`/api/slots?date=${iso}`, { cache: 'no-store' });
+    if (!res.ok) return [...TIMES];
+    return ((await res.json()) as { free: string[] }).free;
+  } catch {
+    return [...TIMES];
+  }
 }
 
 export default function Booking() {
@@ -63,6 +76,9 @@ export default function Booking() {
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [confirmed, setConfirmed] = useState(false); // la llamada ya quedó reservada en el calendario (con Meet)
+  const [free, setFree] = useState<string[] | null>(null); // horarios libres del día elegido; null = todavía no se sabe
+  const [taken, setTaken] = useState(false); // el horario elegido se ocupó mientras completaba el formulario
   const doneRef = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const refocusDays = useRef(false);
@@ -108,6 +124,15 @@ export default function Booking() {
     }
   }, [sent]);
 
+  const pickDay = (d: Day) => {
+    setForm(s => ({ ...s, date: d.key, dateISO: d.iso, time: '' }));
+    setFailed(false);
+    setTaken(false);
+    setFree(null);
+    if ('date' in errors) setErrors(e => ({ ...e, date: undefined }));
+    loadSlots(d.iso).then(setFree);
+  };
+
   const set = (k: keyof Form, v: string) => {
     setForm(s => ({ ...s, [k]: v }));
     setFailed(false);
@@ -135,11 +160,17 @@ export default function Booking() {
     }
     setLoading(true);
     try {
-      await submit({ ...f, name: f.name.trim(), email: f.email.trim(), company: honeypot.current?.value || '' });
+      const r = await submit({ ...f, name: f.name.trim(), email: f.email.trim(), company: honeypot.current?.value || '' });
+      setConfirmed(r.confirmed);
       setSent(true);
       track('booking_submit');
-    } catch {
-      setFailed(true);
+    } catch (err) {
+      if (err instanceof Error && err.message === '409') {
+        // Otra persona reservó ese horario: se vuelve a leer el calendario y se pide elegir otro.
+        setTaken(true);
+        setForm(s => ({ ...s, time: '' }));
+        loadSlots(f.dateISO).then(setFree);
+      } else setFailed(true);
     } finally {
       setLoading(false);
     }
@@ -157,7 +188,15 @@ export default function Booking() {
           ¡Listo, {f.name.trim()}!
         </h3>
         <p>
-          Recibimos tu pedido para el <strong>{`${f.date} a las ${f.time} h`}</strong>. Te confirmamos el horario por email a {f.email.trim()}.
+          {confirmed ? (
+            <>
+              Tu llamada quedó confirmada para el <strong>{`${f.date} a las ${f.time} h`}</strong>. Te enviamos la invitación con el link de la videollamada a {f.email.trim()}.
+            </>
+          ) : (
+            <>
+              Recibimos tu pedido para el <strong>{`${f.date} a las ${f.time} h`}</strong>. Te confirmamos el horario por email a {f.email.trim()}.
+            </>
+          )}
         </p>
         <button
           type="button"
@@ -283,7 +322,7 @@ export default function Booking() {
               className="bk-opt bk-opt--day"
               aria-pressed={f.date === d.key}
               aria-label={d.key}
-              onClick={() => set('date', d.key)}
+              onClick={() => pickDay(d)}
             >
               <span className="dow">{d.dow}</span>
               <span className="num">{d.day}</span>
@@ -311,11 +350,23 @@ export default function Booking() {
         </span>
         <div className="bk-seg bk-seg--times">
           {TIMES.map(t => (
-            <button key={t} type="button" className="bk-opt bk-opt--time" aria-pressed={f.time === t} onClick={() => set('time', t)}>
+            <button
+              key={t}
+              type="button"
+              className="bk-opt bk-opt--time"
+              aria-pressed={f.time === t}
+              disabled={free !== null && !free.includes(t)}
+              onClick={() => set('time', t)}
+            >
               {t}
             </button>
           ))}
         </div>
+        {free !== null && free.length === 0 && (
+          <span className="bk-note" role="status">
+            Ese día no tiene horarios libres. Probá con otro.
+          </span>
+        )}
         {errors.time && (
           <span id="bk-time-err" className="bk-error">
             {errors.time}
@@ -347,6 +398,12 @@ export default function Booking() {
           placeholder="Ej: nos escriben mucho por envíos y cambios"
         />
       </div>
+
+      {taken && (
+        <span role="alert" className="bk-alert">
+          Ese horario se acaba de ocupar. Elegí otro de los que quedan libres.
+        </span>
+      )}
 
       {failed && (
         <span role="alert" className="bk-alert">

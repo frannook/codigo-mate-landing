@@ -11,24 +11,28 @@ Cómo leerlo: cada paso dice **qué hacés vos** (cuentas, claves, clics) y **qu
 | Despliegue automático (GitHub → Vercel) | Funciona | Cada push a `main` publica solo |
 | Chat con Yuyo (Gemini) | Funciona en producción | Se probó `/api/chat` en el sitio publicado y respondió |
 | Formulario de agendar (correo por Gmail) | Funciona | Llegó el correo en las pruebas; conviene repetir una prueba en producción |
+| Horarios libres y reserva con Meet | Probado con un Google simulado | Falta conectar tu cuenta real (paso 1) |
+| WhatsApp real en el chat y el footer | Hecho | Paso 4 |
+| Aviso si el sitio se cae | Hecho | Workflow `uptime.yml` (paso 9) |
 | Respaldo del chat en Groq | **Código listo, falta la clave** | Se activa solo al cargar `GROQ_API_KEY` en Vercel (paso 3) |
 | SEO básico (`robots.txt`, `sitemap.xml`, imagen al compartir, datos estructurados) | Hecho y publicado | Verificado en el sitio publicado (paso 6) |
 | Analítica | Código listo; **falta activarla** en Vercel | Panel de Vercel → Analytics → Enable (paso 5) |
 
-## 2. Qué falta, en orden
+## 2. Estado de cada tarea (2026-10-21)
 
-| # | Tarea | Para qué sirve | Costo | Tiempo |
+| # | Tarea | Código | Lo que falta de tu lado | Tiempo |
 | --- | --- | --- | --- | --- |
-| 1 | Google Calendar + Meet | Que cada pedido cree el evento con link de Meet y no haya dos pedidos a la misma hora | Gratis | 1 h |
-| 2 | Límite de uso compartido (Upstash Redis) | Que el límite del chat y del formulario funcione de verdad en Vercel | Gratis | 30 min |
-| 3 | Respaldo en Groq | Que el chat siga andando si Gemini se satura | Gratis | 10 min |
-| 4 | Número de WhatsApp real | Que el pase a WhatsApp abra una charla de verdad | Gratis | 10 min |
-| 5 | Analítica | Ver visitas, uso del chat y pedidos de llamada | Gratis | 15 min |
-| 6 | SEO básico | Que Google indexe bien la web y se vea bien al compartir el link | Gratis | 30 min |
-| 7 | Dominio propio | `codigomate.com.ar` en vez de `vercel.app` | ~US$ 10/año (.com) o gratis el primer año según el registro (.com.ar) | 1 h |
-| 8 | Reglas del repo y accesos | Que nadie rompa `main` y todos puedan aportar | Gratis | 15 min |
-| 9 | Avisos si algo se cae | Enterarse antes que el cliente | Gratis | 15 min |
-| 10 | Contenido real | Testimonios verdaderos y nombres del equipo | — | — |
+| 1 | Google Calendar + Meet | Hecho y probado | Crear credenciales en Google Cloud, sacar el token y cargarlo en Vercel | 20 min |
+| 2 | Límite de uso compartido (Redis) | Hecho y probado | Conectar Upstash desde el Marketplace de Vercel | 5 min |
+| 3 | Respaldo del chat (Groq u otro) | Hecho | Generar la clave y cargarla en Vercel | 10 min |
+| 4 | WhatsApp real | **Hecho** (+54 9 379 453-0578) | Probar los enlaces desde el celular | 2 min |
+| 5 | Analítica | Hecho (eventos `chat_message`, `booking_submit`, `whatsapp_click`) | Activarla en Vercel (1 clic) | 1 min |
+| 6 | SEO básico | **Hecho** | Dar de alta el sitio en Search Console | 5 min |
+| 7 | Dominio propio | Preparado (`NEXT_PUBLIC_SITE_URL`) | Registrarlo y agregarlo en Vercel | 1 h |
+| 8 | Reglas del repo | — | Revisar y, si querés, exigir Pull Request en `main` | 5 min |
+| 9 | Aviso si algo se cae | **Hecho** (workflow `uptime.yml`) | Dejar activadas las notificaciones por correo de Actions | 2 min |
+| 10 | Contenido real | — | Testimonios verdaderos y nombres del equipo | — |
+| + | Planilla de contactos | Hecho | Crear la planilla y el Apps Script | 10 min |
 
 ### Aviso importante sobre Vercel
 
@@ -36,30 +40,36 @@ El plan gratuito (Hobby) de Vercel es **solo para uso personal y no comercial**.
 
 ---
 
-## Paso 1 · Google Calendar + Meet
+## Paso 1 · Google Calendar + Meet (código hecho; faltan tus credenciales)
 
-**Vos (cuenta `codigomatebot@gmail.com`):**
-1. Entrá a https://console.cloud.google.com y creá un proyecto llamado `codigo-mate`.
-2. Menú "APIs y servicios" → "Biblioteca" → buscá **Google Calendar API** → "Habilitar".
-3. "Pantalla de consentimiento de OAuth" → tipo **Externo** → completá nombre de la app y correo → en "Usuarios de prueba" agregá `codigomatebot@gmail.com`.
-4. "Credenciales" → "Crear credenciales" → **ID de cliente de OAuth** → tipo "Aplicación web". En "URI de redireccionamiento autorizados" poné `http://localhost:3000/api/calendar/callback` y, cuando haya, la dirección pública del sitio con `/api/calendar/callback`.
-5. Guardá el **Client ID** y el **Client Secret** en tu gestor de contraseñas y cargalos en `.env.local` como `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET`. No los pegues en el chat.
+Con esto, cada pedido reserva el horario en el calendario, crea el evento con link de Meet y Google le manda la invitación al cliente. Los horarios ocupados aparecen tachados en el formulario. Sin estas variables el formulario sigue andando solo por correo.
 
-**Yo:**
-- Ruta temporal para autorizar la cuenta una sola vez y guardar el *refresh token* (`GOOGLE_REFRESH_TOKEN`).
-- `/api/slots`: devuelve los horarios libres del calendario.
-- `/api/booking`: crea el evento con link de Meet y Google le manda la invitación al cliente.
-- `Booking.tsx`: muestra solo horarios libres.
+**Vos (con la cuenta `codigomatebot@gmail.com`), unos 20 minutos:**
+1. Crear el proyecto: https://console.cloud.google.com/projectcreate → nombre `codigo-mate`.
+2. Habilitar la API: https://console.cloud.google.com/apis/library/calendar-json.googleapis.com → **Habilitar**.
+3. Pantalla de consentimiento: https://console.cloud.google.com/apis/credentials/consent → tipo **Externo** → nombre `Código Mate`, tu correo de contacto → en "Usuarios de prueba" agregá `codigomatebot@gmail.com`. Al final, **Publicar la app** (pasarla a "En producción"): si queda en "Prueba", el permiso vence a los 7 días. No pide verificación porque la usa solo esta cuenta.
+4. Credencial: https://console.cloud.google.com/apis/credentials → **Crear credenciales** → **ID de cliente de OAuth** → tipo **Aplicación de escritorio** → nombre `codigo-mate-web`. Copiá el **ID de cliente** y el **Secreto**.
+5. Pegalos en `.env.local` (en la carpeta del proyecto):
+   ```
+   GOOGLE_CLIENT_ID=...
+   GOOGLE_CLIENT_SECRET=...
+   ```
+6. En la terminal, dentro de la carpeta del proyecto: `node scripts/google-auth.mjs`. Se abre el navegador; entrá con `codigomatebot@gmail.com` y aceptá. El **refresh token** aparece solo en la terminal (no se guarda en ningún archivo).
+7. Cargá en Vercel (https://vercel.com/codigomate/codigo-mate-landing/settings/environment-variables), en Production y Preview: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` y `GOOGLE_REFRESH_TOKEN`. Después **Redeploy**.
+8. Probá una reserva con tu correo personal: debe llegar la invitación de Google con el link de Meet, y el horario debe quedar tachado en el formulario.
 
-**Cierre:** cargar las tres variables en Vercel y probar una reserva real. Ojo: con la app en modo "Prueba" el refresh token vence a los 7 días; para que no venza, en la pantalla de consentimiento pasá la app a "En producción" (no hace falta verificación para uso propio con un solo usuario).
+**Ya hecho en el código:** `/api/slots` (horarios libres), `/api/booking` (reserva con Meet, aviso al equipo, confirmación al cliente), formulario con horarios ocupados tachados y aviso si alguien ocupa el horario mientras completás el formulario. Si Google falla, el pedido no se pierde: sigue por correo.
 
-## Paso 2 · Límite de uso compartido (Upstash Redis)
+**Opcional:** `GOOGLE_CALENDAR_ID` si querés usar otro calendario en vez del principal de la cuenta.
 
-Hoy el límite vive en la memoria de cada instancia de Vercel y se reinicia solo: no frena a un abusador.
+## Paso 2 · Límite de uso compartido (Upstash Redis) (código hecho; falta conectar la base)
 
-**Vos:** en Vercel → "Storage" (o "Marketplace") → **Upstash Redis** → crear base gratuita en la región más cercana (São Paulo o Virginia) → conectarla al proyecto. Vercel carga solo `KV_REST_API_URL` y `KV_REST_API_TOKEN` (o `UPSTASH_REDIS_REST_*`).
+El chat (20 consultas por minuto por IP), el formulario (5 pedidos cada 10 minutos) y los horarios (60 por minuto) ya usan un límite compartido cuando hay Redis; sin Redis, o si Redis falla, usan memoria local y el sitio sigue andando.
 
-**Yo:** cambio el límite de `/api/chat` y `/api/booking` para que use Redis (ventana de 10 minutos por IP).
+**Vos, 5 minutos:**
+1. Abrí https://vercel.com/marketplace/upstash → **Install** → elegí **Upstash for Redis** → plan **Free** → región `us-east-1` o `sa-east-1` → conectala al proyecto `codigo-mate-landing`.
+2. Vercel carga solo las variables `KV_REST_API_URL` y `KV_REST_API_TOKEN` (el código acepta también `UPSTASH_REDIS_REST_*`).
+3. **Redeploy** del último despliegue.
 
 ## Paso 3 · Respaldo del chat (Groq u otro proveedor)
 
@@ -95,11 +105,16 @@ El código ya acepta cualquier proveedor con API compatible con OpenAI. Cargá e
 
 **Cómo comprobar que funciona:** en Vercel → Logs, si Gemini falla aparece una línea con `respaldo/…` y el chat sigue respondiendo.
 
-## Paso 4 · WhatsApp real
+## Paso 4 · WhatsApp real (hecho)
 
-**Vos:** pasame el número del negocio con código de país, sin signos (ejemplo `5493794000000`), y el mensaje inicial que querés que aparezca escrito.
+El número del negocio es **+54 9 379 453-0578** (`5493794530578` en el link). Está en `lib/site.ts`; para cambiarlo sin tocar código, definí `NEXT_PUBLIC_WHATSAPP_NUMBER` en Vercel.
 
-**Yo:** armo el link `https://wa.me/<número>?text=...` en el botón de pase a WhatsApp del chat y en el footer. Si querés que el pase lleve un resumen de la charla, también lo agrego.
+- En el chat, cuando Yuyo pasa la charla a una persona, aparece el botón **"Seguir por WhatsApp con una persona"** y abre WhatsApp con un mensaje ya escrito que incluye la última consulta del visitante.
+- En el footer hay un enlace **"Escribinos por WhatsApp"**.
+- El teléfono figura en los datos estructurados para Google.
+- Cada clic en el botón del chat se mide en la analítica como `whatsapp_click`.
+
+**Vos:** probá los dos enlaces desde tu celular; WhatsApp debería abrir la charla con +54 9 379 453-0578. Si querés otro mensaje inicial, decime el texto.
 
 ## Paso 5 · Analítica (código hecho)
 
@@ -128,12 +143,13 @@ El código ya acepta cualquier proveedor con API compatible con OpenAI. Cargá e
 2. Settings → Branches → "Add rule" sobre `main`: exigir Pull Request y una aprobación. Así se cumple lo que dice el README.
 3. Settings → Secrets: confirmá que no haya claves en el repo (hoy `.env.local` está ignorado).
 
-## Paso 9 · Avisos si algo se cae
+## Paso 9 · Avisos si algo se cae (hecho)
 
-**Vos:**
-- Cuenta gratuita en https://uptimerobot.com: monitor HTTP sobre `https://codigo-mate-landing.vercel.app/` cada 5 minutos, con aviso por correo.
-- En https://aistudio.google.com revisá la cuota de tu clave de Gemini; si se agota, el chat responde error (por eso el respaldo del paso 3).
-- Vercel → proyecto → "Logs": ahí se ven los errores del chat y del formulario.
+El repositorio tiene el workflow `.github/workflows/uptime.yml`: cada 30 minutos pide la home y `/nosotros` del sitio publicado. Si alguna no responde 200, la ejecución queda en rojo y **GitHub te manda un correo**. Ver las ejecuciones: https://github.com/frannook/codigo-mate-landing/actions
+
+**Vos:** en https://github.com/settings/notifications dejá activadas las notificaciones por correo de **Actions** ("Failed workflows only" alcanza). Opcional: UptimeRobot (https://uptimerobot.com) como segundo aviso.
+
+También conviene mirar de vez en cuando los registros de Vercel (https://vercel.com/codigomate/codigo-mate-landing/logs) y la cuota de la clave de Gemini en https://aistudio.google.com/apikey.
 
 ## Paso 10 · Contenido real
 
@@ -143,13 +159,28 @@ El código ya acepta cualquier proveedor con API compatible con OpenAI. Cargá e
 
 ---
 
-## Automatizaciones opcionales (después de lo anterior)
+## Automatizaciones
 
-| Idea | Qué hace | Cómo |
+| Idea | Estado | Cómo |
 | --- | --- | --- |
-| Planilla de contactos | Cada pedido de llamada se anota solo en una Google Sheet | Webhook de Google Apps Script llamado desde `/api/booking` (gratis) |
-| Recordatorio al cliente | Correo 24 h antes de la llamada | Lo cubre Google Calendar al crear el evento (paso 1) |
-| Resumen semanal | Correo al equipo con conversaciones y pedidos de la semana | Tarea programada de Vercel (cron) + el registro del paso 5 |
+| Recordatorio al cliente 24 h antes | Hecho (con el paso 1) | El evento de Google Calendar lo manda solo |
+| Aviso al equipo de cada pedido | Hecho | Correo por Gmail |
+| Planilla de contactos | Código hecho; falta crear la planilla | Ver abajo |
+| Resumen semanal | Pendiente (opcional) | Tarea programada de Vercel + los eventos de analítica |
+
+**Planilla de contactos (10 minutos):**
+1. Creá una planilla en https://sheets.new con estos encabezados en la fila 1: `Fecha, Nombre, Email, Web, Rubro, Día, Hora, Meet, Mensaje`.
+2. Menú **Extensiones → Apps Script**, borrá lo que haya y pegá:
+   ```js
+   function doPost(e) {{
+     const d = JSON.parse(e.postData.contents);
+     SpreadsheetApp.getActiveSpreadsheet().getActiveSheet()
+       .appendRow([new Date(), d.name, d.email, d.web, d.rubro, d.date, d.time, d.meet, d.msg]);
+     return ContentService.createTextOutput('ok');
+   }}
+   ```
+3. **Implementar → Nueva implementación** → tipo **Aplicación web** → ejecutar como **yo** → acceso **Cualquier persona** → Implementar y autorizar. Copiá la URL que termina en `/exec`.
+4. Cargala en Vercel como `LEADS_WEBHOOK_URL` y hacé Redeploy. No compartas esa URL: cualquiera que la tenga puede agregar filas.
 
 ## Variables de entorno (resumen)
 
@@ -161,4 +192,7 @@ El código ya acepta cualquier proveedor con API compatible con OpenAI. Cargá e
 | `GROQ_API_KEY` (o `FALLBACK_API_KEY`, `FALLBACK_BASE_URL`, `FALLBACK_MODEL`) | Recomendada | console.groq.com/keys u otro proveedor | 3 |
 | `KV_REST_API_URL`, `KV_REST_API_TOKEN` | Recomendadas | Vercel → Storage → Upstash | 2 |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN` | Para el calendario | Google Cloud Console | 1 |
-| `WHATSAPP_NUMBER` | Para el pase a WhatsApp | El número del negocio | 4 |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | No (ya está el número) | Solo para cambiarlo | 4 |
+| `LEADS_WEBHOOK_URL` | No | Apps Script de la planilla | Automatizaciones |
+| `GOOGLE_CALENDAR_ID` | No | Otro calendario distinto del principal | 1 |
+| `NEXT_PUBLIC_SITE_URL` | Con dominio propio | La dirección del sitio, sin barra final | 7 |
