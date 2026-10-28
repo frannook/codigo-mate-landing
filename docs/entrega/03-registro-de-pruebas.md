@@ -21,6 +21,7 @@ Sitio: https://codigo-mate-landing.vercel.app · Evidencia previa: `docs/sprint/
 | 2026-10-28 | Encabezados de seguridad (HSTS, nosniff, X-Frame) | Activos |
 | 2026-10-28 | Celular a 320, 360 y 390 px en las 6 páginas | Sin scroll horizontal; 0 textos menores a 12 px; sin errores propios en consola |
 | 2026-10-28 | Mascota Yuyo en celular (390 px) | Fija en la esquina (52x60 px), no tapa contenido, sube sobre la barra del cotizador, abre el chat a casi todo el ancho y se cierra con la X |
+| 2026-10-28 | Lighthouse móvil en producción (mediana de 3 corridas) | Inicio: rendimiento 85, accesibilidad 100, buenas prácticas 100, SEO 100 (LCP 2,6 s, CLS 0,016). Nosotros: 96. Proyectos: 99 |
 | 2026-10-28 | Mascota Yuyo en escritorio | Camina, se frena con el mouse cerca, ofrece el mate y rota 10 frases |
 
 ## Pruebas pendientes de hacer a mano (completar fecha, quién y resultado)
