@@ -89,7 +89,9 @@ export default function Home() {
           </div>
 
           <div className="hero__visual">
-            <HeroShowcase />
+            <div className="hero__stage" data-tilt="4">
+              <HeroShowcase />
+            </div>
           </div>
         </header>
       </div>
@@ -136,8 +138,6 @@ export default function Home() {
             </ul>
           </div>
           <div data-reveal="right" className="try__stage">
-            <span className="try__badge try__badge--a" aria-hidden="true">En vivo · sin guion</span>
-            <span className="try__badge try__badge--b" aria-hidden="true">Pasa a WhatsApp con contexto</span>
             <ChatWidget />
           </div>
         </div>
@@ -151,8 +151,17 @@ export default function Home() {
             <h2 className="h2" data-headline>
               De la primera charla a tu agente <em className="accent">en línea</em>.
             </h2>
+            <p className="how__lead">Tres pasos. Vos nos contás cómo funciona tu negocio; del resto nos encargamos nosotros.</p>
           </div>
           <Steps />
+          <div className="how__cta" data-reveal="up">
+            <p>
+              <strong>La primera charla es sin costo.</strong> 30 minutos por videollamada para ver cómo quedaría el agente en tu web.
+            </p>
+            <a href="#agendar" className="btn btn--solid">
+              Agendar la primera charla <ArrowRight />
+            </a>
+          </div>
         </div>
       </section>
 

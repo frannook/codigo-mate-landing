@@ -6,6 +6,9 @@ import './styles/nav-footer.css';
 import './styles/testimonials.css';
 import './styles/yuyo.css';
 import './styles/try.css';
+import './styles/depth.css';
+import './styles/polish.css';
+import Tilt from '@/components/Tilt';
 import YuyoLauncher from '@/components/YuyoLauncher';
 import { Analytics } from '@vercel/analytics/next';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, WHATSAPP_NUMBER } from '@/lib/site';
@@ -62,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {children}
+        <Tilt />
         <YuyoLauncher />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
         <Analytics />

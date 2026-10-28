@@ -1,6 +1,10 @@
 # Código Mate · Landing
 
-Landing de una agencia argentina que instala agentes de IA (chatbots) en webs de negocios. La página demuestra el servicio: **Yuyo**, un agente real conectado a Google Gemini, responde dudas de visitantes; un formulario captura pedidos de llamada vía correo.
+Landing de una agencia argentina que instala agentes de IA (chatbots) en webs de negocios. La página demuestra el servicio:
+
+- **Yuyo**, un agente real (Groq + Google Gemini de respaldo), responde dudas de visitantes en la sección *Probalo* y desde una **mascota animada** (una hoja de yerba con remera y mate) que camina por el borde inferior de todas las páginas y abre el chat en una burbuja.
+- **Cotizador** con estimación orientativa que se adjunta al formulario.
+- **Formulario de agendar** conectado a **Google Calendar**: muestra horarios libres reales, crea el evento con **link de Meet** e invita al cliente, y avisa por **Gmail** al equipo y al cliente.
 
 **Objetivo pedagógico:** sitio premium con Next.js moderno, IA en producción, manejo de APIs, autenticación segura y UX pulida.
 
@@ -24,10 +28,12 @@ Landing de una agencia argentina que instala agentes de IA (chatbots) en webs de
 ### Backend & APIs
 | Servicio | Función | Autenticación |
 |----------|---------|----------------|
-| **Google Gemini** | LLM para el chat del bot | API Key (gratuita) |
+| **Groq** | LLM principal del chat (~1 s) | API Key `GROQ_API_KEY` (gratuita) |
+| **Google Gemini** | LLM de respaldo del chat | API Key `GEMINI_API_KEY` (gratuita) |
 | **Gmail SMTP** | Envío de correos | Contraseña de aplicación |
-| **Google Calendar API** | Reservas de llamadas | OAuth 2.0 (pendiente) |
-| **Vercel** | Hosting + CI/CD | Git integration |
+| **Google Calendar API** | Horarios libres, eventos con Meet | OAuth 2.0 (refresh token) |
+| **Upstash Redis** (integración de Vercel) | Límite de consultas compartido entre instancias | `KV_REST_API_*` |
+| **Vercel** | Hosting + CI/CD + Analytics | Git integration |
 
 ### Herramientas
 - **npm 10+** · Dependency management
@@ -48,9 +54,10 @@ Cliente (navegador)
     ├─ Valida y limpia input
     ├─ Lee historial de la sesión
     ├─ Construye prompt del sistema (lib/chat/store.ts)
-    ├─ Lanza consulta a Gemini (con AbortSignal timeout 9s)
-    ├─ Si primer modelo tarda >3.5s, lanza Groq en paralelo (fallback)
-    ├─ Reintenta silencioso si error 503 o network
+    ├─ Límite: 20 consultas por minuto por IP (Redis)
+    ├─ Consulta primero a Groq (llama-3.3-70b; si la cuenta no tiene el modelo, prueba el siguiente)
+    ├─ Si no respondió en 2 s (o falló), lanza Gemini en paralelo y gana el primero
+    ├─ Plazo total 22 s; cancela las consultas que quedan en vuelo
     ├─ Parsea etiquetas [[PEDIDO:n]], [[AGENDAR]], [[OPCIONES:...]]
     └─ Devuelve { text, actions[], error? }
     ↓
@@ -60,11 +67,12 @@ ChatWidget.tsx
     └─ Mantiene scroll al pie, recibe y muestra escritura
 ```
 
-**Timeout y fallback:**
-- Primer modelo (`gemini-3.1-flash-lite`) tiene 9 segundos total.
-- A los 3.5 segundos, si no respondió, lanza `gemini-3.5-flash-lite` en paralelo.
-- Usa la respuesta del primero que llega; si ambos fallan, reintenta una vez.
-- Si sigue fallando, devuelve error al usuario.
+**Velocidad y respaldo (medido en producción, 2026-10-28):** 1,3 a 2 s de punta a punta.
+- Con `GROQ_API_KEY`: Groq primero; Gemini (`gemini-3.5-flash-lite` y siguientes) entra si Groq tarda más de 2 s o falla.
+- Sin `GROQ_API_KEY`: solo Gemini, con consultas escalonadas cada 3,5 s.
+- Si todo falla, el chat muestra un error con botón "Reintentar".
+
+**Dónde aparece:** sección *Probalo* de la home y burbuja flotante que abre la mascota Yuyo (`components/YuyoLauncher.tsx`) en todas las páginas. El chat de la burbuja se descarga recién al abrirlo.
 
 **Comportamiento del bot:**
 - **Prompts firmes:** no inventa precios, plazos, clientes ni integraciones. Todo se deriva a la llamada.
@@ -94,13 +102,17 @@ Booking.tsx (validación en cliente)
     ↓
 /api/booking/route.ts
     ├─ Revalida en servidor
-    ├─ Límite: 5 pedidos cada 10 min por IP (en memoria, volverá a Redis)
+    ├─ Límite: 5 pedidos cada 10 min por IP (Redis)
     ├─ Descarta si honeypot tiene valor
-    ├─ Crea evento en Google Calendar (pendiente)
-    ├─ Manda 2 correos:
-    │  1. Aviso al equipo (BOOKING_TO)
+    ├─ Vuelve a comprobar que el horario siga libre (si no: 409 slot_taken)
+    ├─ Crea el evento en Google Calendar con link de Meet e invita al cliente
+    ├─ Manda 2 correos por Gmail:
+    │  1. Aviso al equipo (BOOKING_TO), con el link de Meet y el resumen del cotizador
     │  2. Confirmación al cliente
-    └─ Devuelve { success, message }
+    ├─ (Opcional) agrega una fila en la planilla de contactos (LEADS_WEBHOOK_URL)
+    └─ Devuelve { ok, confirmed }   // confirmed = true si se creó el evento con Meet
+
+GET /api/slots?date=AAAA-MM-DD → { calendar, free[] }   // horarios libres reales del día
     ↓
 Booking.tsx (éxito)
     ├─ Muestra check con pop (scale 1.06, 550ms total)
@@ -108,9 +120,9 @@ Booking.tsx (éxito)
     └─ Botón "Cambiar fecha" para volver al formulario
 ```
 
-**Rate limiting:**
-- Hoy: memoria por instancia. En Vercel con múltiples instancias, necesita Upstash Redis.
-- Bloquea la misma IP por 10 minutos si envía 6+ pedidos.
+**Horarios:** lunes a viernes, 10:00, 11:30, 14:00, 15:30 y 17:00 (hora Argentina), 30 minutos, hasta 21 días adelante y con 2 h de anticipación mínima (`lib/slots.ts`). Si Google Calendar no está configurado o falla, el pedido sigue por correo y el equipo confirma a mano.
+
+**Rate limiting:** Upstash Redis (compartido entre instancias de Vercel); sin Redis, cae a memoria por instancia.
 
 **Correos:**
 - **Al equipo:** remitente bot, Reply-To cliente, para responder directo desde Gmail.
@@ -120,15 +132,21 @@ Booking.tsx (éxito)
 
 ```
 page.tsx (componentes principales)
-├─ Hero: título animado palabra por palabra, CTA, mockup del chat
+├─ Hero: título palabra por palabra con subrayado ámbar, vitrina que entra en 3D y se inclina con el mouse
 ├─ Showcase: 6 rubros en carrusel (logística, turnos, tienda, inmobiliaria, gastronomía, servicios)
-│           cada uno muestra conversación simulada + tarjetas de productos
+├─ Probalo: chat real con datos clave (24/7, segundos, 1 línea) y preguntas sugeridas
 ├─ NightStory: "Mientras dormís" — 4 escenas de un reloj avanzando, pin en desktop
-├─ Testimonios: marquee de 8 cards (scroll infinito en ambas direcciones)
-├─ Cotizador: selector de rubro + volumen → calcula precio y manda chip de "Presupuesto"
-├─ Steps: línea de tiempo "Cómo trabajamos" (3 pasos)
-└─ Booking: formulario de agendar
+├─ Steps: "De la primera charla a tu agente en línea" (3 pasos con tarjetas 3D y cierre con CTA)
+├─ Testimonios: cinta de 2 filas; al pasar el mouse la tarjeta se inclina en 3D y las demás se apagan
+├─ Cotizador: selector de volumen y funciones → estimación que se adjunta al formulario
+└─ Booking: formulario de agendar con horarios reales de Google Calendar
 ```
+
+**Otras páginas:** `/servicios`, `/proyectos` (casos simulados en filas editoriales con teléfono en 3D), `/nosotros` (foto, equipo, cómo trabajamos), `/privacidad`, `/terminos`.
+
+**Profundidad 3D (desktop con mouse):** `components/Tilt.tsx` inclina hacia el cursor todo lo que tenga `data-tilt` (estilos en `app/styles/depth.css`), y `Motion.tsx` hace que cada sección entre apenas inclinada y se apoye plana al subir. En celulares todo queda plano para no pesar.
+
+**Mascota Yuyo:** camina por el borde inferior; cuando el mouse se acerca se frena, ofrece el mate (con vapor) y dice una de 10 frases que van rotando. Un clic abre el chat.
 
 ---
 
@@ -158,8 +176,9 @@ page.tsx (componentes principales)
 │   ├── layout.tsx                  # Root layout, fuentes, script de movimiento
 │   ├── globals.css                 # Paleta (navy/bone/slate/mist), tipografía, keyframes
 │   ├── api/
-│   │   ├── chat/route.ts           # POST /api/chat — Gemini + Groq fallback
-│   │   └── booking/route.ts        # POST /api/booking — Gmail SMTP, validación
+│   │   ├── chat/route.ts           # POST /api/chat — Groq primero, Gemini de respaldo
+│   │   ├── slots/route.ts          # GET /api/slots — horarios libres (Google Calendar)
+│   │   └── booking/route.ts        # POST /api/booking — Calendar + Meet, Gmail SMTP, validación
 │   └── styles/
 │       ├── glass.css               # Formulario de agendar, botones, animaciones
 │       ├── nav-footer.css          # Navegación flotante, footer
@@ -177,7 +196,10 @@ page.tsx (componentes principales)
 │   ├── Motion.tsx                  # GSAP + Lenis init, scroll triggers
 │   ├── Reveal.tsx                  # IntersectionObserver para data-reveal
 │   ├── Nav.tsx                     # Navegación píldora flotante
-│   └── Footer.tsx                  # Footer con logo animado
+│   ├── Footer.tsx                  # Footer con logo animado
+│   ├── YuyoLauncher.tsx            # Mascota que camina y abre el chat en burbuja
+│   ├── Tilt.tsx                    # Inclinación 3D hacia el cursor ([data-tilt])
+│   └── ChatSample.tsx              # Mini conversaciones de ejemplo (Servicios, Proyectos)
 ├── lib/
 │   ├── chat/
 │   │   ├── store.ts                # System prompt de Yuyo (hechos, rubros, dudas)
@@ -220,22 +242,27 @@ npm install
 Crear `.env.local` (se ignora en git):
 
 ```env
-# Google Gemini API
+# Chat
+GROQ_API_KEY=gsk_...                         # console.groq.com (principal, recomendado)
 GEMINI_API_KEY=tu_clave_de_aistudio_google_com
-GEMINI_MODEL=gemini-3.1-flash-lite           # Opcional
+GEMINI_MODEL=                                # Opcional
 
 # Gmail SMTP
 GMAIL_USER=botcodigomate@gmail.com
-GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx       # 16 caracteres de myaccount.google.com/apppasswords
+GMAIL_APP_PASSWORD=xxxxxxxxxxxxxxxx          # 16 caracteres de myaccount.google.com/apppasswords
+BOOKING_TO=botcodigomate@gmail.com           # Opcional; por defecto es GMAIL_USER
 
-# Booking (opcional)
-BOOKING_TO=contacto@codigomate.com           # Por defecto es GMAIL_USER
+# Google Calendar (cliente OAuth "Aplicación de escritorio")
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+GOOGLE_REFRESH_TOKEN=...                     # se obtiene con: node scripts/google-auth.mjs
 
-# Google Calendar (pendiente)
-# GOOGLE_CALENDAR_CLIENT_ID=...
-# GOOGLE_CALENDAR_CLIENT_SECRET=...
-# GOOGLE_CALENDAR_REFRESH_TOKEN=...
+# Redis (lo crea la integración Upstash de Vercel)
+KV_REST_API_URL=...
+KV_REST_API_TOKEN=...
 ```
+
+Todas las variables están documentadas en [.env.example](.env.example).
 
 ### 3. Ejecutar en desarrollo
 ```bash
@@ -335,20 +362,19 @@ Asunto:      Confirmamos tu llamada | Código Mate
 Cuerpo:      Agradecimiento + resumen de día/hora + próximos pasos
 ```
 
-### Google Calendar API (Pendiente)
+### Google Calendar API (activo)
 
-**OAuth 2.0:** será necesario autorizar una sola vez.
+**OAuth 2.0:** se autoriza una sola vez con la cuenta `botcodigomate@gmail.com`.
 
 **Flujo:**
-1. Ruta `/api/calendar/auth` abre navegador → Google consent screen.
-2. Usuario autoriza → code → se cambia por access_token + refresh_token.
-3. Refresh token se guarda en `.env` (seguro, nunca se expone).
-4. `/api/booking` usa refresh token → crea evento con Meet link → invita al cliente.
+1. `node scripts/google-auth.mjs` abre el navegador con la pantalla de consentimiento de Google (servidor local en `127.0.0.1:53682`).
+2. Al aceptar, el script cambia el código por un refresh token y lo imprime en la terminal.
+3. El refresh token se carga en Vercel como `GOOGLE_REFRESH_TOKEN` (nunca llega al navegador).
+4. `lib/calendar.ts` pide un access token efímero, lee los eventos ocupados del día y crea el evento con Meet (`conferenceDataVersion=1`, `sendUpdates=all`).
 
-**Archivos que se crearán:**
-- `app/api/calendar/auth.ts` — OAuth callback
-- `app/api/slots.ts` — GET los horarios libres
-- `lib/calendar.ts` — cliente de Google Calendar API
+**Archivos:** `lib/calendar.ts` (cliente REST sin dependencias), `lib/slots.ts` (horarios ofrecidos), `app/api/slots/route.ts`, `app/api/booking/route.ts`, `scripts/google-auth.mjs`.
+
+**Importante:** la app de Google está en modo *Prueba*, así que el refresh token vence a los 7 días. Para renovarlo: correr de nuevo el script, actualizar `GOOGLE_REFRESH_TOKEN` en Vercel y redesplegar. Publicarla exige un dominio propio verificado.
 
 ---
 
@@ -397,12 +423,14 @@ El paso a paso completo (qué hace cada integrante y qué hace el código) está
 
 | Tarea | Impacto | Esfuerzo | Estado |
 |-------|---------|----------|--------|
-| **Google Calendar API** | Evita pedidos duplicados, genera Meet link | Medio | En progreso |
-| **Límite de consultas en Redis** | Escalable a múltiples instancias | Bajo | Pendiente |
-| **WhatsApp real** | Integración con número del negocio | Bajo | Demostrativo |
-| **Testimonios reales** | Credibilidad | Bajo | Placeholder |
-| **Analítica** | Medir conversiones | Muy bajo | Vercel Analytics suficiente |
-| **Favicon + dominio** | Marca completa | Muy bajo | No urgente |
+| **Google Calendar API** | Evita pedidos duplicados, genera Meet link | Medio | Hecho (token de prueba, vence a los 7 días) |
+| **Límite de consultas en Redis** | Escalable a múltiples instancias | Bajo | Hecho |
+| **Chat rápido con Groq** | Respuestas en 1 a 2 s | Bajo | Hecho |
+| **WhatsApp real** | Pase a una persona con contexto | Bajo | Hecho |
+| **Testimonios reales** | Credibilidad | Bajo | Ejemplos ilustrativos |
+| **Analítica** | Medir conversiones | Muy bajo | Hecho (Vercel Analytics) |
+| **Dominio propio** | Marca y publicar la app de Google | Bajo | Pendiente (costo) |
+| **Cuenta de servicio de Google** | Calendar sin vencimiento y sin dominio | Medio | Propuesto |
 
 ---
 
@@ -451,4 +479,4 @@ El paso a paso completo (qué hace cada integrante y qué hace el código) está
 
 ---
 
-**Última actualización:** 2026-10-07 · Movimiento Premium, auditoría de animaciones completada.
+**Última actualización:** 2026-10-28 · Google Calendar con Meet, chat con Groq, mascota Yuyo, rediseño 3D (hero, Probalo, pasos, testimonios, Proyectos y Nosotros).

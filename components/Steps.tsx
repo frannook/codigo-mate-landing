@@ -37,8 +37,8 @@ export default function Steps() {
       <ol>
         <li data-reveal="left" className="step">
           <span aria-hidden="true" className="step__node anim" style={d(0.2)} />
-          <span className="step__num">01</span>
-          <div aria-hidden="true" className="step__card">
+          <span className="step__num" data-meta="· Llamada de 30 min">PASO 01</span>
+          <div aria-hidden="true" className="step__card depth-card" data-tilt="7">
             <div className="q-bubble anim">¿Qué te preguntan tus clientes?</div>
             <div className="tags">
               {['Horario', 'Precios', 'Políticas', 'Preguntas frecuentes'].map((t, i) => (
@@ -54,8 +54,8 @@ export default function Steps() {
 
         <li data-reveal="up" className="step">
           <span aria-hidden="true" className="step__node anim" style={d(1.25)} />
-          <span className="step__num">02</span>
-          <div aria-hidden="true" className="step__card step__card--center">
+          <span className="step__num" data-meta="· Lo hacemos nosotros">PASO 02</span>
+          <div aria-hidden="true" className="step__card step__card--center depth-card" data-tilt="7">
             {[
               ['Tu información', 1.4, false],
               ['Tu tono de voz', 1.7, false],
@@ -75,8 +75,8 @@ export default function Steps() {
 
         <li data-reveal="right" className="step">
           <span aria-hidden="true" className="step__node anim" style={d(1.85)} />
-          <span className="step__num">03</span>
-          <div aria-hidden="true" className="step__card step__card--clip">
+          <span className="step__num" data-meta="· Vos pegás una línea">PASO 03</span>
+          <div aria-hidden="true" className="step__card step__card--clip depth-card" data-tilt="7">
             <div className="code">
               <span className="code__text anim">&lt;script src=&quot;codigomate.js&quot;&gt;&lt;/script&gt;</span>
               <span className="code__caret" />

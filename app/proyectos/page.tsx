@@ -14,22 +14,34 @@ export const metadata: Metadata = {
   description: 'Ejemplos de agentes de IA de Código Mate. Son proyectos simulados, creados para la materia Práctica Profesional I.'
 };
 
-const PROJECTS: { name: string; rubro: string; problem: string; solution: string; result: string; sample: SampleLine[] }[] = [
+const PROJECTS: { name: string; rubro: string; agent: string; before: string; after: string; demo: string; sample: SampleLine[] }[] = [
   {
     name: 'Tienda de accesorios "Nube"',
     rubro: 'Tienda online',
-    problem: 'Cada mañana llegaban decenas de mensajes preguntando "¿dónde está mi pedido?" y por cambios y devoluciones.',
-    solution: 'Un agente que consulta el estado del pedido por número, explica la política de cambios y pasa a WhatsApp los casos de reclamo.',
-    result: 'Demo: los pedidos de ejemplo 4821, 4790 y 4833 se pueden consultar en el chat de Yuyo.',
-    sample: [['user', 'Quiero cambiar un talle.'], ['bot', 'Tenés 30 días para cambiarlo con la etiqueta puesta. ¿Me pasás el número de pedido?']]
+    agent: 'Nube · Asistente',
+    before: 'Decenas de mensajes cada mañana preguntando "¿dónde está mi pedido?" y por cambios.',
+    after: 'El agente consulta el pedido por número, explica los cambios y pasa los reclamos a WhatsApp.',
+    demo: 'Probalo con el pedido 4821',
+    sample: [
+      ['user', 'Quiero cambiar un talle.'],
+      ['bot', 'Tenés 30 días para cambiarlo con la etiqueta puesta. ¿Me pasás el número de pedido?'],
+      ['user', 'Es el 4821.'],
+      ['bot', 'Está en camino, llega el jueves entre las 9 y las 13 h. Cuando lo recibas, te ayudo con el cambio.']
+    ]
   },
   {
     name: 'Estudio contable "Ríos y Asociados"',
     rubro: 'Servicios profesionales',
-    problem: 'Los posibles clientes no sabían qué documentación llevar ni a qué profesional dirigirse.',
-    solution: 'Un agente de primera orientación que lista la documentación, toma nombre y consulta, y ofrece turnos para una llamada.',
-    result: 'Demo: el flujo de captura de contactos y la reserva de llamada del formulario de la home.',
-    sample: [['user', '¿Qué documentación tengo que llevar?'], ['bot', 'Te paso la lista general. Para tu caso, ¿agendamos una llamada con un profesional del estudio?']]
+    agent: 'Ríos y Asociados',
+    before: 'Los posibles clientes no sabían qué documentación llevar ni a quién dirigirse.',
+    after: 'El agente lista la documentación, toma nombre y consulta, y ofrece una llamada con un profesional.',
+    demo: 'Probá agendar una llamada',
+    sample: [
+      ['user', '¿Qué documentación tengo que llevar?'],
+      ['bot', 'Te paso la lista general: DNI, constancia de CUIT y tus últimos comprobantes. ¿Sos monotributista o responsable inscripto?'],
+      ['user', 'Monotributo.'],
+      ['bot', 'Perfecto. ¿Agendamos 30 minutos con un profesional del estudio para revisar tu caso?']
+    ]
   }
 ];
 
@@ -39,7 +51,7 @@ export default function Proyectos() {
       <Reveal />
       <Motion />
       <Nav />
-      <main id="top" className="top ab">
+      <main id="top" className="top ab ambient">
         <div aria-hidden="true" className="top__glow" />
         <div aria-hidden="true" className="top__grid" />
         <div className="wrap">
@@ -51,36 +63,60 @@ export default function Proyectos() {
             <h1 className="ab__title">
               Ejemplos de agentes <em className="accent">en acción</em>.
             </h1>
-            <p className="ab__lead">
-              Estos proyectos son <strong>simulados</strong>: los creamos para la materia Práctica Profesional I y los negocios no existen. Muestran cómo
-              trabajaríamos con un cliente real.
-            </p>
+            <p className="ab__lead">Así trabajaríamos con un negocio real: el problema de todos los días y cómo lo resuelve el agente.</p>
+            <p className="pg__note">Proyectos simulados, creados para la materia Práctica Profesional I. Los negocios no existen.</p>
           </div>
-          <ul className="pg__grid">
-            {PROJECTS.map(p => (
-              <li key={p.name} className="pg__card" data-reveal="up">
-                <span className="pg__tag">Proyecto simulado · {p.rubro}</span>
-                <h2>{p.name}</h2>
-                <p>
-                  <strong>Problema: </strong>
-                  {p.problem}
-                </p>
-                <p>
-                  <strong>Solución: </strong>
-                  {p.solution}
-                </p>
-                <p className="pg__for">{p.result}</p>
-                <ChatSample lines={p.sample} />
+          <ol className="pj">
+            {PROJECTS.map((p, i) => (
+              <li key={p.name} className="pj__row">
+                <div className="pj__text" data-reveal={i % 2 ? 'right' : 'left'}>
+                  <span className="pj__rubro">
+                    0{i + 1} · {p.rubro}
+                  </span>
+                  <h2 className="pj__name">{p.name}</h2>
+                  <ul className="pj__ba">
+                    <li className="pj__before">
+                      <b>Antes</b>
+                      <span>{p.before}</span>
+                    </li>
+                    <li className="pj__after">
+                      <b>Ahora</b>
+                      <span>{p.after}</span>
+                    </li>
+                  </ul>
+                  <a href="/#probalo" className="pj__demo">
+                    {p.demo} <ArrowRight size={14} />
+                  </a>
+                </div>
+                <div className="pj__vis" data-reveal={i % 2 ? 'left' : 'right'}>
+                  <div className="pj__phone depth-card" data-tilt="6">
+                    <div className="pj__bar">
+                      <span className={`avatar av-${i + 1}`} aria-hidden="true">
+                        {p.agent[0]}
+                      </span>
+                      <span>
+                        <strong>{p.agent}</strong>
+                        <small>Agente de IA · en línea</small>
+                      </span>
+                    </div>
+                    <ChatSample lines={p.sample} />
+                  </div>
+                </div>
               </li>
             ))}
-          </ul>
-          <div className="pg__cta">
-            <a href="/#probalo" className="btn btn--solid">
-              Probar el agente <ArrowRight />
-            </a>
-            <a href="/#agendar" className="btn btn--ghost">
-              Agendar una llamada
-            </a>
+          </ol>
+          <div className="pj__end" data-reveal="up">
+            <h2>
+              ¿Tu negocio podría ser <em className="accent">el próximo</em>?
+            </h2>
+            <div className="pg__cta pj__ctas">
+              <a href="/#agendar" className="btn btn--solid">
+                Agendar una llamada <ArrowRight />
+              </a>
+              <a href="/#probalo" className="btn btn--ghost">
+                Probar el agente
+              </a>
+            </div>
           </div>
         </div>
       </main>

@@ -48,6 +48,15 @@ export default function Motion() {
       if (!lite) {
         gsap.to('.progress', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } });
 
+        // Entrada de cada sección: llega apenas inclinada hacia atrás y se apoya plana mientras sube (el cotizador queda quieto).
+        gsap.utils.toArray<HTMLElement>('.section:not(.qt) > .section__inner').forEach(el =>
+          gsap.fromTo(
+            el,
+            { rotateX: 7, y: 60, transformPerspective: 1400, transformOrigin: '50% 0%' },
+            { rotateX: 0, y: 0, ease: 'none', scrollTrigger: { trigger: el, start: 'top 98%', end: 'top 45%', scrub: 0.6 } }
+          )
+        );
+
         const top = { trigger: '.top', start: 'top top', end: 'bottom top', scrub: true };
         gsap.to('.top__glow', { yPercent: 30, ease: 'none', scrollTrigger: top });
         if (document.querySelector('.hero__visual')) {

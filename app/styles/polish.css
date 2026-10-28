@@ -1,0 +1,64 @@
+/* ---------- Pulido de paleta y hero (se carga después de globals.css) ---------- */
+
+/* Nav: vidrio más claro y con borde visible, así se despega del fondo. */
+.navp__bar { border-color: rgba(224, 225, 221, 0.22); }
+.navp__bar::before {
+  background: linear-gradient(180deg, rgba(52, 70, 96, 0.84), rgba(30, 43, 64, 0.8));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(11, 23, 36, 0.4),
+    0 0 0 1px rgba(233, 162, 59, 0.08),
+    0 20px 44px -18px rgba(0, 0, 0, 0.75),
+    0 2px 6px -2px rgba(0, 0, 0, 0.35);
+}
+.navp[data-top='true'] .navp__bar::before { opacity: 0.85; }
+.navp[data-top='true'] .navp__bar { border-color: rgba(224, 225, 221, 0.16); }
+.navp__link { color: var(--bone); }
+.navp__pill { background: rgba(224, 225, 221, 0.14); }
+
+/* Chat (sección Probalo y burbuja de Yuyo): fondo más claro, mensajes con más contraste y el usuario en ámbar. */
+:is(.chat--page, .chat--float, .hero .chat) { background: linear-gradient(180deg, #1c2b42 0%, #142236 100%); }
+:is(.chat--page, .chat--float, .hero .chat) .bubble-bot { background: #2a3b55; border-color: rgba(224, 225, 221, 0.1); color: #f1f2ee; }
+:is(.chat--page, .chat--float, .hero .chat) .bubble-user {
+  background: linear-gradient(180deg, #f0b04f, var(--amber)); border-color: transparent; color: var(--navy); font-weight: 500;
+}
+:is(.chat--page, .chat--float, .hero .chat) .chip { background: rgba(233, 162, 59, 0.08); border-color: rgba(233, 162, 59, 0.4); color: var(--bone); }
+:is(.chat--page, .chat--float, .hero .chat) .chip:hover { background: rgba(233, 162, 59, 0.2); border-color: var(--amber); }
+:is(.chat--page, .chat--float, .hero .chat) .composer { background: #1f2f48; border-color: rgba(224, 225, 221, 0.16); }
+:is(.chat--page, .chat--float, .hero .chat) .composer button:not(:disabled) { background: var(--amber); color: var(--navy); }
+:is(.chat--page, .chat--float, .hero .chat) .order { background: #22324b; }
+:is(.chat--page, .chat--float, .hero .chat) .typing span { background: var(--amber); }
+
+/* Hero: luz ámbar que deriva lenta, subrayado que se dibuja bajo "atiende" y la vitrina que entra desde atrás en 3D. */
+.top::after {
+  content: ''; position: absolute; z-index: 0; top: 8%; right: -6%; width: min(620px, 70vw); aspect-ratio: 1; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(233, 162, 59, 0.13), transparent 72%);
+  animation: heroDrift 16s ease-in-out infinite alternate;
+}
+@keyframes heroDrift { from { transform: translate(0, 0) scale(1); } to { transform: translate(-12%, 10%) scale(1.12); } }
+.hero { z-index: 1; }
+.hero__title .accent {
+  background: linear-gradient(90deg, var(--amber), rgba(233, 162, 59, 0.2)) 0 94% / 0% 3px no-repeat;
+  animation: cmWord 1s var(--ease-out) both, heroLine 0.9s var(--ease-out) 1.1s forwards;
+}
+@keyframes heroLine { to { background-size: 100% 3px; } }
+.hero__visual { perspective: 1400px; }
+.hero__stage { transform-origin: 50% 80%; animation: heroRise 1.3s var(--ease-out) 0.15s backwards; }
+@keyframes heroRise { from { opacity: 0; transform: perspective(1400px) rotateX(18deg) translateY(70px) scale(0.94); } }
+@media (min-width: 900px) and (hover: hover) {
+  .hero__stage { --ry: -6deg; --rx: 3deg; }
+}
+
+/* Nosotros: equipo en tarjetas 3D. */
+.ab__team { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(12px, 1.6vw, 20px); grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); perspective: 1400px; }
+.ab__team li { padding: 24px 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; transform-style: preserve-3d; }
+.ab__team strong { margin-top: 12px; font-family: var(--fh); font-weight: 400; font-size: 24px; line-height: 1.1; color: var(--white); }
+.ab__team span:last-child { font-size: 14px; line-height: 1.45; color: var(--mist); }
+.ab__ini {
+  width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-size: 17px; font-weight: 600; color: var(--navy);
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.ab__team li[data-tilting] .ab__ini { transform: translateZ(30px); transition: transform 0.4s var(--ease-out); }
+html .ab__ini.av-0 { background: var(--av-0); } html .ab__ini.av-1 { background: var(--av-1); } html .ab__ini.av-2 { background: var(--av-2); }
+html .ab__ini.av-3 { background: var(--av-3); } html .ab__ini.av-4 { background: var(--av-4); }
+.ab__values + .ab__values { border-top: 0; padding-top: 0; }

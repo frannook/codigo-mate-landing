@@ -1,0 +1,114 @@
+/* ---------- Profundidad 3D compartida ---------- */
+/* [data-tilt]: se inclina hacia el cursor (components/Tilt.tsx) con un brillo que sigue al mouse. */
+[data-tilt] {
+  position: relative;
+  transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.7s var(--ease-out), box-shadow 0.7s var(--ease-out), border-color 0.4s;
+}
+[data-tilt][data-tilting] { transition: transform 0.18s linear, box-shadow 0.7s var(--ease-out), border-color 0.4s; }
+[data-tilt]::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.4s;
+  background: radial-gradient(45% 55% at var(--mx, 50%) var(--my, 30%), rgba(255, 255, 255, 0.09), transparent 70%);
+}
+[data-tilt][data-tilting]::after { opacity: 1; }
+
+/* Tarjeta de vidrio con filo de luz y sombra profunda. */
+.depth-card {
+  border-radius: 20px; background: linear-gradient(180deg, rgba(36, 51, 73, 0.72), rgba(21, 32, 47, 0.55));
+  border: 1px solid rgba(119, 141, 169, 0.2); border-top-color: rgba(224, 225, 221, 0.18);
+  box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.08), 0 30px 60px -36px rgba(0, 0, 0, 0.85);
+}
+.depth-card[data-tilting] { border-color: rgba(233, 162, 59, 0.32); box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.12), 0 40px 80px -34px rgba(0, 0, 0, 0.9); }
+
+/* ---------- Cómo trabajamos ---------- */
+.section--how { background: radial-gradient(55% 60% at 50% 0%, rgba(119, 141, 169, 0.12), transparent 70%), var(--navy); }
+.how__lead { margin: 0; max-width: 560px; font-size: 17px; line-height: 1.6; color: var(--mist); }
+.step__num {
+  margin-top: 28px; font-family: var(--fm); font-size: 13px; line-height: 1; letter-spacing: 0.08em; color: var(--amber); opacity: 1;
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.step__num::after { content: attr(data-meta); color: var(--mist); letter-spacing: 0.04em; }
+.step__card { height: 200px; padding: 22px; margin-top: 18px; }
+.step__card.depth-card { background: linear-gradient(180deg, rgba(36, 51, 73, 0.72), rgba(21, 32, 47, 0.5)); }
+.step h3 { margin-top: 28px; font-family: var(--fh); font-weight: 400; font-size: clamp(26px, 2.4vw, 32px); line-height: 1.1; }
+.q-bubble { font-size: 14px; }
+.tag, .bar__label { font-size: 13px; }
+.code { font-size: 12.5px; }
+.how__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; padding-top: 8px; border-top: 1px solid var(--rule); }
+.how__cta p { margin: 0; flex: 1 1 280px; font-size: 16px; color: var(--mist); }
+.how__cta p strong { color: var(--bone); font-weight: 500; }
+
+/* ---------- Proyectos: filas editoriales con el teléfono en 3D ---------- */
+.pj { list-style: none; margin: 0; padding: 0 0 clamp(24px, 4vw, 48px); }
+.pj__row { display: grid; gap: clamp(32px, 5vw, 80px); align-items: center; padding-block: clamp(48px, 7vw, 96px); border-top: 1px solid var(--rule); }
+@media (min-width: 900px) {
+  .pj__row { grid-template-columns: minmax(0, 1fr) 400px; }
+  .pj__row:nth-child(even) .pj__vis { order: -1; }
+}
+.pj__text { display: flex; flex-direction: column; gap: 18px; }
+.pj__rubro { font-family: var(--fm); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
+.pj__name { margin: 0; font-family: var(--fh); font-weight: 400; font-size: clamp(34px, 4.4vw, 56px); line-height: 1.02; letter-spacing: -0.01em; color: var(--white); text-wrap: balance; }
+.pj__ba { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 12px; max-width: 560px; }
+.pj__ba li { display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: baseline; font-size: 17px; line-height: 1.55; }
+.pj__ba b { font-family: var(--fm); font-weight: 400; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.pj__before { color: var(--slate); }
+.pj__before b { color: var(--slate); }
+.pj__after { color: var(--bone); }
+.pj__after b { color: var(--amber); }
+.pj__demo {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; padding: 10px 16px; border-radius: 999px;
+  font-size: 14px; color: var(--bone); background: rgba(233, 162, 59, 0.1); border: 1px solid rgba(233, 162, 59, 0.35);
+  transition: background 0.3s, transform var(--dur-std) var(--ease-out);
+}
+.pj__demo:hover { background: rgba(233, 162, 59, 0.2); transform: translateY(-2px); }
+.pj__vis { position: relative; perspective: 1200px; }
+.pj__vis::before {
+  content: ''; position: absolute; inset: 8% 6%; z-index: -1; border-radius: 40px; filter: blur(40px);
+  background: radial-gradient(closest-side, rgba(233, 162, 59, 0.2), transparent 75%);
+}
+.pj__phone { padding: 18px 16px 20px; border-radius: 32px; }
+.pj__phone .pg__chat { margin: 0; background: rgba(11, 23, 36, 0.6); }
+.pj__bar { display: flex; align-items: center; gap: 10px; padding: 2px 4px 14px; }
+.pj__bar span:first-child { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 600; }
+.pj__bar strong { font-size: 14px; font-weight: 600; color: var(--bone); }
+.pj__bar small { display: block; font-size: 12px; color: var(--mist); }
+@media (min-width: 900px) {
+  .pj__phone { --rx: 3deg; --ry: -8deg; }
+  .pj__row:nth-child(even) .pj__phone { --ry: 8deg; }
+}
+.pj__end { padding: clamp(48px, 7vw, 96px) 0 clamp(64px, 9vw, 120px); border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 28px; align-items: flex-start; }
+.pj__end h2 { margin: 0; max-width: 18ch; font-family: var(--fh); font-weight: 400; font-size: clamp(36px, 5vw, 64px); line-height: 1.04; color: var(--white); }
+
+/* ---------- Nosotros ---------- */
+.ab__photo-wrap { position: relative; perspective: 1200px; }
+.ab__photo-wrap::before {
+  content: ''; position: absolute; inset: 6%; z-index: -1; border-radius: 40px; filter: blur(48px);
+  background: radial-gradient(closest-side, rgba(233, 162, 59, 0.22), transparent 75%);
+}
+@media (min-width: 900px) { .ab__photo-wrap { --ry: 6deg; --rx: 2deg; } }
+.ab__photo-wrap::after { display: none; }
+.ab__chip {
+  position: absolute; z-index: 2; left: clamp(-8px, -1vw, 0px); bottom: 28px; padding: 10px 16px; border-radius: 999px;
+  display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--navy); background: var(--bone);
+  box-shadow: 0 18px 36px -14px rgba(0, 0, 0, 0.7); animation: tryFloat 5s ease-in-out infinite alternate;
+}
+.ab__chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }
+@keyframes tryFloat { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+.ab__stats { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 520px; }
+.ab__stats li { padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 2px; background: rgba(27, 38, 59, 0.6); border: 1px solid rgba(119, 141, 169, 0.18); }
+.ab__stats strong { font-family: var(--fh); font-weight: 400; font-size: clamp(24px, 2.6vw, 30px); line-height: 1.1; color: var(--amber); }
+.ab__stats span { font-size: 13px; color: var(--mist); }
+.ab__cards { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(16px, 2vw, 24px); grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.ab__cards li { padding: clamp(22px, 2.4vw, 30px); display: flex; flex-direction: column; gap: 14px; }
+.ab__cards em { font-family: var(--fh); font-style: normal; font-size: 48px; line-height: 0.9; color: var(--amber); }
+.ab__cards h3 { margin: 0; font-family: var(--fh); font-weight: 400; font-size: 28px; line-height: 1.1; color: var(--white); }
+.ab__cards p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--mist); }
+.ab__cards blockquote { margin: 6px 0 0; padding: 12px 14px; border-radius: 12px 12px 12px 4px; font-size: 14px; line-height: 1.5; color: var(--bone); background: rgba(11, 23, 36, 0.55); border: 1px solid rgba(119, 141, 169, 0.16); }
+
+.pg__note { margin: 0; font-size: 13px; color: var(--slate); }
+.pj__ctas { padding: 0; }
+
+/* Celulares: sin vidrio pesado ni giros, todo plano y liviano. */
+@media (max-width: 899px) {
+  [data-tilt] { transform: none; }
+}

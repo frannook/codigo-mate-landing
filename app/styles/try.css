@@ -20,12 +20,10 @@
   background: radial-gradient(closest-side, rgba(233, 162, 59, 0.22), transparent 75%); filter: blur(28px);
 }
 .try__stage .chat--page { border-color: rgba(233, 162, 59, 0.28); box-shadow: 0 0 0 1px rgba(13, 27, 42, 0.8), 0 60px 100px -50px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(224, 225, 221, 0.06); }
-.try__badge {
-  position: absolute; z-index: 2; padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--navy); white-space: nowrap;
-  background: var(--bone); box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.7); pointer-events: none; animation: tryFloat 5s ease-in-out infinite alternate;
+/* Profundidad: el chat arranca apenas girado en 3D y se endereza al acercarse el mouse. */
+@media (min-width: 900px) and (hover: hover) {
+  .try__stage { perspective: 1600px; }
+  .try__stage > .demo { transform: rotateY(-7deg) rotateX(3deg); transform-origin: 30% 50%; transition: transform 0.9s var(--ease-out); }
+  .try__stage:hover > .demo, .try__stage:focus-within > .demo { transform: none; }
 }
-.try__badge--a { top: -16px; left: clamp(8px, 4%, 28px); }
-.try__badge--a::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: #34c759; box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.25); }
-.try__badge--b { bottom: 64px; right: -10px; background: var(--amber); animation-delay: -2.5s; }
-@keyframes tryFloat { from { transform: translateY(0); } to { transform: translateY(-6px); } }
-@media (max-width: 640px) { .try__badge--b { right: 8px; bottom: auto; top: -16px; left: auto; } .try__badge--a { display: none; } .try__facts { gap: 8px; } }
+@media (max-width: 640px) { .try__facts { gap: 8px; } }

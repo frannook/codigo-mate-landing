@@ -44,7 +44,25 @@
   padding: 6px 12px; border-radius: 999px; background: var(--bone); color: var(--navy); font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none;
   box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.6); transition: opacity var(--dur-std) var(--ease-out), transform var(--dur-std) var(--ease-out);
 }
-.yuyo__walk:hover .yuyo__hint, .yuyo__walk:focus-within .yuyo__hint { opacity: 1; transform: translateX(-50%) translateY(0); }
+.yuyo__walk:hover .yuyo__hint, .yuyo__walk:focus-within .yuyo__hint, .yuyo[data-near='true'] .yuyo__hint {
+  opacity: 1; transform: translateX(-50%) translateY(0); animation: yuyoSay 0.45s var(--ease-out);
+}
+@keyframes yuyoSay { from { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.85); } }
+.yuyo__hint::after {
+  content: ''; position: absolute; left: 50%; top: 100%; width: 10px; height: 10px; margin: -6px 0 0 -5px; background: inherit;
+  transform: rotate(45deg); border-radius: 0 0 3px 0;
+}
+
+/* Mouse cerca: se frena, se agranda un poco y te ofrece el mate (con vapor). */
+.yuyo[data-near='true'] .yuyo__walk, .yuyo[data-near='true'] .yuyo__flip, .yuyo[data-near='true'] .yuyo__leg { animation-play-state: paused; }
+.yuyo[data-near='true'] .yuyo__btn { transform: translateY(-4px) scale(1.06); }
+.yuyo__arm { transition: transform 0.45s var(--ease-out); }
+.yuyo[data-near='true'] .yuyo__arm, .yuyo__walk:hover .yuyo__arm { animation: none; transform: translate(5px, -7px) rotate(-10deg) scale(1.12); }
+.yuyo__steam { opacity: 0; transition: opacity 0.4s; }
+.yuyo__steam path { animation: yuyoSteam 1.6s ease-in-out infinite; }
+.yuyo__steam path + path { animation-delay: -0.8s; }
+.yuyo[data-near='true'] .yuyo__steam, .yuyo__walk:hover .yuyo__steam { opacity: 0.8; }
+@keyframes yuyoSteam { 0% { opacity: 0; transform: translateY(4px); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(-6px); } }
 .yuyo[data-open='true'] .yuyo__hint { display: none; }
 
 /* Panel del chat: burbuja en la esquina inferior derecha. */
