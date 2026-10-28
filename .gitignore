@@ -11,3 +11,6 @@ AGENTS.md
 
 *.zip
 .impeccable
+
+# Notas privadas del equipo (no van al repositorio público)
+docs/GUIA_CHATBOT_ECOMMERCE.md
