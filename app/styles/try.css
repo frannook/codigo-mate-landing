@@ -1,0 +1,31 @@
+/* ---------- Probalo: escenario con halo, datos clave y etiquetas flotantes ---------- */
+.section--try {
+  background:
+    radial-gradient(60% 70% at 85% 50%, rgba(233, 162, 59, 0.09), transparent 70%),
+    radial-gradient(50% 60% at 10% 10%, rgba(119, 141, 169, 0.1), transparent 70%),
+    var(--navy-900);
+}
+.try__facts { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 480px; }
+.try__facts li {
+  display: flex; flex-direction: column; gap: 2px; padding: 14px 14px 13px; border-radius: 14px;
+  background: rgba(27, 38, 59, 0.6); border: 1px solid rgba(119, 141, 169, 0.18); box-shadow: inset 0 1px 0 rgba(224, 225, 221, 0.07);
+}
+.try__facts strong { font-family: var(--font-serif), serif; font-weight: 400; font-size: clamp(24px, 2.6vw, 30px); line-height: 1.1; color: var(--amber); }
+.try__facts span { font-size: 13px; color: var(--mist); }
+.try__label { margin: 10px 0 -10px; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate); }
+
+.try__stage { position: relative; }
+.try__stage::before {
+  content: ''; position: absolute; inset: -6% -4%; z-index: -1; border-radius: 40px; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(233, 162, 59, 0.22), transparent 75%); filter: blur(28px);
+}
+.try__stage .chat--page { border-color: rgba(233, 162, 59, 0.28); box-shadow: 0 0 0 1px rgba(13, 27, 42, 0.8), 0 60px 100px -50px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(224, 225, 221, 0.06); }
+.try__badge {
+  position: absolute; z-index: 2; padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--navy); white-space: nowrap;
+  background: var(--bone); box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.7); pointer-events: none; animation: tryFloat 5s ease-in-out infinite alternate;
+}
+.try__badge--a { top: -16px; left: clamp(8px, 4%, 28px); }
+.try__badge--a::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: #34c759; box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.25); }
+.try__badge--b { bottom: 64px; right: -10px; background: var(--amber); animation-delay: -2.5s; }
+@keyframes tryFloat { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+@media (max-width: 640px) { .try__badge--b { right: 8px; bottom: auto; top: -16px; left: auto; } .try__badge--a { display: none; } .try__facts { gap: 8px; } }

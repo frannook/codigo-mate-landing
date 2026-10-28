@@ -27,7 +27,6 @@ const STRIP = ['Atención 24 horas', 'Seguimiento de pedidos', 'Pase a WhatsApp 
 const ASKS: [string, string][] = [
   ['Tengo una tienda online', 'Pedidos, envíos, cambios y pagos'],
   ['Hago envíos y logística', 'Seguimiento, cobertura y reclamos'],
-  ['Tengo una web institucional', 'Servicios, horarios y contacto'],
   ['¿Qué pasa si no sabe responder?', 'Errores y pase a una persona'],
   ['¿Cuánto cuesta y cuánto tarda?', 'Precio, plazos y qué incluye']
 ];
@@ -110,13 +109,20 @@ export default function Home() {
       <section id="probalo" className="section section--try">
         <div className="wrap section__inner try">
           <div data-reveal="left" className="try__intro">
+            <div className="eyebrow">
+              <span aria-hidden="true" className="eyebrow__rule" />
+              <span>Probalo en vivo</span>
+            </div>
             <h2 className="h2" data-headline>
               Preguntale lo que quieras. <em className="accent">Es de verdad.</em>
             </h2>
-            <p className="lead">
-              Yuyo es un agente real de Código Mate, igual al que instalamos en tu web. Reemplaza a las preguntas frecuentes: contale a qué te
-              dedicás y resolvé todas tus dudas, de logística, ecommerce, webs institucionales y más.
-            </p>
+            <p className="lead">Yuyo es el mismo agente que instalamos en tu web. Contale a qué te dedicás y mirá cómo te ayudaría.</p>
+            <ul className="try__facts" aria-label="Qué hace el agente">
+              <li><strong>24/7</strong><span>Atiende siempre</span></li>
+              <li><strong>Segundos</strong><span>Responde al toque</span></li>
+              <li><strong>1 línea</strong><span>Para instalarlo</span></li>
+            </ul>
+            <p className="try__label">Probá con una de estas:</p>
             <ul className="try__asks">
               {ASKS.map(([q, hint]) => (
                 <li key={q}>
@@ -129,7 +135,9 @@ export default function Home() {
               ))}
             </ul>
           </div>
-          <div data-reveal="right">
+          <div data-reveal="right" className="try__stage">
+            <span className="try__badge try__badge--a" aria-hidden="true">En vivo · sin guion</span>
+            <span className="try__badge try__badge--b" aria-hidden="true">Pasa a WhatsApp con contexto</span>
             <ChatWidget />
           </div>
         </div>

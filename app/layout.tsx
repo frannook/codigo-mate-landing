@@ -5,6 +5,7 @@ import './styles/glass.css';
 import './styles/nav-footer.css';
 import './styles/testimonials.css';
 import './styles/yuyo.css';
+import './styles/try.css';
 import YuyoLauncher from '@/components/YuyoLauncher';
 import { Analytics } from '@vercel/analytics/next';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, WHATSAPP_NUMBER } from '@/lib/site';
