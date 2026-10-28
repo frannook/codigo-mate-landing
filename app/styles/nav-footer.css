@@ -201,6 +201,10 @@
 @media (max-width: 640px) {
   .foot__legal { font-size: 14px; }
 }
+/* Mismo corte que Yuyo fijo: la última fila del pie sube para que la mascota no tape "Volver arriba". */
+@media (max-width: 899px), (pointer: coarse) {
+  .foot__legal { padding-bottom: 76px; }
+}
 
 /* Aclaración bajo el título de testimonios. */
 .proof__note { margin: 14px 0 0; max-width: 62ch; font-size: 15px; line-height: 1.6; color: var(--mist); }

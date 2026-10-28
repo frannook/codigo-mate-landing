@@ -443,6 +443,30 @@ Cuerpo:      Agradecimiento + resumen de día/hora + próximos pasos
 
 ---
 
+## Proceso de desarrollo
+
+Cómo se fue construyendo la web, en orden y con las tecnologías de cada paso. La versión sin jerga, con el prototipo y las decisiones, está en el tablero de Trello; el detalle de cada decisión (fecha y motivo) en [docs/entrega/02-acuerdos-y-decisiones.md](docs/entrega/02-acuerdos-y-decisiones.md).
+
+| Fecha | Qué se hizo | Tecnologías y detalle | Qué no se hizo y por qué |
+| --- | --- | --- | --- |
+| 6/10 | Landing inicial: inicio, bot, testimonios y formulario | Diseño de origen en `project/` pasado a Next.js (App Router), React y TypeScript. Chat en `/api/chat` con Gemini | Tailwind: el diseño vino en CSS y no justificaba otra dependencia |
+| 6/10 | Reintentos silenciosos ante errores 503 de Gemini | Modelo `gemini-3.1-flash-lite`, reintento en el servidor | Plan pago de Google: se buscó una opción gratuita |
+| 6/10 | Avisos por correo | Nodemailer con Gmail SMTP y contraseña de aplicación; cuenta propia del proyecto | Telegram (el público no lo usa) y Resend (pide dominio propio verificado) |
+| 7/10 | Rediseño v2 y movimiento | GSAP con ScrollTrigger, Lenis para el scroll, CSS propio. Vitrina de 6 rubros con timeline de GSAP. Movimiento siempre activo | Respetar `prefers-reduced-motion` e interruptor on/off: el equipo eligió movimiento siempre activo |
+| 16/10 | Acento ámbar, logo, `/nosotros`, SEO y analítica | Color `#E9A23B` elegido por contraste (8:1) entre 4 candidatos; metadatos y Vercel Analytics | Terracota, cobre y durazno |
+| 20-21/10 | Rendimiento | Lighthouse en local y en producción; estilos en línea, carga diferida del movimiento, modo liviano en celulares. Se revirtió lo que no mejoraba (precarga de fuentes, carga bajo demanda de secciones) | Cambios a ciegas: se midió de a uno |
+| 21/10 | `/servicios` y `/proyectos`, WhatsApp, Calendar y límites | Google Calendar API con OAuth y Meet; Upstash Redis para el límite compartido; tarea de GitHub cada 30 min para avisar caídas. Si Google falla, el pedido sigue por correo | Herramienta de agenda paga; monitoreo pago |
+| 27/10 | Seguridad y confianza | Actualización de `next`, `nodemailer` y `react` (0 vulnerabilidades), cabeceras de seguridad, páginas legales, 404, íconos y manifest | Textos legales revisados por abogado: queda como borrador |
+| 28/10 | Groq como proveedor principal | Groq primero y Gemini de reserva si Groq tarda más de 2 s o falla; 1,3 a 2 s por respuesta medidos en producción | Plan pago; seguir solo con Gemini |
+| 28/10 | Mascota Yuyo y rediseño 3D | Chat cargado bajo demanda en una burbuja; mascota fija en la esquina en celular; 3D sutil solo en escritorio con mouse | Botón de chat clásico; mascota caminando también en celular (tapaba contenido) |
+| 28/10 | Correos de bienvenida | Mail HTML con día, hora, Meet y qué vamos a ver, más invitación de Calendar | — |
+
+**Lo que se usó, en una línea:** Next.js 16, React 19, TypeScript, GSAP, Lenis, CSS propio, Groq, Gemini, Gmail SMTP, Google Calendar y Meet, Upstash Redis, Vercel y Vercel Analytics. **Costo en servicios:** cero (planes gratuitos); la única compra pendiente es un dominio propio.
+
+**Cómo se trabajó:** el código se construyó con ayuda de Claude Code (un asistente de IA para programar) y las decisiones las tomó el equipo. Casi todos los commits figuran con la cuenta `frannook`, así que el historial no refleja el reparto del trabajo; la mejora acordada para un próximo proyecto es que cada integrante suba sus cambios con su cuenta y por pull request.
+
+---
+
 ## Pendiente
 
 El paso a paso completo (qué hace cada integrante y qué hace el código) está en [docs/PLAN_CONEXIONES.md](docs/PLAN_CONEXIONES.md).
@@ -463,7 +487,7 @@ El paso a paso completo (qué hace cada integrante y qué hace el código) está
 ## Notas para el profesor
 
 1. **Stack moderno:** Next.js 16 (App Router), React 19, TypeScript. Sin Tailwind: CSS handoff implementado 1:1.
-2. **IA en producción:** Gemini API con fallback a Groq, timeouts, manejo de saturación.
+2. **IA en producción:** Groq como proveedor principal y Gemini de respaldo, con timeouts y manejo de saturación.
 3. **Correo:** Gmail SMTP sin servicio externo (gratis), cuenta del proyecto separada.
 4. **Seguridad:** validación dual (cliente + servidor), honeypot, rate limiting, env variables seguras.
 5. **Motion:** identidad Premium documentada, animaciones que mejoran UX sin distraer.
