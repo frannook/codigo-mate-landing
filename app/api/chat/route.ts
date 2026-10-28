@@ -20,6 +20,8 @@ const HEDGE_MS = 3_500;
 const FALLBACK_KEY = process.env.FALLBACK_API_KEY || process.env.GROQ_API_KEY;
 const FALLBACK_URL = process.env.FALLBACK_BASE_URL || 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = process.env.FALLBACK_MODEL || process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const GROQ_MODELS = [...new Set([GROQ_MODEL, 'openai/gpt-oss-120b', 'llama-3.1-8b-instant'])];
+const deniedModels = new Set<string>();
 const DEADLINE_MS = 22_000;
 const MAX_MESSAGES = 16;
 const MAX_LEN = 2000;
@@ -89,28 +91,36 @@ export async function POST(req: Request) {
   };
 
   const groq = async () => {
-    const res = await fetch(FALLBACK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${FALLBACK_KEY}` },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        max_tokens: 600,
-        temperature: 0.6,
-        messages: [{ role: 'system', content: SYSTEM }, ...messages]
-      }),
-      signal: done.signal
-    });
-    if (!res.ok) throw new Error(`respaldo ${res.status} ${(await res.text()).slice(0, 160)}`);
-    const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-    const reply = (data.choices?.[0]?.message?.content || '').trim();
-    if (!reply) throw new Error('respaldo respuesta vacía');
-    return reply;
+    // Si la cuenta no tiene acceso a un modelo (404), prueba el siguiente y se acuerda de cuál no sirve.
+    for (const model of GROQ_MODELS.filter(m => !deniedModels.has(m))) {
+      const res = await fetch(FALLBACK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${FALLBACK_KEY}` },
+        body: JSON.stringify({
+          model,
+          max_tokens: 600,
+          temperature: 0.6,
+          messages: [{ role: 'system', content: SYSTEM }, ...messages]
+        }),
+        signal: done.signal
+      });
+      if (res.status === 404 || res.status === 403) {
+        deniedModels.add(model);
+        continue;
+      }
+      if (!res.ok) throw new Error(`respaldo ${model} ${res.status} ${(await res.text()).slice(0, 160)}`);
+      const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+      const reply = (data.choices?.[0]?.message?.content || '').trim();
+      if (!reply) throw new Error(`respaldo ${model} respuesta vacía`);
+      return reply;
+    }
+    throw new Error('respaldo: ningún modelo disponible para esta clave');
   };
 
   // Orden: con proveedor de respaldo configurado (Groq responde en ~0,5 s) va primero y Gemini queda de reserva;
   // sin él, el Gemini más rápido y después el resto de Gemini.
   const candidates: [string, () => Promise<string>][] = [
-    ...(FALLBACK_KEY ? [[`respaldo/${GROQ_MODEL}`, groq] as [string, () => Promise<string>]] : []),
+    ...(FALLBACK_KEY ? [['respaldo', groq] as [string, () => Promise<string>]] : []),
     ...MODELS.map(m => [m, () => gemini(m)] as [string, () => Promise<string>])
   ];
   const hedgeMs = FALLBACK_KEY ? 2_000 : HEDGE_MS;

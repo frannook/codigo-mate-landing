@@ -49,40 +49,46 @@ export default function YuyoLauncher() {
             <svg viewBox="0 0 80 92" width="80" height="92" aria-hidden="true" focusable="false">
               {/* patitas */}
               <g className="yuyo__leg yuyo__leg--a">
-                <rect x="30" y="68" width="7" height="16" rx="3.5" fill="#2f7a3a" />
-                <ellipse cx="34" cy="85" rx="7" ry="3.4" fill="#2a6a33" />
+                <rect x="30" y="74" width="5.5" height="12" rx="2.7" fill="#3a2418" />
+                <ellipse cx="31.5" cy="87" rx="5.5" ry="2.6" fill="#2a1a11" />
               </g>
               <g className="yuyo__leg yuyo__leg--b">
-                <rect x="44" y="68" width="7" height="16" rx="3.5" fill="#2f7a3a" />
-                <ellipse cx="48" cy="85" rx="7" ry="3.4" fill="#2a6a33" />
+                <rect x="44.5" y="74" width="5.5" height="12" rx="2.7" fill="#3a2418" />
+                <ellipse cx="48.5" cy="87" rx="5.5" ry="2.6" fill="#2a1a11" />
               </g>
               <g className="yuyo__body">
-                {/* hojas del brote */}
+                {/* hoja de yerba: borde aserrado, nervadura y venas */}
                 <g className="yuyo__sprout">
-                  <path d="M40 24 C34 10 22 8 14 12 C16 22 26 28 40 26 Z" fill="#7bd36a" />
-                  <path d="M40 24 C46 8 58 4 67 9 C65 20 54 27 40 26 Z" fill="#5cb85c" />
-                  <path d="M40 26 C40 18 40 12 41 5" stroke="#2f7a3a" strokeWidth="3" strokeLinecap="round" fill="none" />
+                  <path
+                    d="M40 3 L47 13 L52 12 L51 21 L58 22 L56 31 L63 34 L60 43 L66 47 L60 56 L63 62 L54 65 L52 73 L44 72 L40 77 L36 72 L28 73 L26 65 L17 62 L20 56 L14 47 L20 43 L17 34 L24 31 L22 22 L29 21 L28 12 L33 13 Z"
+                    fill="#4fb23e" stroke="#2c7a2b" strokeWidth="1.6" strokeLinejoin="round"
+                  />
+                  <path d="M40 8 L40 70" stroke="#2c7a2b" strokeWidth="1.6" strokeLinecap="round" />
+                  <path d="M40 22 L28 14 M40 22 L52 14 M40 32 L24 24 M40 32 L56 24 M40 44 L21 37 M40 44 L59 37" stroke="#2c7a2b" strokeWidth="1.1" strokeLinecap="round" opacity="0.7" />
+                  <path d="M30 18 Q34 30 33 42" stroke="#8be06f" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.65" />
                 </g>
-                {/* cuerpo */}
-                <ellipse cx="40" cy="48" rx="23" ry="24" fill="#6bc65d" />
-                <ellipse cx="33" cy="38" rx="9" ry="6" fill="#92e07f" opacity="0.55" />
                 {/* cara */}
                 <g className="yuyo__eyes">
-                  <ellipse cx="32" cy="46" rx="3.2" ry="4.2" fill="#12261a" />
-                  <ellipse cx="46" cy="46" rx="3.2" ry="4.2" fill="#12261a" />
-                  <circle cx="33" cy="44.5" r="1.1" fill="#fff" />
-                  <circle cx="47" cy="44.5" r="1.1" fill="#fff" />
+                  <ellipse cx="33" cy="35" rx="2.8" ry="3.8" fill="#12261a" />
+                  <ellipse cx="47" cy="35" rx="2.8" ry="3.8" fill="#12261a" />
+                  <circle cx="34" cy="33.6" r="1" fill="#fff" />
+                  <circle cx="48" cy="33.6" r="1" fill="#fff" />
                 </g>
-                <path d="M34 55 Q39 60 44 55" stroke="#12261a" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-                <ellipse cx="26" cy="54" rx="3.6" ry="2.2" fill="#e9a23b" opacity="0.5" />
-                <ellipse cx="52" cy="54" rx="3.6" ry="2.2" fill="#e9a23b" opacity="0.5" />
-                {/* brazo con el mate */}
+                <path d="M35 42 Q40 47 45 42" stroke="#12261a" strokeWidth="2" strokeLinecap="round" fill="none" />
+                <ellipse cx="27" cy="41" rx="3.4" ry="2.1" fill="#f08a7a" opacity="0.7" />
+                <ellipse cx="53" cy="41" rx="3.4" ry="2.1" fill="#f08a7a" opacity="0.7" />
+                {/* mate torpedo con bombilla, sostenido con los dos brazos */}
                 <g className="yuyo__arm">
-                  <path d="M60 56 Q68 58 68 64" stroke="#5cb85c" strokeWidth="5.5" strokeLinecap="round" fill="none" />
-                  <path d="M60 64 L76 64 L74 78 Q68 83 62 78 Z" fill="#9a6232" />
-                  <rect x="59" y="62" width="18" height="4" rx="2" fill="#e9a23b" />
-                  <path d="M72 64 L77 46" stroke="#cfd6df" strokeWidth="2" strokeLinecap="round" />
-                  <circle cx="77.5" cy="45" r="2" fill="#cfd6df" />
+                  <path d="M31 53 L53 53 L51 62 Q48 79 40 80 Q32 79 29 62 Z" fill="#9b5a26" stroke="#4a2810" strokeWidth="1.4" strokeLinejoin="round" />
+                  <path d="M33 58 Q35 70 38 77" stroke="#c98a4d" strokeWidth="1.6" strokeLinecap="round" fill="none" opacity="0.7" />
+                  <ellipse cx="42" cy="52.5" rx="11.5" ry="3.4" fill="#b9bfc8" stroke="#4a2810" strokeWidth="1.2" />
+                  <ellipse cx="42" cy="51.6" rx="9" ry="2.2" fill="#2f7d2b" />
+                  <path d="M45 51 L55 30" stroke="#d5dbe3" strokeWidth="2.2" strokeLinecap="round" />
+                  <path d="M54 32 L58 28" stroke="#d5dbe3" strokeWidth="3" strokeLinecap="round" />
+                  <path d="M21 47 Q22 56 31 58" stroke="#3a2418" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+                  <path d="M59 47 Q58 56 51 58" stroke="#3a2418" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+                  <circle cx="31" cy="58" r="2.6" fill="#3a2418" />
+                  <circle cx="51" cy="58" r="2.6" fill="#3a2418" />
                 </g>
               </g>
             </svg>
