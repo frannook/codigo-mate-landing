@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       if (!isOfferable(dateISO, time) || !(await freeTimes(dateISO)).includes(time)) {
         return Response.json({ error: 'slot_taken' }, { status: 409 });
       }
-      const ev = await createCall({ date: dateISO, time, name, email, description: `${email}\n${details}` });
+      const ev = await createCall({ date: dateISO, time, name, email, description: eventDescription({ name, date, time, web, rubro, msg }) });
       meet = ev.meet;
       eventLink = ev.link;
     } catch (error) {
