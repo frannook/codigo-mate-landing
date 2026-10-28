@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import Motion from '@/components/Motion';
 import Nav from '@/components/Nav';
 import Reveal from '@/components/Reveal';
+import ChatSample, { type SampleLine } from '@/components/ChatSample';
 import { ArrowRight } from '@/components/icons';
 import '../styles/about.css';
 import '../styles/pages.css';
@@ -13,20 +14,22 @@ export const metadata: Metadata = {
   description: 'Ejemplos de agentes de IA de Código Mate. Son proyectos simulados, creados para la materia Práctica Profesional I.'
 };
 
-const PROJECTS: { name: string; rubro: string; problem: string; solution: string; result: string }[] = [
+const PROJECTS: { name: string; rubro: string; problem: string; solution: string; result: string; sample: SampleLine[] }[] = [
   {
     name: 'Tienda de accesorios "Nube"',
     rubro: 'Tienda online',
     problem: 'Cada mañana llegaban decenas de mensajes preguntando "¿dónde está mi pedido?" y por cambios y devoluciones.',
     solution: 'Un agente que consulta el estado del pedido por número, explica la política de cambios y pasa a WhatsApp los casos de reclamo.',
-    result: 'Demo: los pedidos de ejemplo 4821, 4790 y 4833 se pueden consultar en el chat de Yuyo.'
+    result: 'Demo: los pedidos de ejemplo 4821, 4790 y 4833 se pueden consultar en el chat de Yuyo.',
+    sample: [['user', 'Quiero cambiar un talle.'], ['bot', 'Tenés 30 días para cambiarlo con la etiqueta puesta. ¿Me pasás el número de pedido?']]
   },
   {
     name: 'Estudio contable "Ríos y Asociados"',
     rubro: 'Servicios profesionales',
     problem: 'Los posibles clientes no sabían qué documentación llevar ni a qué profesional dirigirse.',
     solution: 'Un agente de primera orientación que lista la documentación, toma nombre y consulta, y ofrece turnos para una llamada.',
-    result: 'Demo: el flujo de captura de contactos y la reserva de llamada del formulario de la home.'
+    result: 'Demo: el flujo de captura de contactos y la reserva de llamada del formulario de la home.',
+    sample: [['user', '¿Qué documentación tengo que llevar?'], ['bot', 'Te paso la lista general. Para tu caso, ¿agendamos una llamada con un profesional del estudio?']]
   }
 ];
 
@@ -67,6 +70,7 @@ export default function Proyectos() {
                   {p.solution}
                 </p>
                 <p className="pg__for">{p.result}</p>
+                <ChatSample lines={p.sample} />
               </li>
             ))}
           </ul>

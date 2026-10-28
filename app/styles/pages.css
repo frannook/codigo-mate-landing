@@ -15,3 +15,15 @@
 .pg__list { margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.6; color: var(--mist); }
 .pg__list li::marker { color: var(--amber); }
 .pg__cta { padding-bottom: clamp(80px, 11vw, 140px); display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Mini conversación de ejemplo dentro de las tarjetas. */
+.pg__chat { margin: 6px 0 0; padding: 14px; border-radius: 16px; display: flex; flex-direction: column; gap: 8px; background: rgba(11, 23, 36, 0.55); border: 1px solid rgba(175, 187, 203, 0.14); }
+.pg__chatlabel { font-size: 13px; color: var(--mist); }
+.pg__msg { margin: 0; max-width: 88%; padding: 9px 13px; border-radius: 14px; font-size: 14.5px; line-height: 1.5; }
+.pg__chat .pg__msg { color: var(--bone); }
+.pg__msg--user { align-self: flex-end; border-bottom-right-radius: 4px; background: var(--steel); }
+.pg__msg--bot { align-self: flex-start; border-bottom-left-radius: 4px; background: var(--navy-600); border: 1px solid rgba(175, 187, 203, 0.14); }
+.pg__card { justify-content: flex-start; }
+.pg__chat { margin-top: auto; }
+.pg__grid { padding-bottom: clamp(40px, 6vw, 72px); }
+.pg__cta { padding-bottom: clamp(56px, 8vw, 96px); }

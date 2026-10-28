@@ -80,6 +80,15 @@ El movimiento sigue siempre activo, también con `prefers-reduced-motion`. Lo de
 - **Aviso de caídas**: workflow `.github/workflows/uptime.yml` (cada 30 minutos). **Planilla de contactos**: `LEADS_WEBHOOK_URL`.
 - Lo que falta de tu lado está en [docs/PLAN_CONEXIONES.md](docs/PLAN_CONEXIONES.md).
 
+## Mejoras del 2026-10-28
+
+- **Seguridad:** `next` 16.4.3 y `nodemailer` 10.2.1 (npm audit: 0 vulnerabilidades) y cabeceras de seguridad en `next.config.ts`. La Content-Security-Policy queda pendiente (hay scripts en línea).
+- **Legales:** `/privacidad` y `/terminos` (borrador razonable; conviene revisión de un abogado), enlazados en el pie y el sitemap. Los testimonios de la home están rotulados como ejemplos.
+- **Descubrimiento:** 404 propia, `favicon.ico`, `apple-icon.png`, manifest, íconos 192/512 e imagen de vista previa propia en `/nosotros`.
+- **Diseño:** mini conversaciones de ejemplo (`components/ChatSample.tsx`) en Servicios y Proyectos.
+- **Rendimiento móvil de la home:** se probó cargar las secciones de abajo con `next/dynamic` y no mejoró; se revirtió. Plan en [docs/PLAN_MEJORAS.md](docs/PLAN_MEJORAS.md).
+- `docs/GUIA_CHATBOT_ECOMMERCE.md` es privada (está en `.gitignore`).
+
 ## Cosas a tener presentes
 
 - Los testimonios de `components/Testimonials.tsx` son **texto de ejemplo**: reemplazar antes de promocionar la web.
