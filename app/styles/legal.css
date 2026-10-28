@@ -1,0 +1,11 @@
+/* Páginas legales (Privacidad y Términos): texto largo con medida cómoda y títulos de sección. */
+.lg { max-width: 760px; padding-bottom: clamp(72px, 10vw, 128px); display: flex; flex-direction: column; gap: 8px; }
+.lg__meta { margin: 0; font-size: 14px; color: var(--mist); }
+.lg h2 { margin: 36px 0 4px; font-family: var(--fh); font-weight: 400; font-size: clamp(26px, 2.6vw, 34px); line-height: 1.12; color: var(--bone); }
+.lg p, .lg li { font-size: 16.5px; line-height: 1.7; color: var(--mist); text-wrap: pretty; }
+.lg p { margin: 0; }
+.lg ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.lg li::marker { color: var(--amber); }
+.lg strong { color: var(--bone); font-weight: 500; }
+.lg a { color: var(--bone); text-decoration: underline; text-decoration-color: rgba(233, 162, 59, 0.6); text-underline-offset: 3px; }
+.lg a:hover { color: var(--amber-hi); }

@@ -154,6 +154,9 @@ export default function Home() {
             <h2 className="h2" data-headline>
               Lo que cambia cuando tu web <em className="accent">responde sola</em>.
             </h2>
+            <p className="proof__note">
+              Ejemplos ilustrativos de lo que cuentan los negocios que usan un agente. Los vamos a reemplazar por casos reales a medida que los tengamos.
+            </p>
           </div>
           <div data-reveal="up">
             <Testimonials />

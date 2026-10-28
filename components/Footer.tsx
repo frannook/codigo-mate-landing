@@ -65,6 +65,10 @@ export default function Footer() {
 
       <div className="wrap foot__legal">
         <span>© 2026 Código Mate · Hecho en Argentina</span>
+        <span className="foot__links">
+          <a href="/privacidad">Privacidad</a>
+          <a href="/terminos">Términos</a>
+        </span>
         <a href="#top" className="foot__top">
           Volver arriba <ArrowUp size={14} />
         </a>
