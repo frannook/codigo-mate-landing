@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 const DEV = 'Técnico Superior en Desarrollo de Software';
 const TEAM: [string, string][] = [
   ['Cristian Maciel', DEV],
-  ['Luciano Beimundo', DEV],
+  ['Luciano Deimundo', DEV],
   ['Matías Ortiz', DEV],
   ['Franco Romero', DEV],
   ['Elías Gómez Romero', 'Técnico Superior en Infraestructura']
