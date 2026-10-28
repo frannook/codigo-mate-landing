@@ -1,12 +1,12 @@
 # Informe final · Código Mate
 
-**Materia:** Práctica Profesional I · **Fecha:** 21 de octubre de 2026
+**Materia:** Práctica Profesional I · **Fecha:** 28 de octubre de 2026
 **Integrantes:** Cristian Maciel, Matías Ortiz, Luciano Deimundo, Elías Gomez, Franco Romero
 
 ## Enlaces
 
 - Sitio publicado: https://codigo-mate-landing.vercel.app
-- Tablero Trello: COMPLETAR (dar acceso al docente)
+- Tablero Trello: COMPLETAR el enlace y dar acceso al docente (no figura en el repositorio)
 - Repositorio: https://github.com/frannook/codigo-mate-landing
 
 ## 1. Brief y objetivo
@@ -15,7 +15,7 @@ Código Mate es una consultora argentina que instala agentes de IA en las webs d
 
 ## 2. Sprint Goal y trabajo planificado
 
-Publicar una primera versión utilizable que permita a un cliente conocer la consultora, entender los servicios, ver ejemplos y contactarse. Se priorizaron las historias 1 a 8 del Product Backlog; las 9 a 12 quedaron para después.
+Publicar una primera versión utilizable que permita a un cliente conocer la consultora, entender los servicios, ver ejemplos y contactarse. Se priorizaron las historias 1 a 8 del Product Backlog. Después del sprint se completaron la 9, 10, 11 y las 13 a 16 (analítica, Google Calendar con Meet, WhatsApp real, chat rápido, mascota Yuyo, correos de confirmación y rediseño 3D). Quedan la 12 (testimonios reales) y la 17 (dominio propio).
 
 ## 3. El sitio desarrollado
 
@@ -23,27 +23,24 @@ Capturas en `docs/sprint/evidencias/` (agregar capturas de `/servicios` y `/proy
 
 | Sección | Qué muestra |
 | --- | --- |
-| Inicio | Propuesta de valor, agente Yuyo, cotizador, formulario de contacto |
-| Servicios | Cuatro servicios con qué incluyen y a quién se dirigen |
-| Proyectos | Dos proyectos simulados: tienda "Nube" y estudio "Ríos y Asociados" |
-| Nosotros | Equipo, principios y forma de trabajo |
-| Contacto | Formulario que envía correo al equipo y confirmación al cliente; correo en el pie |
+| Inicio | Propuesta de valor, agente Yuyo en vivo (Probalo), "Mientras dormís", cómo trabajamos, testimonios (ejemplos), cotizador y formulario de contacto |
+| Servicios | Cuatro servicios con qué incluyen, a quién se dirigen y una conversación de ejemplo |
+| Proyectos | Dos proyectos simulados (tienda "Nube" y estudio "Ríos y Asociados") con el antes y el ahora y una conversación de ejemplo |
+| Nosotros | Foto, equipo con nombres y títulos, principios y forma de trabajo |
+| Contacto | Formulario con horarios reales de Google Calendar: crea el evento con Meet, avisa al equipo y envía la confirmación al cliente; WhatsApp y correo en el pie |
+| Mascota Yuyo | En todas las páginas: abre el chat en una burbuja (en celular queda fija en la esquina) |
 
 ## 4. Decisiones, pruebas y pendientes
 
 Ver `02-acuerdos-y-decisiones.md` y `03-registro-de-pruebas.md`.
 
-## 5. Sprint Review (completar tras la demo en vivo)
+## 5. Sprint Review
 
-- Producto demostrado: sitio publicado en computadora y vista móvil.
-- Devoluciones recibidas: COMPLETAR
-- Qué haríamos después: Google Calendar con Meet, WhatsApp real, testimonios reales, analítica activa.
+Completar con `05-sprint-review-y-retrospectiva.md` (Parte 1): Sprint Goal cumplido, producto demostrado, devoluciones recibidas y próximos pasos.
 
-## 6. Retrospectiva (completar en equipo)
+## 6. Retrospectiva
 
-- Qué funcionó bien: COMPLETAR
-- Dificultades: la API de Gemini saturada (503) obligó a sumar un modelo de respaldo; hubo trabajo hecho antes de ordenar el tablero.
-- Mejora concreta para el próximo proyecto: COMPLETAR (propuesta: crear el tablero y los criterios de aceptación antes de escribir código)
+Completar con `05-sprint-review-y-retrospectiva.md` (Parte 2): Mad / Sad / Glad, Start / Stop / Continue, una mejora concreta para un próximo proyecto y cómo se sintió cada integrante.
 
 ## 7. Aporte individual
 

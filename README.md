@@ -11,6 +11,32 @@ Landing de una agencia argentina que instala agentes de IA (chatbots) en webs de
 **Sitio publicado:** https://codigo-mate-landing.vercel.app · **Páginas:** Inicio, `/servicios`, `/proyectos`, `/nosotros`, contacto (`/#agendar`).
 **Documentación de la materia (brief, backlog, decisiones, pruebas, informe):** [docs/entrega/](docs/entrega/)
 
+## Proyecto de la materia · Práctica Profesional I
+
+Website de la consultora IT **Código Mate**, desarrollada y publicada por un equipo de cinco personas con Scrum y Trello.
+
+| | |
+| --- | --- |
+| **Equipo** | Cristian Maciel, Matías Ortiz, Luciano Deimundo, Elías Gomez, Franco Romero |
+| **Roles** | Product Owner: Matías Ortiz · Scrum Master: Elías Gomez · Developers: todos |
+| **Sprint Goal** | Publicar una primera versión utilizable que permita a un cliente conocer la consultora, entender los servicios, ver ejemplos y encontrar un contacto que funcione |
+| **URL publicada** | https://codigo-mate-landing.vercel.app |
+| **Tablero Trello** | COMPLETAR |
+| **Repositorio** | https://github.com/frannook/codigo-mate-landing |
+
+**Secciones del sitio:** Inicio, [Servicios](app/servicios/page.tsx), [Proyectos](app/proyectos/page.tsx) (2 proyectos simulados), [Nosotros](app/nosotros/page.tsx) y Contacto (formulario en `/#agendar` y correo en el pie).
+
+**Cómo ejecutarlo:** `npm install`, completar `.env.local` (ver [Setup & Ejecución](#setup--ejecución)) y `npm run dev` en http://localhost:3000. **Cómo publicarlo o actualizarlo:** un push a `main` despliega solo en Vercel (ver [Deployment](#deployment-vercel)).
+
+| Documento | Contenido |
+| --- | --- |
+| [01 Brief y backlog](docs/entrega/01-brief-y-backlog.md) | Brief, Sprint Goal, roles, Product Backlog |
+| [02 Acuerdos y decisiones](docs/entrega/02-acuerdos-y-decisiones.md) | Cómo trabaja el equipo y registro de decisiones |
+| [03 Registro de pruebas](docs/entrega/03-registro-de-pruebas.md) | Qué se probó, resultado y pendientes |
+| [04 Informe final](docs/entrega/04-informe-final.md) | Informe para Moodle |
+| [05 Sprint Review y Retrospectiva](docs/entrega/05-sprint-review-y-retrospectiva.md) | Cierre del sprint |
+| [Bitácora técnica](CONTEXT.md) | Por qué el proyecto es como es |
+
 ---
 
 ## Stack Tecnológico
