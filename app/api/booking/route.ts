@@ -6,6 +6,7 @@
 
 import nodemailer from 'nodemailer';
 import { calendarEnabled, createCall, freeTimes } from '@/lib/calendar';
+import { confirmationEmail, eventDescription } from '@/lib/mail';
 import { clientIp, rateLimit } from '@/lib/ratelimit';
 import { isIsoDate, isOfferable } from '@/lib/slots';
 
@@ -89,24 +90,8 @@ export async function POST(req: Request) {
 
   // La confirmación al cliente es secundaria: si falla, el pedido ya llegó al equipo.
   try {
-    await transport.sendMail({
-      from: `Código Mate <${user}>`,
-      to: email,
-      subject: meet ? 'Llamada confirmada · Código Mate' : 'Recibimos tu pedido de llamada · Código Mate',
-      text: [
-        `Hola ${name},`,
-        '',
-        meet
-          ? `Tu llamada quedó confirmada para el ${date} a las ${time} h (hora Argentina). Duración: 30 minutos.`
-          : `Recibimos tu pedido para hablar el ${date} a las ${time} h (hora Argentina).`,
-        meet
-          ? `Te llegó también una invitación de Google Calendar. Link de la videollamada: ${meet}`
-          : 'Te confirmamos el horario por este mismo medio y te enviamos el link de la videollamada.',
-        '',
-        '¡Gracias!',
-        'Equipo de Código Mate'
-      ].join('\n')
-    });
+    const mail = confirmationEmail({ name, date, time, meet, web, rubro, msg });
+    await transport.sendMail({ from: `Código Mate <${user}>`, to: email, replyTo: user, subject: mail.subject, text: mail.text, html: mail.html });
   } catch (error) {
     console.warn('[api/booking] confirmación al cliente', error);
   }

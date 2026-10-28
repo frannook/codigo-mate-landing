@@ -217,7 +217,7 @@ export default function Booking() {
 
   return (
     <form className="bk" ref={formRef} onSubmit={onSubmit} noValidate aria-busy={loading}>
-      <div className="bk-row">
+      <div className="bk-row bk-row--stack">
         <div className="bk-field">
           <label className="bk-label" htmlFor="bk-name">
             Nombre
