@@ -79,11 +79,20 @@
 .demo--float { animation: none; }
 @keyframes yuyoPop { from { opacity: 0; transform: translateY(18px) scale(0.94); } to { opacity: 1; transform: none; } }
 
-@media (max-width: 640px) {
-  .yuyo__walk, .yuyo__btn { width: 60px; }
-  .yuyo__btn { height: 69px; }
-  .yuyo__btn svg { width: 60px; height: 69px; }
-  .yuyo__walk { animation-name: yuyoWalkS; }
-  .yuyo__panel { right: 8px; left: 8px; width: auto; bottom: 72px; height: min(70dvh, calc(100dvh - 96px)); }
+/* Celulares y tablets: Yuyo no camina (taparía texto y botones en una pantalla chica). Queda fijo en la esquina inferior
+   derecha como el botón de chat de cualquier sitio, respira y de a ratos saluda. Sube cuando aparece la barra del cotizador. */
+@media (max-width: 899px), (pointer: coarse) {
+  .yuyo__walk, .yuyo__flip { animation: none; }
+  .yuyo__walk {
+    left: auto; right: 6px; bottom: calc(env(safe-area-inset-bottom, 0px) + 6px); width: 52px;
+    transition: bottom var(--dur-slow) var(--ease-out);
+  }
+  .yuyo__btn { width: 52px; height: 60px; }
+  .yuyo__btn svg { width: 52px; height: 60px; }
+  .yuyo__hint { left: auto; right: 0; transform: translateY(6px); }
+  .yuyo__walk:hover .yuyo__hint, .yuyo__walk:focus-within .yuyo__hint, .yuyo[data-near='true'] .yuyo__hint { transform: translateY(0); }
+  .yuyo__hint::after { left: auto; right: 22px; margin-left: 0; }
+  @keyframes yuyoSay { from { opacity: 0; transform: translateY(8px) scale(0.85); } }
+  body:has(.qt__aside[data-inview]) .yuyo__walk { bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); }
+  .yuyo__panel { right: 8px; left: 8px; width: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 76px); height: min(72dvh, calc(100dvh - 104px)); }
 }
-@keyframes yuyoWalkS { from { transform: translateX(6px); } to { transform: translateX(calc(100vw - 66px)); } }

@@ -31,6 +31,8 @@ export default function YuyoLauncher() {
   const [phrase, setPhrase] = useState(0);
   const btnRef = useRef<HTMLButtonElement>(null);
   const walkRef = useRef<HTMLDivElement>(null);
+  const openRef = useRef(false);
+  openRef.current = open;
 
   const toggle = (next: boolean) => {
     if (next) setLoaded(true);
@@ -63,6 +65,25 @@ export default function YuyoLauncher() {
     return () => {
       document.removeEventListener('pointermove', onMove);
       cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  // Celulares: sin mouse no hay "acercar el cursor", así que Yuyo saluda solo de a ratos (y nunca con el chat abierto).
+  useEffect(() => {
+    if (!window.matchMedia('(max-width: 899px), (pointer: coarse)').matches) return;
+    let hide = 0;
+    const greet = () => {
+      if (document.hidden || openRef.current) return;
+      setPhrase(p => (p + 1) % PHRASES.length);
+      setNear(true);
+      hide = window.setTimeout(() => setNear(false), 3800);
+    };
+    const first = window.setTimeout(greet, 6000);
+    const every = window.setInterval(greet, 22000);
+    return () => {
+      clearTimeout(first);
+      clearInterval(every);
+      clearTimeout(hide);
     };
   }, []);
 
