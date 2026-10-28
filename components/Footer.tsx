@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { ArrowRight, ArrowUp } from '@/components/icons';
 import { waLink } from '@/lib/site';
 
-const EMAIL = 'codigomatebot@gmail.com';
+const EMAIL = 'botcodigomate@gmail.com';
 
 const LINKS: [string, string][] = [
   ['/#probalo', 'Probalo'],

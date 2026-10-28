@@ -27,7 +27,7 @@ La landing de una agencia que instala agentes de IA en webs de negocios. La pág
 - **Correo en vez de Telegram para avisos.** En Argentina Telegram no es de uso común entre dueños de negocio; el correo sí.
 - **Gmail SMTP en vez de Resend.** Resend (plan gratuito) solo envía a clientes externos si se verifica un dominio propio, y eso tiene costo.
   Con Gmail y una contraseña de aplicación se envía a cualquier destinatario sin dominio. Se puede cambiar después cambiando solo variables de entorno.
-- **Cuenta Gmail propia del proyecto** (`codigomatebot@gmail.com`) en vez de una personal: es el remitente que ven los clientes y evita
+- **Cuenta Gmail propia del proyecto** (`botcodigomate@gmail.com`) en vez de una personal: es el remitente que ven los clientes y evita
   atar el servicio a una persona del equipo.
 - **El bot reemplaza a la FAQ.** Una FAQ estática no cubre todos los rubros; el agente es además la mejor demostración del producto.
 - **El bot no inventa.** Precios, plazos, métricas, clientes e integraciones concretas se derivan a la llamada. Es una decisión de negocio, no técnica.

@@ -37,7 +37,7 @@ const JSON_LD = {
   url: SITE_URL,
   logo: `${SITE_URL}/logo-color.png`,
   description: SITE_DESCRIPTION,
-  email: 'codigomatebot@gmail.com',
+  email: 'botcodigomate@gmail.com',
   telephone: `+${WHATSAPP_NUMBER}`,
   areaServed: 'AR',
   inLanguage: 'es-AR'

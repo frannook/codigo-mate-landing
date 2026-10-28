@@ -34,6 +34,19 @@ Cómo leerlo: cada paso dice **qué hacés vos** (cuentas, claves, clics) y **qu
 | 10 | Contenido real | — | Testimonios verdaderos y nombres del equipo | — |
 | + | Planilla de contactos | Hecho | Crear la planilla y el Apps Script | 10 min |
 
+### Cambio de cuenta de correo (2026-10-28)
+
+La cuenta del proyecto ahora es **botcodigomate@gmail.com** (reemplaza a la anterior). El código y los textos del sitio ya la usan. Para que los correos y el calendario funcionen hay que actualizar las variables y las credenciales, **todo con la cuenta nueva**:
+
+1. **Contraseña de aplicación** (para enviar correos): entrá a la cuenta nueva, activá la verificación en 2 pasos (https://myaccount.google.com/signinoptions/two-step-verification) y creá una contraseña de aplicación en https://myaccount.google.com/apppasswords. Se muestra una sola vez (16 letras).
+2. **Variables en Vercel** (https://vercel.com/codigomate/codigo-mate-landing/settings/environment-variables), en Production y Preview: `GMAIL_USER` = `botcodigomate@gmail.com` y `GMAIL_APP_PASSWORD` = la nueva. Si existe `BOOKING_TO` y apunta a la cuenta anterior, cambiala también: ahí llegan los avisos de cada pedido de llamada.
+3. **Redeploy** del último despliegue.
+4. **Probar**: mandá un pedido de llamada con tu correo personal; tienen que llegar el aviso al equipo y la confirmación.
+5. **Google Calendar** (paso 1): crear el proyecto de Google Cloud y las credenciales con **esta** cuenta; el evento y el link de Meet se crean en su calendario.
+6. En `.env.local` ya cambié `GMAIL_USER`; falta que pongas la contraseña de aplicación nueva en `GMAIL_APP_PASSWORD` para probar en tu máquina.
+
+Mientras no se actualicen las variables de Vercel, el formulario puede fallar al enviar los correos.
+
 ### Aviso importante sobre Vercel
 
 El plan gratuito (Hobby) de Vercel es **solo para uso personal y no comercial**. Para un proyecto de la facultad alcanza. Si la agencia empieza a cobrar a clientes con esta web, hay que pasar a Vercel Pro (US$ 20 por mes por usuario) o mover el sitio a otro hosting. Conviene decidirlo antes de promocionar la web.
@@ -44,17 +57,17 @@ El plan gratuito (Hobby) de Vercel es **solo para uso personal y no comercial**.
 
 Con esto, cada pedido reserva el horario en el calendario, crea el evento con link de Meet y Google le manda la invitación al cliente. Los horarios ocupados aparecen tachados en el formulario. Sin estas variables el formulario sigue andando solo por correo.
 
-**Vos (con la cuenta `codigomatebot@gmail.com`), unos 20 minutos:**
+**Vos (con la cuenta `botcodigomate@gmail.com`), unos 20 minutos:**
 1. Crear el proyecto: https://console.cloud.google.com/projectcreate → nombre `codigo-mate`.
 2. Habilitar la API: https://console.cloud.google.com/apis/library/calendar-json.googleapis.com → **Habilitar**.
-3. Pantalla de consentimiento: https://console.cloud.google.com/apis/credentials/consent → tipo **Externo** → nombre `Código Mate`, tu correo de contacto → en "Usuarios de prueba" agregá `codigomatebot@gmail.com`. Al final, **Publicar la app** (pasarla a "En producción"): si queda en "Prueba", el permiso vence a los 7 días. No pide verificación porque la usa solo esta cuenta.
+3. Pantalla de consentimiento: https://console.cloud.google.com/apis/credentials/consent → tipo **Externo** → nombre `Código Mate`, tu correo de contacto → en "Usuarios de prueba" agregá `botcodigomate@gmail.com`. Al final, **Publicar la app** (pasarla a "En producción"): si queda en "Prueba", el permiso vence a los 7 días. No pide verificación porque la usa solo esta cuenta.
 4. Credencial: https://console.cloud.google.com/apis/credentials → **Crear credenciales** → **ID de cliente de OAuth** → tipo **Aplicación de escritorio** → nombre `codigo-mate-web`. Copiá el **ID de cliente** y el **Secreto**.
 5. Pegalos en `.env.local` (en la carpeta del proyecto):
    ```
    GOOGLE_CLIENT_ID=...
    GOOGLE_CLIENT_SECRET=...
    ```
-6. En la terminal, dentro de la carpeta del proyecto: `node scripts/google-auth.mjs`. Se abre el navegador; entrá con `codigomatebot@gmail.com` y aceptá. El **refresh token** aparece solo en la terminal (no se guarda en ningún archivo).
+6. En la terminal, dentro de la carpeta del proyecto: `node scripts/google-auth.mjs`. Se abre el navegador; entrá con `botcodigomate@gmail.com` y aceptá. El **refresh token** aparece solo en la terminal (no se guarda en ningún archivo).
 7. Cargá en Vercel (https://vercel.com/codigomate/codigo-mate-landing/settings/environment-variables), en Production y Preview: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` y `GOOGLE_REFRESH_TOKEN`. Después **Redeploy**.
 8. Probá una reserva con tu correo personal: debe llegar la invitación de Google con el link de Meet, y el horario debe quedar tachado en el formulario.
 

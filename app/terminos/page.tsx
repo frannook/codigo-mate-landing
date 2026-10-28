@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: 'Condiciones de uso del sitio de Código Mate: el chat con IA, el cotizador y el formulario de llamadas.'
 };
 
-const EMAIL = 'codigomatebot@gmail.com';
+const EMAIL = 'botcodigomate@gmail.com';
 
 export default function Terminos() {
   return (

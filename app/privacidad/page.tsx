@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: 'Qué datos recibe Código Mate cuando usás el chat, el cotizador o el formulario, para qué los usa, con quién los comparte y cómo ejercer tus derechos.'
 };
 
-const EMAIL = 'codigomatebot@gmail.com';
+const EMAIL = 'botcodigomate@gmail.com';
 
 export default function Privacidad() {
   return (

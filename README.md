@@ -225,7 +225,7 @@ GEMINI_API_KEY=tu_clave_de_aistudio_google_com
 GEMINI_MODEL=gemini-3.1-flash-lite           # Opcional
 
 # Gmail SMTP
-GMAIL_USER=codigomatebot@gmail.com
+GMAIL_USER=botcodigomate@gmail.com
 GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx       # 16 caracteres de myaccount.google.com/apppasswords
 
 # Booking (opcional)
@@ -320,8 +320,8 @@ transport: nodemailer.createTransport({
 
 **Correo al equipo:**
 ```
-Para:        codigomatebot@gmail.com (o BOOKING_TO)
-De:          codigomatebot@gmail.com
+Para:        botcodigomate@gmail.com (o BOOKING_TO)
+De:          botcodigomate@gmail.com
 Reply-To:    cliente@example.com
 Asunto:      Nuevo pedido: Franco Perez (2026-10-10 14:00)
 Cuerpo:      Datos del formulario + rubro + mensaje
@@ -330,7 +330,7 @@ Cuerpo:      Datos del formulario + rubro + mensaje
 **Correo al cliente:**
 ```
 Para:        cliente@example.com
-De:          codigomatebot@gmail.com
+De:          botcodigomate@gmail.com
 Asunto:      Confirmamos tu llamada | Código Mate
 Cuerpo:      Agradecimiento + resumen de día/hora + próximos pasos
 ```
