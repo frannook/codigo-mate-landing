@@ -1,0 +1,71 @@
+/* ---------- Yuyo: mascota que camina por el borde inferior + chat en burbuja ---------- */
+.yuyo { position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; height: 0; pointer-events: none; }
+
+/* Camina de punta a punta: va y vuelve; el giro se sincroniza con el trayecto (mismo tiempo, dura el doble). */
+.yuyo__walk {
+  position: absolute; left: 0; bottom: 4px; width: 80px; pointer-events: auto;
+  animation: yuyoWalk 46s linear infinite alternate;
+}
+.yuyo__flip { animation: yuyoFlip 92s steps(1, end) infinite; transform-origin: 50% 100%; }
+.yuyo__walk:hover, .yuyo__walk:hover .yuyo__flip, .yuyo__walk:focus-within, .yuyo__walk:focus-within .yuyo__flip,
+.yuyo[data-open='true'] .yuyo__walk, .yuyo[data-open='true'] .yuyo__flip { animation-play-state: paused; }
+@keyframes yuyoWalk { from { transform: translateX(8px); } to { transform: translateX(calc(100vw - 88px)); } }
+@keyframes yuyoFlip { 0% { transform: scaleX(1); } 50% { transform: scaleX(-1); } }
+
+.yuyo__btn {
+  position: relative; display: block; width: 80px; height: 92px; padding: 0; border: 0; background: none; cursor: pointer;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.45)); -webkit-tap-highlight-color: transparent;
+}
+.yuyo__btn svg { display: block; overflow: visible; }
+.yuyo__btn:focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; border-radius: 12px; }
+
+/* Pasitos: el cuerpo rebota y las patas se alternan. */
+.yuyo__body { transform-box: fill-box; transform-origin: 50% 100%; animation: yuyoBob 0.42s ease-in-out infinite alternate; }
+.yuyo__leg { transform-box: fill-box; transform-origin: 50% 0; }
+.yuyo__leg--a { animation: yuyoStep 0.42s ease-in-out infinite alternate; }
+.yuyo__leg--b { animation: yuyoStep 0.42s ease-in-out infinite alternate-reverse; }
+.yuyo__sprout { transform-box: fill-box; transform-origin: 50% 100%; animation: yuyoSway 0.84s ease-in-out infinite alternate; }
+.yuyo__arm { transform-box: fill-box; transform-origin: 0 0; animation: yuyoSip 3.6s ease-in-out infinite; }
+.yuyo__eyes { transform-box: fill-box; transform-origin: 50% 50%; animation: yuyoBlink 4.8s infinite; }
+@keyframes yuyoBob { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+@keyframes yuyoStep { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
+@keyframes yuyoSway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+@keyframes yuyoSip { 0%, 55%, 100% { transform: rotate(0); } 68%, 80% { transform: rotate(-24deg) translateY(-3px); } }
+@keyframes yuyoBlink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(0.1); } }
+
+/* Quieto (con el mouse encima o con el chat abierto): respira en lugar de caminar. */
+.yuyo__walk:hover .yuyo__leg, .yuyo__walk:focus-within .yuyo__leg, .yuyo[data-open='true'] .yuyo__leg { animation-play-state: paused; }
+.yuyo__walk:hover .yuyo__btn, .yuyo__walk:focus-within .yuyo__btn { transform: translateY(-4px) scale(1.06); }
+.yuyo__btn { transition: transform var(--dur-std) var(--ease-out); }
+
+/* Cartelito al pasar el mouse (se contra-gira para que el texto no quede espejado cuando camina hacia la izquierda). */
+.yuyo__hint {
+  position: absolute; left: 50%; bottom: calc(100% + 2px); transform: translateX(-50%) translateY(6px); white-space: nowrap;
+  padding: 6px 12px; border-radius: 999px; background: var(--bone); color: var(--navy); font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.6); transition: opacity var(--dur-std) var(--ease-out), transform var(--dur-std) var(--ease-out);
+}
+.yuyo__walk:hover .yuyo__hint, .yuyo__walk:focus-within .yuyo__hint { opacity: 1; transform: translateX(-50%) translateY(0); }
+.yuyo[data-open='true'] .yuyo__hint { display: none; }
+
+/* Panel del chat: burbuja en la esquina inferior derecha. */
+.yuyo__panel {
+  position: fixed; right: 16px; bottom: 88px; width: min(380px, calc(100vw - 32px)); height: min(560px, calc(100dvh - 120px)); pointer-events: auto;
+}
+.yuyo__panel[hidden] { display: none; }
+.yuyo__panel .demo--float, .yuyo__panel .chat--float { height: 100%; }
+.chat--float {
+  position: relative; inset: auto; width: 100%; border-color: rgba(119, 141, 169, 0.34);
+  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(224, 225, 221, 0.05);
+  animation: yuyoPop var(--dur-slow) var(--ease-out) both; transform-origin: 90% 100%;
+}
+.demo--float { animation: none; }
+@keyframes yuyoPop { from { opacity: 0; transform: translateY(18px) scale(0.94); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 640px) {
+  .yuyo__walk, .yuyo__btn { width: 60px; }
+  .yuyo__btn { height: 69px; }
+  .yuyo__btn svg { width: 60px; height: 69px; }
+  .yuyo__walk { animation-name: yuyoWalkS; }
+  .yuyo__panel { right: 8px; left: 8px; width: auto; bottom: 72px; height: min(70dvh, calc(100dvh - 96px)); }
+}
+@keyframes yuyoWalkS { from { transform: translateX(6px); } to { transform: translateX(calc(100vw - 66px)); } }

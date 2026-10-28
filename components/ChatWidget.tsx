@@ -20,7 +20,8 @@ function whatsappMessage(list: ChatMessage[], upTo: number): string {
 }
 
 // El bot real de Código Mate (sección Probalo). La vitrina del hero está en HeroShowcase.
-export default function ChatWidget() {
+// `floating`: versión de la burbuja flotante (YuyoLauncher): sin id de ancla, con botón para cerrar.
+export default function ChatWidget({ floating = false, onClose }: { floating?: boolean; onClose?: () => void }) {
   const [chat, setChat] = useState<ChatSnapshot>({ messages: [], status: 'idle', error: null });
   const [draft, setDraft] = useState('');
 
@@ -45,6 +46,7 @@ export default function ChatWidget() {
 
   const sendRef = useRef<(t: string) => void>(() => {});
   useEffect(() => {
+    if (floating) return; // los enlaces "Probalo" apuntan al chat de la página, no a la burbuja
     const onFocus = (e: Event) => {
       const q = (e as CustomEvent<string | undefined>).detail;
       if (q) sendRef.current(q);
@@ -52,7 +54,7 @@ export default function ChatWidget() {
     };
     window.addEventListener(FOCUS_CHAT_EVENT, onFocus);
     return () => window.removeEventListener(FOCUS_CHAT_EVENT, onFocus);
-  }, []);
+  }, [floating]);
 
   const list: ChatMessage[] = chat.messages;
   const loading = chat.status === 'loading';
@@ -83,7 +85,7 @@ export default function ChatWidget() {
   const canRetry = !!chatError && last?.role === 'user';
 
   const chatSection = (
-    <section className="chat chat--page" aria-label="Chat con Yuyo, agente de Código Mate">
+    <section className={`chat ${floating ? 'chat--float' : 'chat--page'}`} aria-label="Chat con Yuyo, agente de Código Mate">
       <div className="chat__head">
         <div aria-hidden="true" className="avatar av-1">Y</div>
         <div className="chat__who">
@@ -102,6 +104,11 @@ export default function ChatWidget() {
           >
             <RotateCcw />
           </button>
+        {onClose && (
+          <button type="button" className="chat__reset" aria-label="Cerrar el chat" title="Cerrar" onClick={onClose}>
+            <span aria-hidden="true" style={{ fontSize: 22, lineHeight: 1 }}>×</span>
+          </button>
+        )}
       </div>
 
       <div ref={logRef} className="chat__log" data-lenis-prevent role="log" aria-live="polite" aria-relevant="additions">
@@ -194,11 +201,11 @@ export default function ChatWidget() {
             if (canSend) send(draft);
           }}
         >
-          <label htmlFor="cm-chat-input" className="sr-only">
+          <label htmlFor={floating ? 'cm-chat-input-float' : 'cm-chat-input'} className="sr-only">
             Escribí tu consulta
           </label>
           <input
-            id="cm-chat-input"
+            id={floating ? 'cm-chat-input-float' : 'cm-chat-input'}
             ref={inputRef}
             value={draft}
             onChange={e => setDraft(e.target.value)}
@@ -215,5 +222,6 @@ export default function ChatWidget() {
     </section>
   );
 
+  if (floating) return <div className="demo demo--float">{chatSection}</div>;
   return <div id="demo" className="demo demo--page">{chatSection}</div>;
 }

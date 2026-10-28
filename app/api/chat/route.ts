@@ -107,13 +107,13 @@ export async function POST(req: Request) {
     return reply;
   };
 
-  // Orden: el Gemini más rápido, después Groq (si está configurado) y el resto de Gemini.
-  const [first, ...rest] = MODELS;
+  // Orden: con proveedor de respaldo configurado (Groq responde en ~0,5 s) va primero y Gemini queda de reserva;
+  // sin él, el Gemini más rápido y después el resto de Gemini.
   const candidates: [string, () => Promise<string>][] = [
-    [first, () => gemini(first)],
     ...(FALLBACK_KEY ? [[`respaldo/${GROQ_MODEL}`, groq] as [string, () => Promise<string>]] : []),
-    ...rest.map(m => [m, () => gemini(m)] as [string, () => Promise<string>])
+    ...MODELS.map(m => [m, () => gemini(m)] as [string, () => Promise<string>])
   ];
+  const hedgeMs = FALLBACK_KEY ? 2_000 : HEDGE_MS;
 
   let lastError: unknown;
   const reply = await new Promise<string | null>(resolve => {
@@ -138,7 +138,7 @@ export async function POST(req: Request) {
         // Falló rápido: no hace falta esperar, se lanza el siguiente ya.
         launch();
       });
-      timer = setTimeout(launch, HEDGE_MS);
+      timer = setTimeout(launch, hedgeMs);
     };
     done.signal.addEventListener('abort', () => resolve(null));
     launch();
