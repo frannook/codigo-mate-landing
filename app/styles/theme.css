@@ -1,0 +1,64 @@
+/* Tema claro: papel crema, tinta navy y ámbar de la marca. Se activa con <html data-theme="light"> (ver ThemeToggle).
+   Solo redefine tokens; el tema oscuro sigue siendo el de globals.css. */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --navy-900: #efe9dc;
+  --navy: #f7f3ea;
+  --navy-800: #ffffff;
+  --navy-700: #f0ebe0;
+  --navy-600: #e3dccb;
+  --navy-500: #d3c9b3;
+  --slate: #4f6883;
+  --mist: #3b4d66;
+  --bone: #0d1b2a;
+  --white: #0b1724;
+  --rule: rgba(13, 27, 42, 0.12);
+  --amber: #a8640f;
+  --amber-hi: #c77a1c;
+  --theme-glass: rgba(255, 255, 255, 0.72);
+  --theme-glass-strong: rgba(255, 255, 255, 0.9);
+}
+:root[data-theme='light'] .glass { --glass-bg: var(--theme-glass); }
+:root[data-theme='light'] .glass--strong { --glass-bg: var(--theme-glass-strong); }
+:root[data-theme='light'] .navp__bar { border-color: rgba(13, 27, 42, 0.12); }
+:root[data-theme='light'] .navp__bar::before { background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(247, 243, 234, 0.8)); }
+:root[data-theme='light'] .navp[data-top='true'] .navp__bar { border-color: rgba(13, 27, 42, 0.08); }
+:root[data-theme='light'] .navp[data-top='true'] .navp__bar::before { opacity: 0.8; }
+:root[data-theme='light'] .navp__sheet { background: rgba(255, 255, 255, 0.96); }
+:root[data-theme='light'] .navp__pill { background: rgba(13, 27, 42, 0.08); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8); }
+:root[data-theme='light'] .navp__burger { border-color: rgba(13, 27, 42, 0.18); background: rgba(13, 27, 42, 0.05); }
+:root[data-theme='light'] .navp__burger:hover { background: rgba(13, 27, 42, 0.1); }
+:root[data-theme='light'] .navp__link { color: var(--mist); }
+:root[data-theme='light'] ::selection { background: var(--amber); color: #fff; }
+/* Tarjetas, paneles y campos con fondo navy escrito a mano: pasan a papel blanco translúcido con borde suave. */
+:root[data-theme='light'] :is(.tm__card, .qt__card, .qt__seg, .ns__device, .bk-seg, .bk-input, .step__card, .ab__stats li, .ab__cards blockquote, .try, .try__ask, .order__track) {
+  background: var(--theme-glass);
+  border-color: rgba(13, 27, 42, 0.1);
+}
+:root[data-theme='light'] :is(.tm__card, .qt__card, .ns__device, .step__card) { box-shadow: 0 10px 30px rgba(13, 27, 42, 0.08); }
+:root[data-theme='light'] .qt__feat:hover { background: rgba(13, 27, 42, 0.05); }
+:root[data-theme='light'] .btn--ghost:hover { background: rgba(13, 27, 42, 0.05); }
+
+/* Logo: en claro se usa la versión de tinta navy (la de color se pierde sobre crema). */
+.navp__brand .navp__logo--ink { display: none; }
+:root[data-theme='light'] .navp__brand .navp__logo--dark { display: none; }
+:root[data-theme='light'] .navp__brand .navp__logo--ink { display: block; }
+
+/* Botón de tema */
+.theme-toggle {
+  position: relative; flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(175, 187, 203, 0.18); background: rgba(119, 141, 169, 0.08); color: var(--bone);
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+}
+.theme-toggle:hover { background: rgba(119, 141, 169, 0.18); }
+.theme-toggle svg { display: block; transition: transform 0.5s var(--ease-out); }
+.theme-toggle:hover svg { transform: rotate(-18deg); }
+:root[data-theme='light'] .theme-toggle { border-color: rgba(13, 27, 42, 0.18); background: rgba(13, 27, 42, 0.05); }
+:root[data-theme='light'] .theme-toggle:hover { background: rgba(13, 27, 42, 0.1); }
+
+/* Celular: la barra tiene que alojar logo, tema, CTA y menú sin salirse del ancho. */
+@media (max-width: 559px) {
+  .theme-toggle { width: 38px; height: 38px; }
+  .navp__brand img { height: 32px !important; }
+}

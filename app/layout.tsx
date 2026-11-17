@@ -8,6 +8,7 @@ import './styles/yuyo.css';
 import './styles/try.css';
 import './styles/depth.css';
 import './styles/polish.css';
+import './styles/theme.css';
 import Tilt from '@/components/Tilt';
 import YuyoLauncher from '@/components/YuyoLauncher';
 import { Analytics } from '@vercel/analytics/next';
@@ -60,6 +61,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{
             __html:
               "var d=document.documentElement;d.dataset.motion='on';if('IntersectionObserver' in window)d.classList.add('reveal-on')"
+          }}
+        />
+        {/* Tema claro guardado: se aplica antes del primer pintado para que no parpadee el oscuro. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(localStorage.getItem('cm-theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}"
           }}
         />
       </head>
