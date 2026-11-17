@@ -69,6 +69,11 @@
 :root[data-theme='light'] .theme-toggle { border-color: rgba(13, 27, 42, 0.18); background: rgba(13, 27, 42, 0.05); }
 :root[data-theme='light'] .theme-toggle:hover { background: rgba(13, 27, 42, 0.1); }
 
+/* Logo en pie y en la página Nosotros: misma regla (color para oscuro, tinta navy para claro). */
+.logo-ink { display: none; }
+:root[data-theme='light'] .logo-dark { display: none; }
+:root[data-theme='light'] .logo-ink { display: inline-block; }
+
 /* Celular: la barra tiene que alojar logo, tema, CTA y menú sin salirse del ancho. */
 @media (max-width: 559px) {
   .theme-toggle { width: 38px; height: 38px; }
