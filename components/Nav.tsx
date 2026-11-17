@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from '@/components/icons';
+import ThemeToggle from '@/components/ThemeToggle';
 import { motionOn } from '@/lib/motion';
 
 const LINKS: [string, string][] = [
@@ -110,7 +111,9 @@ export default function Nav() {
     <header className="navp" data-hidden={hidden && !open} data-top={atTop} data-open={open}>
       <nav className="navp__bar" aria-label="Principal">
         <a href={`${base}#top`} className="navp__brand" aria-label="Código Mate, inicio" onClick={() => setOpen(false)}>
-          <Image src="/logo-color.png" alt="" width={1307} height={406} sizes="124px" priority style={{ height: 38, width: 'auto' }} />
+          {/* Dos versiones del logo: la color para fondo oscuro y la de tinta navy para el claro (ver theme.css). */}
+          <Image className="navp__logo navp__logo--dark" src="/logo-color.png" alt="" width={1307} height={406} sizes="124px" priority style={{ height: 38, width: 'auto' }} />
+          <Image className="navp__logo navp__logo--ink" src="/logo-ink.png" alt="" width={1307} height={406} sizes="124px" priority style={{ height: 38, width: 'auto' }} />
         </a>
 
         <div className="navp__links" ref={linksRef} onPointerLeave={() => setHover(null)}>
@@ -146,6 +149,7 @@ export default function Nav() {
         </div>
 
         <div className="navp__right">
+          <ThemeToggle />
           <a href={`${base}#agendar`} className="nav__cta" onClick={() => setOpen(false)}>
             <span className="navp__cta-long">Agendar llamada</span>
             <span className="navp__cta-short">Agendar</span>
