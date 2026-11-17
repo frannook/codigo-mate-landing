@@ -31,11 +31,23 @@
 :root[data-theme='light'] .navp__link { color: var(--mist); }
 :root[data-theme='light'] ::selection { background: var(--amber); color: #fff; }
 /* Tarjetas, paneles y campos con fondo navy escrito a mano: pasan a papel blanco translúcido con borde suave. */
-:root[data-theme='light'] :is(.tm__card, .qt__card, .qt__seg, .ns__device, .bk-seg, .bk-input, .step__card, .ab__stats li, .ab__cards blockquote, .try, .try__ask, .order__track) {
+:root[data-theme='light'] :is(.tm__card, .qt__card, .qt__seg, .ns__device, .bk-seg, .bk-input, .step__card, .ab__stats li, .ab__cards blockquote, .try__facts li, .try__ask, .order__track) {
   background: var(--theme-glass);
   border-color: rgba(13, 27, 42, 0.1);
 }
 :root[data-theme='light'] :is(.tm__card, .qt__card, .ns__device, .step__card) { box-shadow: 0 10px 30px rgba(13, 27, 42, 0.08); }
+:root[data-theme='light'] .try__facts li { box-shadow: none; }
+
+/* Chat (Yuyo y mockups del hero/probalo): azul más claro y tokens propios para que el texto y los chips se lean sobre oscuro. */
+:root[data-theme='light'] :is(.chat--page, .chat--float, .hero .chat) {
+  --navy-900: #2b3f5e; --navy-800: #34496b; --navy-700: #3d5577; --navy-600: #4a6389; --navy-500: #5b7396;
+  --navy: #0d1b2a; --bone: #e0e1dd; --mist: #c3cedd; --slate: #a9b8cc; --white: #ffffff; --rule: rgba(175, 187, 203, 0.2);
+  color: var(--bone);
+  background: linear-gradient(180deg, #37506f 0%, #2b3f5e 100%);
+}
+:root[data-theme='light'] :is(.chat--page, .chat--float, .hero .chat) .bubble-bot { background: #3d5577; color: #eef1f5; border-color: rgba(224, 225, 221, 0.12); }
+:root[data-theme='light'] :is(.chat--page, .chat--float, .hero .chat) .composer { background: #3a5170; }
+:root[data-theme='light'] :is(.chat--page, .chat--float, .hero .chat) .chip { color: #eef1f5; }
 :root[data-theme='light'] .qt__feat:hover { background: rgba(13, 27, 42, 0.05); }
 :root[data-theme='light'] .btn--ghost:hover { background: rgba(13, 27, 42, 0.05); }
 
