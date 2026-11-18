@@ -38,11 +38,11 @@
 .how__cta p { margin: 0; flex: 1 1 280px; font-size: 16px; color: var(--mist); }
 .how__cta p strong { color: var(--bone); font-weight: 500; }
 
-/* ---------- Proyectos: filas editoriales con el teléfono en 3D ---------- */
+/* ---------- Proyectos: filas editoriales con la captura del sitio en 3D ---------- */
 .pj { list-style: none; margin: 0; padding: 0 0 clamp(24px, 4vw, 48px); }
 .pj__row { display: grid; gap: clamp(32px, 5vw, 80px); align-items: center; padding-block: clamp(48px, 7vw, 96px); border-top: 1px solid var(--rule); }
 @media (min-width: 900px) {
-  .pj__row { grid-template-columns: minmax(0, 1fr) 400px; }
+  .pj__row { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
   .pj__row:nth-child(even) .pj__vis { order: -1; }
 }
 .pj__text { display: flex; flex-direction: column; gap: 18px; }
@@ -66,15 +66,14 @@
   content: ''; position: absolute; inset: 8% 6%; z-index: -1; border-radius: 40px; filter: blur(40px);
   background: radial-gradient(closest-side, rgba(233, 162, 59, 0.2), transparent 75%);
 }
-.pj__phone { padding: 18px 16px 20px; border-radius: 32px; }
-.pj__phone .pg__chat { margin: 0; background: rgba(11, 23, 36, 0.6); }
-.pj__bar { display: flex; align-items: center; gap: 10px; padding: 2px 4px 14px; }
-.pj__bar span:first-child { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 600; }
-.pj__bar strong { font-size: 14px; font-weight: 600; color: var(--bone); }
-.pj__bar small { display: block; font-size: 12px; color: var(--mist); }
+.pj__shot {
+  margin: 0; border-radius: 18px; overflow: hidden; border: 1px solid rgba(175, 187, 203, 0.22); background: var(--navy-800);
+  box-shadow: 0 40px 70px -40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(13, 27, 42, 0.5);
+}
+.pj__shot img { display: block; width: 100%; height: auto; }
 @media (min-width: 900px) {
-  .pj__phone { --rx: 3deg; --ry: -8deg; }
-  .pj__row:nth-child(even) .pj__phone { --ry: 8deg; }
+  .pj__shot { --rx: 3deg; --ry: -7deg; }
+  .pj__row:nth-child(even) .pj__shot { --ry: 7deg; }
 }
 .pj__end { padding: clamp(48px, 7vw, 96px) 0 clamp(64px, 9vw, 120px); border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 28px; align-items: flex-start; }
 .pj__end h2 { margin: 0; max-width: 18ch; font-family: var(--fh); font-weight: 400; font-size: clamp(36px, 5vw, 64px); line-height: 1.04; color: var(--white); }
