@@ -82,3 +82,10 @@
   .theme-toggle { width: 38px; height: 38px; }
   .navp__brand img { height: 32px !important; }
 }
+
+/* Nosotros: tarjetas del equipo y de "Cómo trabajamos" en papel claro (antes quedaban gris pizarra con texto apagado). */
+:root[data-theme='light'] .ab :is(.depth-card, .ab__team li, .ab__cards li) {
+  background: var(--theme-glass);
+  border-color: rgba(13, 27, 42, 0.1);
+  box-shadow: 0 10px 30px rgba(13, 27, 42, 0.08);
+}
