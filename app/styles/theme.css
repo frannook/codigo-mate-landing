@@ -31,12 +31,15 @@
 :root[data-theme='light'] .navp__link { color: var(--mist); }
 :root[data-theme='light'] ::selection { background: var(--amber); color: #fff; }
 /* Tarjetas, paneles y campos con fondo navy escrito a mano: pasan a papel blanco translúcido con borde suave. */
-:root[data-theme='light'] :is(.tm__card, .qt__card, .qt__seg, .ns__device, .bk-seg, .bk-input, .step__card, .ab__stats li, .ab__cards blockquote, .try__facts li, .try__ask, .order__track) {
+:root[data-theme='light'] :is(.tm__card, .qt__card, .qt__seg, .ns__device, .bk-seg, .bk-input, .step__card, .ab__stats li, .ab__cards blockquote, .try__facts li, .order__track) {
   background: var(--theme-glass);
   border-color: rgba(13, 27, 42, 0.1);
 }
 :root[data-theme='light'] :is(.tm__card, .qt__card, .ns__device, .step__card) { box-shadow: 0 10px 30px rgba(13, 27, 42, 0.08); }
 :root[data-theme='light'] .try__facts li { box-shadow: none; }
+/* Lista "Probá con una de estas": mismo crema del fondo, solo filetes; hover apenas más oscuro. */
+:root[data-theme='light'] .try__ask { background: transparent; }
+:root[data-theme='light'] .try__ask:hover { background: rgba(13, 27, 42, 0.05); }
 
 /* Chat (Yuyo y mockups del hero/probalo): azul más claro y tokens propios para que el texto y los chips se lean sobre oscuro. */
 :root[data-theme='light'] :is(.chat--page, .chat--float, .hero .chat) {
