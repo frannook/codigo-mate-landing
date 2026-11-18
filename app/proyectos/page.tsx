@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Footer from '@/components/Footer';
 import Motion from '@/components/Motion';
 import Nav from '@/components/Nav';
@@ -89,7 +88,18 @@ export default function Proyectos() {
                 </div>
                 <div className="pj__vis" data-reveal={i % 2 ? 'left' : 'right'}>
                   <figure className="pj__shot" data-tilt="5">
-                    <Image src={p.img} alt={p.alt} width={1600} height={893} sizes="(min-width: 900px) 600px, 92vw" priority={i === 0} />
+                    {/* Video de 10 s en silencio y en bucle; la captura es la portada mientras carga (y si el navegador no reproduce video). */}
+                    <video
+                      className="pj__video"
+                      src={p.img.replace(/\.jpg$/, '.mp4')}
+                      poster={p.img}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      preload="metadata"
+                      aria-label={p.alt}
+                    />
                   </figure>
                 </div>
               </li>
