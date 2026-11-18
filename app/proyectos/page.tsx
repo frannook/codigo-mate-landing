@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Footer from '@/components/Footer';
 import Motion from '@/components/Motion';
 import Nav from '@/components/Nav';
 import Reveal from '@/components/Reveal';
-import ChatSample, { type SampleLine } from '@/components/ChatSample';
 import { ArrowRight } from '@/components/icons';
 import '../styles/about.css';
 import '../styles/pages.css';
@@ -14,34 +14,33 @@ export const metadata: Metadata = {
   description: 'Ejemplos de agentes de IA de Código Mate. Son proyectos simulados, creados para la materia Práctica Profesional I.'
 };
 
-const PROJECTS: { name: string; rubro: string; agent: string; before: string; after: string; demo: string; sample: SampleLine[] }[] = [
+const PROJECTS: { name: string; rubro: string; before: string; after: string; demo: string; img: string; alt: string }[] = [
   {
-    name: 'Tienda de accesorios "Nube"',
+    name: 'Almacén Natural "El Ceibo"',
     rubro: 'Tienda online',
-    agent: 'Nube · Asistente',
-    before: 'Decenas de mensajes cada mañana preguntando "¿dónde está mi pedido?" y por cambios.',
-    after: 'El agente consulta el pedido por número, explica los cambios y pasa los reclamos a WhatsApp.',
-    demo: 'Probalo con el pedido 4821',
-    sample: [
-      ['user', 'Quiero cambiar un talle.'],
-      ['bot', 'Tenés 30 días para cambiarlo con la etiqueta puesta. ¿Me pasás el número de pedido?'],
-      ['user', 'Es el 4821.'],
-      ['bot', 'Está en camino, llega el jueves entre las 9 y las 13 h. Cuando lo recibas, te ayudo con el cambio.']
-    ]
+    before: 'Las mismas preguntas todos los días: si hacen envíos a tal ciudad, cuánto tarda y cómo se paga. Se contestaban a mano y fuera de horario se perdían ventas.',
+    after: 'El agente vive en la tienda, responde envíos y plazos por localidad al instante y pasa a WhatsApp cuando el cliente quiere cerrar la compra.',
+    demo: 'Probá preguntarle por un envío',
+    img: '/proyectos/el-ceibo.jpg',
+    alt: 'Tienda online de mates con el asistente virtual respondiendo sobre envíos a Mercedes, Corrientes'
   },
   {
-    name: 'Estudio contable "Ríos y Asociados"',
-    rubro: 'Servicios profesionales',
-    agent: 'Ríos y Asociados',
-    before: 'Los posibles clientes no sabían qué documentación llevar ni a quién dirigirse.',
-    after: 'El agente lista la documentación, toma nombre y consulta, y ofrece una llamada con un profesional.',
-    demo: 'Probá agendar una llamada',
-    sample: [
-      ['user', '¿Qué documentación tengo que llevar?'],
-      ['bot', 'Te paso la lista general: DNI, constancia de CUIT y tus últimos comprobantes. ¿Sos monotributista o responsable inscripto?'],
-      ['user', 'Monotributo.'],
-      ['bot', 'Perfecto. ¿Agendamos 30 minutos con un profesional del estudio para revisar tu caso?']
-    ]
+    name: 'Distribución Federal',
+    rubro: 'Logística de envíos',
+    before: 'El equipo atendía llamadas y mensajes de "¿dónde está mi envío?" y no le quedaba tiempo para coordinar los repartos.',
+    after: 'El cliente escribe su número de envío y el agente le dice dónde está y cuándo llega. Si pide cambiar el horario, lo deriva a un operador por WhatsApp.',
+    demo: 'Probá con un número de envío',
+    img: '/proyectos/distribucion-federal.jpg',
+    alt: 'Panel de envíos con mapa de ruteo y el asistente de envíos informando el estado de un paquete'
+  },
+  {
+    name: 'Consultorios Médicos San Lucas',
+    rubro: 'Turnos online',
+    before: 'Los turnos se coordinaban por teléfono, con idas y vueltas hasta encontrar un horario libre, y había ausencias sin aviso.',
+    after: 'El agente propone un horario disponible, reserva el turno y envía la confirmación con el enlace de la videoconsulta. Las dudas pasan a WhatsApp.',
+    demo: 'Probá agendar un turno',
+    img: '/proyectos/san-lucas.jpg',
+    alt: 'Sitio de consultorios con calendario de turnos y el asistente virtual confirmando un turno médico'
   }
 ];
 
@@ -89,18 +88,9 @@ export default function Proyectos() {
                   </a>
                 </div>
                 <div className="pj__vis" data-reveal={i % 2 ? 'left' : 'right'}>
-                  <div className="pj__phone depth-card" data-tilt="6">
-                    <div className="pj__bar">
-                      <span className={`avatar av-${i + 1}`} aria-hidden="true">
-                        {p.agent[0]}
-                      </span>
-                      <span>
-                        <strong>{p.agent}</strong>
-                        <small>Agente de IA · en línea</small>
-                      </span>
-                    </div>
-                    <ChatSample lines={p.sample} />
-                  </div>
+                  <figure className="pj__shot" data-tilt="5">
+                    <Image src={p.img} alt={p.alt} width={1600} height={893} sizes="(min-width: 900px) 600px, 92vw" priority={i === 0} />
+                  </figure>
                 </div>
               </li>
             ))}
