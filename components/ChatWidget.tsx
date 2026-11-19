@@ -90,7 +90,7 @@ export default function ChatWidget({ floating = false, onClose }: { floating?: b
         <div aria-hidden="true" className="avatar av-1">Y</div>
         <div className="chat__who">
           <span className="chat__name">Yuyo · Código Mate</span>
-          <span className="chat__state">En línea · responde al instante</span>
+          <span className="chat__state"><i className="chat__dot" aria-hidden="true" />En línea · responde al instante</span>
         </div>
         <button
             type="button"

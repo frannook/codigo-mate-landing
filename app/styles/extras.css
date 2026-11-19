@@ -114,18 +114,6 @@
   .op__recent time { display: none; }
 }
 
-/* ---------- Cinta de plataformas ---------- */
-.chan { border-top: 1px solid var(--rule); background: var(--navy); padding: 28px 0 24px; overflow: hidden; }
-.chan__label { margin: 0 0 14px; text-align: center; font-family: var(--fm); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate); }
-.chan__viewport { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
-.chan__track { display: flex; width: max-content; animation: cmMarquee 40s linear infinite reverse; }
-.chan__list { display: flex; flex-shrink: 0; margin: 0; padding: 0; list-style: none; }
-.chan__list li {
-  margin-right: 12px; padding: 10px 20px; border-radius: 999px; white-space: nowrap; font-size: 15px; color: var(--mist);
-  border: 1px solid rgba(175, 187, 203, 0.2); background: rgba(119, 141, 169, 0.06);
-}
-html[data-motion='off'] .chan__track { animation: none; }
-
 /* ---------- Preguntas frecuentes ---------- */
 .faq { display: grid; border-top: 1px solid var(--rule); }
 .faq__item { border-bottom: 1px solid var(--rule); }
@@ -186,6 +174,41 @@ html[data-motion='off'] .chan__track { animation: none; }
 :root[data-theme='light'] .op__topics i { background: rgba(13, 27, 42, 0.08); }
 :root[data-theme='light'] .op__state { border-color: rgba(13, 27, 42, 0.22); }
 :root[data-theme='light'] .op__state.is-wa { border-color: rgba(168, 100, 15, 0.55); }
-:root[data-theme='light'] .chan__list li { border-color: rgba(13, 27, 42, 0.14); background: rgba(255, 255, 255, 0.6); color: var(--mist); }
 :root[data-theme='light'] .faq, :root[data-theme='light'] .faq__item { border-color: rgba(13, 27, 42, 0.12); }
 :root[data-theme='light'] .cn__btn:hover { background: var(--amber-hi); color: #fff; }
+
+/* ---------- Pulido premium: checklist, WhatsApp, estado del chat, sello de actualización y confirmación ---------- */
+.book__checks { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 12px; }
+.book__checks li { position: relative; padding-left: 30px; font-size: 16px; line-height: 1.5; color: var(--mist); }
+.book__checks li::before {
+  content: ''; position: absolute; left: 0; top: 4px; width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(233, 162, 59, 0.5);
+}
+.book__checks li::after {
+  content: ''; position: absolute; left: 6px; top: 8px; width: 6px; height: 3px; border-left: 2px solid var(--amber); border-bottom: 2px solid var(--amber);
+  transform: rotate(-45deg); transform-origin: center; transition: transform 0.45s var(--ease-out) var(--d, 0s);
+}
+/* Se dibuja al entrar en pantalla; sin JS (o con movimiento apagado) se ve completa. */
+.reveal-on [data-reveal]:not(.is-in) .book__checks li::after { transform: rotate(-45deg) scale(0); }
+.book__checks li:nth-child(2) { --d: 0.15s; }
+.book__checks li:nth-child(3) { --d: 0.3s; }
+
+.book__wa {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--bone); text-decoration: underline;
+  text-decoration-color: rgba(233, 162, 59, 0.5); text-underline-offset: 4px; transition: color 0.25s;
+}
+.book__wa:hover { color: var(--amber); }
+
+.chat__state { display: inline-flex; align-items: center; gap: 7px; }
+.chat__dot { position: relative; width: 7px; height: 7px; border-radius: 50%; background: #5cb860; flex: none; }
+.chat__dot::after {
+  content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid #5cb860; opacity: 0; animation: chatPulse 2.4s var(--ease-out) infinite;
+}
+@keyframes chatPulse { 0% { transform: scale(0.5); opacity: 0.7; } 100% { transform: scale(1.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .chat__dot::after { animation: none; } }
+
+.foot__updated { font-family: var(--fm); font-size: 12px; letter-spacing: 0.02em; color: var(--slate); }
+
+/* Confirmación: el check se dibuja al aparecer */
+.bk-check svg path { stroke-dasharray: 26; stroke-dashoffset: 26; animation: bkDraw 0.6s var(--ease-out) 0.2s forwards; }
+@keyframes bkDraw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .bk-check svg path { stroke-dashoffset: 0; animation: none; } }

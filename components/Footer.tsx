@@ -66,6 +66,7 @@ export default function Footer() {
 
       <div className="wrap foot__legal">
         <span>© 2026 Código Mate · Hecho en Argentina</span>
+        <span className="foot__updated">Última actualización: 19 de noviembre de 2026</span>
         <span className="foot__links">
           <a href="/privacidad">Privacidad</a>
           <a href="/terminos">Términos</a>
