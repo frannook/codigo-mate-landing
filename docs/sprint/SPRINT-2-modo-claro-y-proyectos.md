@@ -122,3 +122,37 @@ Después de los dos tramos anteriores, sumamos diez mejoras de solo frontend (si
 2. Inicio: comparador sin agente / con agente, panel del dueño, cinta de plataformas y preguntas frecuentes.
 3. Aviso de privacidad, "Saltar al contenido" y modo claro según el sistema.
 4. Docs: sprint 2 actualizado y documento de nuevas modificaciones para la presentación.
+
+## Cuarto tramo: ajustes después de revisar la web publicada
+
+Después de recorrer el sitio publicado se hicieron estos cambios:
+
+| Cambio | Qué se hizo y por qué |
+| --- | --- |
+| **Comparador "sin agente / con agente"** | Al arrastrar hacia un lado, una tarjeta quedaba con un espacio vacío enorme. Ahora son dos tarjetas lado a lado: al arrastrar una crece y la otra se achica, y el texto se reacomoda, así nunca sobra espacio. El control se limita a un rango (35 % a 65 %) para que las dos se lean siempre. En celular las dos tarjetas se apilan y se ven completas, sin control. |
+| **Proyectos: se quitó el bloque final** | Se eliminó "¿Tu negocio podría ser el próximo?" con los botones de agendar y probar. Repetía lo que ya dice el pie de página ("Que tu web atienda mientras vos tomás mate"). Lo mismo en las páginas de detalle de cada proyecto: queda solo el enlace al siguiente caso y el pie. |
+| **Nosotros rediseñada** | Se sacó la foto grande del equipo, que no cumplía las normas del proyecto (la imagen `nosotros.jpg` se eliminó del sitio; sigue en el historial de Git). Ahora la página arranca con el texto, y "El equipo" tiene cinco tarjetas con espacio para una foto tipo currículum de cada integrante, con el logo de Código Mate de fondo. Se mantienen los nombres y títulos. "Cómo trabajamos" se mantiene. |
+| **Logo en el pie** | En modo oscuro se veía el logo repetido (la versión de tinta para modo claro quedaba visible). Corregido. |
+
+### Cómo cargar las fotos del equipo
+
+Hasta que estén las fotos, cada tarjeta muestra las iniciales sobre el fondo de marca. Para cargar una foto, guardar el archivo en `public/equipo/` con el nombre del integrante y subir el cambio:
+
+| Integrante | Nombre del archivo |
+| --- | --- |
+| Cristian Maciel | `cristian-maciel.png` |
+| Luciano Deimundo | `luciano-deimundo.png` |
+| Matías Ortiz | `matias-ortiz.png` |
+| Franco Romero | `franco-romero.png` |
+| Elías Gómez Romero | `elias-gomez-romero.png` |
+
+- Lo ideal es un **PNG con fondo transparente** (persona recortada): así se ve el logo de Código Mate detrás. También se aceptan `.webp`, `.jpg` y `.jpeg`.
+- Formato vertical (proporción 4:5) y al menos 600 px de ancho, con la persona centrada y la cabeza en el tercio superior.
+- El sitio detecta solo qué fotos existen: no hace falta tocar código.
+
+### Commits de este tramo
+
+1. Comparador: dos tarjetas que crecen y se achican, sin espacio vacío.
+2. Proyectos: se quita el bloque final repetido.
+3. Nosotros: equipo con fotos tipo currículum y sin foto grande.
+4. Docs: sprint 2 y documento de presentación actualizados.
