@@ -111,3 +111,15 @@
 @media (max-width: 899px) {
   [data-tilt] { transform: none; }
 }
+
+/* Proyectos: enlaces de cada fila, portada clickeable y brillo de carga mientras llega la captura/video. */
+.pj__links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 6px; }
+.pj__links .pj__demo { margin-top: 0; }
+.pj__more { font-size: 14px; color: var(--mist); text-decoration: underline; text-decoration-color: rgba(119, 141, 169, 0.4); text-underline-offset: 3px; }
+.pj__more:hover { color: var(--white); }
+.pj__shot-link { display: block; border-radius: 18px; }
+.pj__shot-link:focus-visible { outline-offset: 6px; }
+.pj__shot { background: linear-gradient(100deg, var(--navy-800) 30%, var(--navy-600) 50%, var(--navy-800) 70%) 0 0 / 220% 100%; animation: pjShimmer 1.6s linear 3; }
+@keyframes pjShimmer { to { background-position: -220% 0; } }
+@media (prefers-reduced-motion: reduce) { .pj__shot { animation: none; } }
+

@@ -1,4 +1,7 @@
+import BeforeAfter from '@/components/BeforeAfter';
 import Booking from '@/components/Booking';
+import Channels from '@/components/Channels';
+import Faq from '@/components/Faq';
 import ChatWidget from '@/components/ChatWidget';
 import FocusChatLink from '@/components/FocusChatLink';
 import Footer from '@/components/Footer';
@@ -6,6 +9,7 @@ import HeroShowcase from '@/components/HeroShowcase';
 import Motion from '@/components/Motion';
 import Nav from '@/components/Nav';
 import NightStory from '@/components/NightStory';
+import OwnerPanel from '@/components/OwnerPanel';
 import Quote from '@/components/Quote';
 import Reveal from '@/components/Reveal';
 import Steps from '@/components/Steps';
@@ -145,6 +149,24 @@ export default function Home() {
 
       <NightStory />
 
+      <section id="comparar" className="section section--ba">
+        <div className="wrap section__inner sec">
+          <div data-reveal="up" className="sec__head">
+            <div className="eyebrow">
+              <span aria-hidden="true" className="eyebrow__rule" />
+              <span>La diferencia</span>
+            </div>
+            <h2 className="h2" data-headline>
+              La misma consulta, <em className="accent">dos finales distintos</em>.
+            </h2>
+            <p className="lead">Arrastrá el control y mirá qué pasa a las 23:47 sin agente y con agente.</p>
+          </div>
+          <div data-reveal="up">
+            <BeforeAfter />
+          </div>
+        </div>
+      </section>
+
       <section id="como" className="section section--how">
         <div className="wrap section__inner how">
           <div data-reveal="left" className="how__head">
@@ -165,6 +187,26 @@ export default function Home() {
         </div>
       </section>
 
+      <section id="panel" className="section section--panel">
+        <div className="wrap section__inner sec">
+          <div data-reveal="up" className="sec__head">
+            <div className="eyebrow">
+              <span aria-hidden="true" className="eyebrow__rule" />
+              <span>Para el dueño del negocio</span>
+            </div>
+            <h2 className="h2" data-headline>
+              Vos ves todo lo que <em className="accent">pasa en tu web</em>.
+            </h2>
+            <p className="lead">Qué preguntan, a qué hora, qué resolvió el agente solo y qué pasó a una persona. Panel de ejemplo con datos ilustrativos.</p>
+          </div>
+          <div data-reveal="up">
+            <OwnerPanel />
+          </div>
+        </div>
+      </section>
+
+      <Channels />
+
       <section id="testimonios" className="section section--proof">
         <div className="wrap section__inner proof">
           <div data-reveal="up" className="proof__head">
@@ -182,6 +224,19 @@ export default function Home() {
       </section>
 
       <Quote />
+
+      <section id="faq" className="section section--faq">
+        <div className="wrap section__inner sec sec--narrow">
+          <div data-reveal="up" className="sec__head">
+            <h2 className="h2" data-headline>
+              Preguntas <em className="accent">frecuentes</em>.
+            </h2>
+          </div>
+          <div data-reveal="up">
+            <Faq />
+          </div>
+        </div>
+      </section>
 
       <section id="agendar" className="section section--book ambient">
         <div className="wrap section__inner book">
