@@ -70,20 +70,6 @@ export default function Nosotros() {
               Cada agente se arma con la información de tu negocio, habla con tu tono de voz y se publica con una sola línea de código.
               Nos importa que se note que hay personas atrás.
             </p>
-            <ul className="ab__stats" aria-label="Cómo empieza">
-              <li>
-                <strong>1 llamada</strong>
-                <span>Para conocerte</span>
-              </li>
-              <li>
-                <strong>30 min</strong>
-                <span>Sin costo</span>
-              </li>
-              <li>
-                <strong>1 línea</strong>
-                <span>Para instalarlo</span>
-              </li>
-            </ul>
             <div className="ab__ctas">
               <a href="/#agendar" className="btn btn--solid">
                 Agendar una llamada <ArrowRight />

@@ -69,7 +69,7 @@ export default function BeforeAfter() {
         />
       </div>
 
-      <ul className="ba__stats" aria-label="Resultados de ejemplo">
+      <ul className="ba__stats ba__stats--two" aria-label="Resultados de ejemplo">
         <li>
           <strong>
             <CountUp value={10} suffix=" h" />
@@ -81,12 +81,6 @@ export default function BeforeAfter() {
             <CountUp value={4} prefix="< " suffix=" s" duration={900} />
           </strong>
           <span>para responder con un agente</span>
-        </li>
-        <li>
-          <strong>
-            <CountUp value={24} suffix="/7" duration={1000} />
-          </strong>
-          <span>atención, todos los días del año</span>
         </li>
       </ul>
       <p className="ba__fine">Ejemplo ilustrativo: las cifras muestran el tipo de mejora que buscamos, no mediciones reales.</p>

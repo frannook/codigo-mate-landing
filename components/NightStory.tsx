@@ -287,7 +287,6 @@ export default function NightStory() {
                   <span className="ns__code-text">&lt;script src=&quot;codigomate.js&quot;&gt;&lt;/script&gt;</span>
                   <span className="ns__caret" aria-hidden="true" />
                 </code>
-                <p className="ns__small">Funciona en cualquier plataforma: tienda, sitio a medida o landing. La instalación la hacemos nosotros.</p>
               </div>
             </div>
             <div className="ns__vis">

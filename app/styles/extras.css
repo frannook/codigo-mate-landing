@@ -55,7 +55,7 @@
 }
 
 .ba__stats { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
-@media (min-width: 700px) { .ba__stats { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 700px) { .ba__stats { grid-template-columns: repeat(3, 1fr); } .ba__stats--two { grid-template-columns: repeat(2, 1fr); } }
 .ba__stats li { display: flex; flex-direction: column; gap: 6px; padding: 20px 22px; border-radius: 18px; border: 1px solid rgba(175, 187, 203, 0.2); background: var(--navy-700); }
 .ba__stats strong { font-family: var(--fh); font-weight: 400; font-size: clamp(36px, 4vw, 52px); line-height: 1; color: var(--amber); font-variant-numeric: tabular-nums; }
 .ba__stats li > span { font-size: 14px; line-height: 1.45; color: var(--mist); }
