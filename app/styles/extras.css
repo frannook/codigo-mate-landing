@@ -6,7 +6,6 @@
 .sec__head { display: flex; flex-direction: column; gap: 18px; max-width: 680px; }
 .section--ba { background: var(--navy); }
 .section--panel { background: var(--navy-900); }
-.section--faq { background: var(--navy-900); }
 
 /* ---------- Saltar al contenido (solo se ve con el teclado) ---------- */
 .skip {
@@ -114,20 +113,6 @@
   .op__recent time { display: none; }
 }
 
-/* ---------- Preguntas frecuentes ---------- */
-.faq { display: grid; border-top: 1px solid var(--rule); }
-.faq__item { border-bottom: 1px solid var(--rule); }
-.faq__item summary {
-  display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 4px; cursor: pointer; list-style: none;
-  font-family: var(--fh); font-size: clamp(22px, 2.4vw, 28px); line-height: 1.2; color: var(--bone); transition: color 0.25s;
-}
-.faq__item summary::-webkit-details-marker { display: none; }
-.faq__item summary:hover { color: var(--white); }
-.faq__item summary:focus-visible { outline-offset: -2px; border-radius: 8px; }
-.faq__item summary svg { flex: none; color: var(--amber); transition: transform 0.35s var(--ease-out); }
-.faq__item[open] summary svg { transform: rotate(180deg); }
-.faq__item p { margin: 0; padding: 0 4px 24px; max-width: 64ch; font-size: 17px; line-height: 1.65; color: var(--mist); animation: cmIn 0.4s var(--ease-out) both; }
-
 /* ---------- Aviso de privacidad ---------- */
 .cn {
   position: fixed; left: 16px; right: 16px; bottom: 112px; z-index: 45; max-width: 520px; display: flex; align-items: center; gap: 16px; padding: 16px 18px;
@@ -174,7 +159,6 @@
 :root[data-theme='light'] .op__topics i { background: rgba(13, 27, 42, 0.08); }
 :root[data-theme='light'] .op__state { border-color: rgba(13, 27, 42, 0.22); }
 :root[data-theme='light'] .op__state.is-wa { border-color: rgba(168, 100, 15, 0.55); }
-:root[data-theme='light'] .faq, :root[data-theme='light'] .faq__item { border-color: rgba(13, 27, 42, 0.12); }
 :root[data-theme='light'] .cn__btn:hover { background: var(--amber-hi); color: #fff; }
 
 /* ---------- Pulido premium: checklist, WhatsApp, estado del chat, sello de actualización y confirmación ---------- */
