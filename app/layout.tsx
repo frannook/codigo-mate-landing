@@ -9,6 +9,8 @@ import './styles/try.css';
 import './styles/depth.css';
 import './styles/polish.css';
 import './styles/theme.css';
+import './styles/extras.css';
+import CookieNotice from '@/components/CookieNotice';
 import Tilt from '@/components/Tilt';
 import YuyoLauncher from '@/components/YuyoLauncher';
 import { Analytics } from '@vercel/analytics/next';
@@ -63,15 +65,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "var d=document.documentElement;d.dataset.motion='on';if('IntersectionObserver' in window)d.classList.add('reveal-on')"
           }}
         />
-        {/* Tema claro guardado: se aplica antes del primer pintado para que no parpadee el oscuro. */}
+        {/* Tema: la elección guardada o, la primera vez, la preferencia del sistema. Se aplica antes del primer pintado para que no parpadee. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: "try{if(localStorage.getItem('cm-theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}"
+            __html:
+              "try{var t=localStorage.getItem('cm-theme');if(t==='light'||(t===null&&matchMedia('(prefers-color-scheme: light)').matches))document.documentElement.dataset.theme='light'}catch(e){}"
           }}
         />
       </head>
       <body>
+        <a className="skip" href="#top">
+          Saltar al contenido
+        </a>
         {children}
+        <CookieNotice />
         <Tilt />
         <YuyoLauncher />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />

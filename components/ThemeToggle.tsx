@@ -4,13 +4,9 @@ import { useEffect, useState } from 'react';
 
 const KEY = 'cm-theme';
 
-// Lee la preferencia guardada; si el navegador no deja leer localStorage (modo privado, datos bloqueados), queda el oscuro.
+// El estado inicial lo fija el script de layout.tsx (elección guardada o, si no hay, la preferencia del sistema): se lee del atributo.
 function readTheme(): 'dark' | 'light' {
-  try {
-    return localStorage.getItem(KEY) === 'light' ? 'light' : 'dark';
-  } catch {
-    return 'dark';
-  }
+  return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
 }
 
 // Cambia entre fondo oscuro (navy) y claro (crema). El estado inicial lo fija el script de layout.tsx antes del primer pintado.
