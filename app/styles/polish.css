@@ -50,15 +50,4 @@
 }
 
 /* Nosotros: equipo en tarjetas 3D. */
-.ab__team { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(12px, 1.6vw, 20px); grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); perspective: 1400px; }
-.ab__team li { padding: 24px 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; transform-style: preserve-3d; }
-.ab__team strong { margin-top: 12px; font-family: var(--fh); font-weight: 400; font-size: 24px; line-height: 1.1; color: var(--white); }
-.ab__team span:last-child { font-size: 14px; line-height: 1.45; color: var(--mist); }
-.ab__ini {
-  width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-size: 17px; font-weight: 600; color: var(--navy);
-  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-}
-.ab__team li[data-tilting] .ab__ini { transform: translateZ(30px); transition: transform 0.4s var(--ease-out); }
-html .ab__ini.av-0 { background: var(--av-0); } html .ab__ini.av-1 { background: var(--av-1); } html .ab__ini.av-2 { background: var(--av-2); }
-html .ab__ini.av-3 { background: var(--av-3); } html .ab__ini.av-4 { background: var(--av-4); }
 .ab__values + .ab__values { border-top: 0; padding-top: 0; }

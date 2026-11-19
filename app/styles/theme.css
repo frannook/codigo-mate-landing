@@ -73,9 +73,9 @@
 :root[data-theme='light'] .theme-toggle:hover { background: rgba(13, 27, 42, 0.1); }
 
 /* Logo en pie y en la página Nosotros: misma regla (color para oscuro, tinta navy para claro). */
-.logo-ink { display: none; }
-:root[data-theme='light'] .logo-dark { display: none; }
-:root[data-theme='light'] .logo-ink { display: inline-block; }
+img.logo-ink { display: none; }
+:root[data-theme='light'] img.logo-dark { display: none; }
+:root[data-theme='light'] img.logo-ink { display: inline-block; }
 
 /* Celular: la barra tiene que alojar logo, tema, CTA y menú sin salirse del ancho. */
 @media (max-width: 559px) {
@@ -84,7 +84,7 @@
 }
 
 /* Nosotros: tarjetas del equipo y de "Cómo trabajamos" en papel claro (antes quedaban gris pizarra con texto apagado). */
-:root[data-theme='light'] .ab :is(.depth-card, .ab__team li, .ab__cards li) {
+:root[data-theme='light'] .ab :is(.depth-card, .ab__cards li) {
   background: var(--theme-glass);
   border-color: rgba(13, 27, 42, 0.1);
   box-shadow: 0 10px 30px rgba(13, 27, 42, 0.08);

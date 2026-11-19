@@ -1,0 +1,36 @@
+/* ---------- Nosotros: equipo con fotos tipo currículum ---------- */
+/* Cada integrante: retrato 4:5 con el logo de Código Mate de fondo. Con un PNG de fondo transparente el logo se ve detrás de la persona. */
+.crew__head { display: flex; flex-direction: column; gap: 14px; }
+.crew__lead { margin: 0; font-size: 17px; color: var(--mist); }
+.crew { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(12px, 1.6vw, 20px); grid-template-columns: repeat(2, minmax(0, 1fr)); perspective: 1400px; }
+@media (min-width: 640px) { .crew { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .crew { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.crew__card { padding: 12px 12px 18px; display: flex; flex-direction: column; gap: 6px; transform-style: preserve-3d; }
+.crew__photo {
+  position: relative; isolation: isolate; overflow: hidden; aspect-ratio: 4 / 5; border-radius: 16px; margin-bottom: 10px;
+  border: 1px solid rgba(175, 187, 203, 0.18);
+  background:
+    radial-gradient(80% 50% at 30% 105%, rgba(233, 162, 59, 0.25), transparent 70%),
+    radial-gradient(90% 60% at 50% 0%, rgba(65, 90, 119, 0.55), transparent 75%),
+    var(--navy-700);
+}
+.crew__mark { position: absolute; top: 14%; left: 50%; width: 92%; max-width: none; height: auto; transform: translateX(-50%); opacity: 0.12; z-index: 0; pointer-events: none; }
+.crew__img { z-index: 1; object-fit: cover; object-position: 50% 12%; }
+.crew__ini {
+  position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; font-family: var(--fh); font-size: clamp(44px, 6vw, 64px); color: #0d1b2a;
+  width: 44%; height: auto; aspect-ratio: 1; margin: auto; border-radius: 22%; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+html .crew__ini.av-0 { background: var(--av-0); } html .crew__ini.av-1 { background: var(--av-1); } html .crew__ini.av-2 { background: var(--av-2); }
+html .crew__ini.av-3 { background: var(--av-3); } html .crew__ini.av-4 { background: var(--av-4); } html .crew__ini.av-5 { background: var(--av-5); }
+.crew__card strong { padding: 0 6px; font-family: var(--fh); font-weight: 400; font-size: clamp(20px, 2vw, 24px); line-height: 1.1; color: var(--white); }
+.crew__card > span { padding: 0 6px; font-size: 13.5px; line-height: 1.45; color: var(--mist); }
+.crew__card[data-tilting] .crew__photo { transform: translateZ(24px); transition: transform 0.4s var(--ease-out); }
+
+:root[data-theme='light'] .crew__photo {
+  border-color: rgba(13, 27, 42, 0.12);
+  background:
+    radial-gradient(80% 50% at 30% 105%, rgba(233, 162, 59, 0.28), transparent 70%),
+    radial-gradient(90% 60% at 50% 0%, rgba(119, 141, 169, 0.3), transparent 75%),
+    #efe9dc;
+}
+:root[data-theme='light'] .crew__mark { opacity: 0.1; }
