@@ -16,42 +16,43 @@
 .skip:focus-visible { transform: none; outline-offset: 2px; }
 
 /* ---------- Comparador sin agente / con agente ---------- */
+/* Dos tarjetas lado a lado: al arrastrar, una crece y la otra se achica (el texto se reacomoda), así nunca queda espacio vacío.
+   El rango está limitado a 35-65 % para que las dos se lean siempre. En celular se apilan y el control se oculta. */
 .ba { display: flex; flex-direction: column; gap: 20px; max-width: 920px; }
-.ba__stage {
-  --pos: 50; position: relative; overflow: hidden; border-radius: 28px; min-height: 380px; user-select: none; touch-action: pan-y;
-  border: 1px solid rgba(175, 187, 203, 0.22); background: var(--navy-800);
-}
-.ba__layer { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 16px; padding: clamp(20px, 3vw, 36px); }
-.ba__layer--without { background: linear-gradient(180deg, var(--navy-800), var(--navy-900)); }
-.ba__layer--with { background: linear-gradient(180deg, var(--navy-700), var(--navy-800)); clip-path: inset(0 0 0 calc(var(--pos) * 1%)); }
+.ba__stage { --pos: 50; position: relative; overflow: hidden; border-radius: 28px; border: 1px solid rgba(175, 187, 203, 0.22); background: var(--navy-800); }
+.ba__cards { display: flex; flex-direction: column; }
+.ba__card { display: flex; flex-direction: column; gap: 16px; min-width: 0; padding: clamp(20px, 3vw, 32px); }
+.ba__card--without { background: linear-gradient(180deg, var(--navy-800), var(--navy-900)); }
+.ba__card--with { background: linear-gradient(180deg, var(--navy-700), var(--navy-800)); border-top: 1px solid rgba(175, 187, 203, 0.18); }
 .ba__tag {
   align-self: flex-start; padding: 4px 12px; border-radius: 999px; font-family: var(--fm); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--slate); border: 1px solid var(--slate);
 }
-.ba__layer--with .ba__tag { align-self: flex-end; }
 .ba__tag--on { color: var(--amber); border-color: var(--amber); }
-.ba__chat { display: flex; flex-direction: column; gap: 10px; max-width: 420px; }
-.ba__layer--with .ba__chat { margin-left: auto; }
+.ba__chat { display: flex; flex-direction: column; gap: 10px; }
 .ba__msg { margin: 0; padding: 11px 15px; border-radius: 16px; font-size: 15px; line-height: 1.5; color: var(--bone); }
-.ba__msg--user { align-self: flex-end; border-bottom-right-radius: 4px; background: var(--steel); }
+.ba__msg--user { align-self: flex-end; max-width: 100%; border-bottom-right-radius: 4px; background: var(--steel); }
 .ba__msg--bot { align-self: flex-start; border-bottom-left-radius: 4px; background: var(--navy-600); border: 1px solid rgba(175, 187, 203, 0.16); }
 .ba__time { margin: 0; font-family: var(--fm); font-size: 12px; color: var(--slate); }
 .ba__status { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: 14px; font-size: 14px; border: 1px dashed rgba(175, 187, 203, 0.35); color: var(--mist); }
 .ba__status b { font-weight: 600; color: var(--bone); }
-.ba__result { margin: auto 0 0; max-width: 420px; font-size: 16px; line-height: 1.55; color: var(--mist); }
-.ba__layer--with .ba__result { margin-left: auto; }
+.ba__result { margin: auto 0 0; font-size: 16px; line-height: 1.55; color: var(--mist); }
 .ba__result strong { color: var(--bone); font-weight: 600; }
 .ba__result--ok strong { color: var(--amber); }
 
-.ba__handle {
-  position: absolute; top: 0; bottom: 0; left: calc(var(--pos) * 1%); width: 2px; margin-left: -1px; background: var(--amber); pointer-events: none;
+.ba__handle, .ba__range { display: none; }
+@media (min-width: 760px) {
+  .ba__cards { position: relative; flex-direction: row; }
+  .ba__card--without { flex: 0 0 calc(var(--pos) * 1%); }
+  .ba__card--with { flex: 1 1 0; border-top: 0; border-left: 0; }
+  .ba__handle { display: block; position: absolute; top: 0; bottom: 0; left: calc(var(--pos) * 1%); width: 2px; margin-left: -1px; background: var(--amber); pointer-events: none; }
+  .ba__handle span {
+    position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; display: grid; place-items: center; border-radius: 50%;
+    background: var(--amber); color: #0d1b2a; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  }
+  .ba__range { display: block; position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; }
+  .ba__stage:has(.ba__range:focus-visible) { outline: 2px solid var(--amber); outline-offset: 3px; }
 }
-.ba__handle span {
-  position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; display: grid; place-items: center; border-radius: 50%;
-  background: var(--amber); color: #0d1b2a; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-}
-.ba__range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
-.ba__stage:has(.ba__range:focus-visible) { outline: 2px solid var(--amber); outline-offset: 3px; }
 
 .ba__stats { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
 @media (min-width: 700px) { .ba__stats { grid-template-columns: repeat(3, 1fr); } }
@@ -59,11 +60,6 @@
 .ba__stats strong { font-family: var(--fh); font-weight: 400; font-size: clamp(36px, 4vw, 52px); line-height: 1; color: var(--amber); font-variant-numeric: tabular-nums; }
 .ba__stats li > span { font-size: 14px; line-height: 1.45; color: var(--mist); }
 .ba__fine { margin: 0; font-size: 13px; color: var(--slate); }
-
-@media (max-width: 640px) {
-  .ba__stage { min-height: 460px; }
-  .ba__msg { font-size: 14px; }
-}
 
 /* ---------- Panel del dueño ---------- */
 .op { display: flex; flex-direction: column; gap: 18px; padding: clamp(16px, 2.4vw, 28px); border-radius: 28px; max-width: 1040px; }
@@ -175,8 +171,8 @@ html[data-motion='off'] .chan__track { animation: none; }
 
 /* ---------- Tema claro: tokens ya cubren casi todo; acá solo lo que usa colores propios ---------- */
 :root[data-theme='light'] .ba__stage { border-color: rgba(13, 27, 42, 0.12); box-shadow: 0 20px 50px -30px rgba(13, 27, 42, 0.35); }
-:root[data-theme='light'] .ba__layer--without { background: linear-gradient(180deg, #ebe4d4, #e3dccb); }
-:root[data-theme='light'] .ba__layer--with { background: linear-gradient(180deg, #fffdf8, #f7f3ea); }
+:root[data-theme='light'] .ba__card--without { background: linear-gradient(180deg, #ebe4d4, #e3dccb); }
+:root[data-theme='light'] .ba__card--with { background: linear-gradient(180deg, #fffdf8, #f7f3ea); border-color: rgba(13, 27, 42, 0.1); }
 :root[data-theme='light'] .ba__msg--user { background: #d7dfe9; color: #0d1b2a; }
 :root[data-theme='light'] .ba__msg--bot { background: #fff; color: #0d1b2a; border-color: rgba(13, 27, 42, 0.12); }
 :root[data-theme='light'] .ba__status { border-color: rgba(13, 27, 42, 0.25); }

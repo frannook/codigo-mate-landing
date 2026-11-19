@@ -17,48 +17,51 @@ export default function BeforeAfter() {
         misma consulta se responde en 4 segundos con el plazo de envío y la opción de pasar a WhatsApp para comprar.
       </p>
 
-      <div className="ba__stage" style={{ '--pos': pos } as React.CSSProperties} aria-hidden="true">
-        <div className="ba__layer ba__layer--without">
-          <span className="ba__tag">Sin agente</span>
-          <div className="ba__chat">
-            <p className="ba__msg ba__msg--user">{MSG}</p>
-            <p className="ba__time">23:47 · mensaje recibido</p>
-            <div className="ba__status ba__status--bad">
-              <b>Sin respuesta</b>
-              <span>El negocio está cerrado.</span>
+      <div className="ba__stage" style={{ '--pos': pos } as React.CSSProperties}>
+        <div className="ba__cards" aria-hidden="true">
+          <div className="ba__card ba__card--without">
+            <span className="ba__tag">Sin agente</span>
+            <div className="ba__chat">
+              <p className="ba__msg ba__msg--user">{MSG}</p>
+              <p className="ba__time">23:47 · mensaje recibido</p>
+              <div className="ba__status">
+                <b>Sin respuesta</b>
+                <span>El negocio está cerrado.</span>
+              </div>
             </div>
+            <p className="ba__result">
+              Se contesta a las <strong>10:15</strong> del día siguiente. El cliente ya compró en otro lado.
+            </p>
           </div>
-          <p className="ba__result">
-            Se contesta a las <strong>10:15</strong> del día siguiente. El cliente ya compró en otro lado.
-          </p>
-        </div>
 
-        <div className="ba__layer ba__layer--with">
-          <span className="ba__tag ba__tag--on">Con agente</span>
-          <div className="ba__chat">
-            <p className="ba__msg ba__msg--user">{MSG}</p>
-            <p className="ba__msg ba__msg--bot">¡Sí! Enviamos a todo el país. A Mercedes llega en 3 a 5 días hábiles. ¿Te paso con el equipo para cerrar el pedido?</p>
-            <p className="ba__time">23:47 · respondido en 4 segundos</p>
+          <div className="ba__card ba__card--with">
+            <span className="ba__tag ba__tag--on">Con agente</span>
+            <div className="ba__chat">
+              <p className="ba__msg ba__msg--user">{MSG}</p>
+              <p className="ba__msg ba__msg--bot">¡Sí! Enviamos a todo el país. A Mercedes llega en 3 a 5 días hábiles. ¿Te paso con el equipo para cerrar el pedido?</p>
+              <p className="ba__time">23:47 · respondido en 4 segundos</p>
+            </div>
+            <p className="ba__result ba__result--ok">
+              El cliente sigue por WhatsApp con <strong>toda la charla cargada</strong>.
+            </p>
           </div>
-          <p className="ba__result ba__result--ok">
-            El cliente sigue por WhatsApp con <strong>toda la charla cargada</strong>.
-          </p>
+
+          <div className="ba__handle">
+            <span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m9 6-6 6 6 6" />
+                <path d="m15 6 6 6-6 6" />
+              </svg>
+            </span>
+          </div>
         </div>
 
-        <div className="ba__handle" aria-hidden="true">
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m9 6-6 6 6 6" />
-              <path d="m15 6 6 6-6 6" />
-            </svg>
-          </span>
-        </div>
-
+        {/* El control solo se usa en pantallas anchas; en celular las dos tarjetas se apilan y se ven completas. */}
         <input
           className="ba__range"
           type="range"
-          min={0}
-          max={100}
+          min={35}
+          max={65}
           step={1}
           value={pos}
           onChange={e => setPos(Number(e.target.value))}
