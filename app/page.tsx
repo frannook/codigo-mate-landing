@@ -86,10 +86,6 @@ export default function Home() {
               </a>
               <FocusChatLink className="btn btn--ghost">Probar el agente</FocusChatLink>
             </div>
-            <div className="hero__notes">
-              <span>Se instala con una línea de código</span>
-              <span>Funciona en cualquier plataforma</span>
-            </div>
           </div>
 
           <div className="hero__visual">
@@ -123,11 +119,6 @@ export default function Home() {
               Preguntale lo que quieras. <em className="accent">Es de verdad.</em>
             </h2>
             <p className="lead">Yuyo es el mismo agente que instalamos en tu web. Contale a qué te dedicás y mirá cómo te ayudaría.</p>
-            <ul className="try__facts" aria-label="Qué hace el agente">
-              <li><strong>24/7</strong><span>Atiende siempre</span></li>
-              <li><strong>Segundos</strong><span>Responde al toque</span></li>
-              <li><strong>1 línea</strong><span>Para instalarlo</span></li>
-            </ul>
             <p className="try__label">Probá con una de estas:</p>
             <ul className="try__asks">
               {ASKS.map(([q, hint]) => (

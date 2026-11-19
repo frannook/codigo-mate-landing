@@ -10,24 +10,8 @@ export const FAQS: [string, string][] = [
     'No inventa. Te lo dice con claridad y pasa la conversación a tu WhatsApp con todo el contexto, para que una persona la retome sin hacerle repetir nada al cliente.'
   ],
   [
-    '¿Funciona en mi plataforma?',
-    'Sí: se instala con una línea de código en cualquier sitio, ya sea una tienda online, una web institucional o una página hecha a medida.'
-  ],
-  [
-    '¿Habla como mi marca?',
-    'Sí. Lo armamos con la información de tu negocio y con tu tono de voz: más cercano, más formal o como prefieras. Antes de publicarlo lo probamos con las preguntas que más te hacen.'
-  ],
-  [
-    '¿Necesito saber programar?',
-    'No. Vos nos contás cómo funciona tu negocio y nosotros nos encargamos de armarlo, instalarlo y mantenerlo al día.'
-  ],
-  [
     '¿Qué pasa con los datos de mis clientes?',
     'Los usamos solo para responder y coordinar. En la política de privacidad explicamos qué datos recibimos, para qué y cómo ejercer tus derechos. Y en el chat pedimos no escribir datos sensibles ni de tarjetas.'
-  ],
-  [
-    '¿Los proyectos de ejemplo son reales?',
-    'No: son proyectos simulados, creados para la materia Práctica Profesional I. Muestran cómo trabajaríamos con un negocio real.'
   ]
 ];
 
