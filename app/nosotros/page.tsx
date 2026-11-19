@@ -8,6 +8,7 @@ import Nav from '@/components/Nav';
 import Reveal from '@/components/Reveal';
 import { ArrowRight } from '@/components/icons';
 import '../styles/about.css';
+import '../styles/equipo.css';
 
 export const metadata: Metadata = {
   title: 'Nosotros · Código Mate',
@@ -18,12 +19,12 @@ export const metadata: Metadata = {
 };
 
 const DEV = 'Técnico Superior en Desarrollo de Software';
-const TEAM: [string, string][] = [
-  ['Cristian Maciel', DEV],
-  ['Luciano Deimundo', DEV],
-  ['Matías Ortiz', DEV],
-  ['Franco Romero', DEV],
-  ['Elías Gómez Romero', 'Técnico Superior en Infraestructura']
+const TEAM: { name: string; role: string; slug: string }[] = [
+  { name: 'Cristian Maciel', role: DEV, slug: 'cristian-maciel' },
+  { name: 'Luciano Deimundo', role: DEV, slug: 'luciano-deimundo' },
+  { name: 'Matías Ortiz', role: DEV, slug: 'matias-ortiz' },
+  { name: 'Franco Romero', role: DEV, slug: 'franco-romero' },
+  { name: 'Elías Gómez Romero', role: 'Técnico Superior en Infraestructura', slug: 'elias-gomez-romero' }
 ];
 
 // [título, explicación, ejemplo de cómo lo diría el agente]
@@ -33,16 +34,16 @@ const PRINCIPLES: [string, string, string][] = [
   ['Siempre hay una persona', 'Si el agente no sabe algo, no lo inventa: pasa la charla a tu WhatsApp con todo el contexto.', '«Eso lo ve mejor alguien del equipo. Te paso por WhatsApp.»']
 ];
 
-// La foto del equipo se pone en public/nosotros.jpg (o .webp / .png). Mientras no esté, se muestra el panel de marca.
-function teamPhoto(): string | null {
-  for (const ext of ['jpg', 'jpeg', 'webp', 'png']) {
-    if (fs.existsSync(path.join(process.cwd(), 'public', `nosotros.${ext}`))) return `/nosotros.${ext}`;
+// La foto de cada integrante se guarda en public/equipo/<slug>.png (ideal: fondo transparente, así se ve el logo detrás), .webp, .jpg o .jpeg.
+// Mientras no esté el archivo, se muestran las iniciales sobre el fondo de marca.
+function memberPhoto(slug: string): string | null {
+  for (const ext of ['png', 'webp', 'jpg', 'jpeg']) {
+    if (fs.existsSync(path.join(process.cwd(), 'public', 'equipo', `${slug}.${ext}`))) return `/equipo/${slug}.${ext}`;
   }
   return null;
 }
 
 export default function Nosotros() {
-  const photo = teamPhoto();
   return (
     <>
       <Reveal />
@@ -53,22 +54,6 @@ export default function Nosotros() {
         <div aria-hidden="true" className="top__grid" />
 
         <div className="wrap ab__hero">
-          <div className="ab__photo-wrap" data-tilt="5">
-            <figure className="ab__photo">
-              {photo ? (
-                <Image src={photo} alt="El equipo de Código Mate posando junto" width={1620} height={1620} priority quality={75} sizes="(min-width: 900px) 520px, 92vw" />
-              ) : (
-                <div className="ab__mark" role="img" aria-label="Código Mate">
-                  <Image className="logo-dark" src="/logo-color.png" alt="" width={1307} height={406} sizes="(min-width: 900px) 300px, 60vw" priority />
-                  <Image className="logo-ink" src="/logo-ink.png" alt="" width={1307} height={406} sizes="(min-width: 900px) 300px, 60vw" priority />
-                </div>
-              )}
-            </figure>
-            <span className="ab__chip" aria-hidden="true">
-              <i /> 5 personas · Hecho en Argentina
-            </span>
-          </div>
-
           <div className="ab__copy">
             <div className="eyebrow">
               <span aria-hidden="true" className="eyebrow__rule" />
@@ -111,23 +96,37 @@ export default function Nosotros() {
         </div>
 
         <section className="wrap ab__values" aria-labelledby="ab-team">
-          <h2 id="ab-team" className="h2" data-reveal="up">
-            El <em className="accent">equipo</em>
-          </h2>
-          <ul className="ab__team">
-            {TEAM.map(([name, role], i) => (
-              <li key={name} data-reveal="up" className="depth-card" data-tilt="8" style={{ transitionDelay: `${i * 0.06}s` }}>
-                <span className={`ab__ini av-${i % 6}`} aria-hidden="true">
-                  {name
-                    .split(' ')
-                    .slice(0, 2)
-                    .map(w => w[0])
-                    .join('')}
-                </span>
-                <strong>{name}</strong>
-                <span>{role}</span>
-              </li>
-            ))}
+          <div className="crew__head" data-reveal="up">
+            <h2 id="ab-team" className="h2">
+              El <em className="accent">equipo</em>
+            </h2>
+            <p className="crew__lead">Cinco personas detrás de cada agente. Hecho en Argentina.</p>
+          </div>
+          <ul className="crew">
+            {TEAM.map((m, i) => {
+              const photo = memberPhoto(m.slug);
+              return (
+                <li key={m.slug} data-reveal="up" className="crew__card depth-card" data-tilt="6" style={{ transitionDelay: `${i * 0.06}s` }}>
+                  <div className="crew__photo">
+                    <Image className="crew__mark logo-dark" src="/logo-color.png" alt="" width={1307} height={406} sizes="200px" />
+                    <Image className="crew__mark logo-ink" src="/logo-ink.png" alt="" width={1307} height={406} sizes="200px" />
+                    {photo ? (
+                      <Image className="crew__img" src={photo} alt={`${m.name}, ${m.role}`} fill sizes="(min-width: 1000px) 220px, (min-width: 600px) 30vw, 46vw" quality={80} />
+                    ) : (
+                      <span className={`crew__ini av-${i % 6}`} role="img" aria-label={`${m.name}: foto pendiente`}>
+                        {m.name
+                          .split(' ')
+                          .slice(0, 2)
+                          .map(w => w[0])
+                          .join('')}
+                      </span>
+                    )}
+                  </div>
+                  <strong>{m.name}</strong>
+                  <span>{m.role}</span>
+                </li>
+              );
+            })}
           </ul>
         </section>
 

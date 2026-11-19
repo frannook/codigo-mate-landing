@@ -31,25 +31,29 @@ Los tres proyectos de ejemplo (una tienda de mates, una distribuidora de envíos
 
 ### 3. Comparador "sin agente / con agente"
 
-Un control que se arrastra muestra la misma consulta recibida a las 23:47: sin agente queda sin respuesta hasta el día siguiente; con agente se responde en segundos y la charla sigue por WhatsApp. Es la forma más rápida de explicar el valor del producto.
+Dos tarjetas lado a lado muestran la misma consulta recibida a las 23:47. Al arrastrar el control, una crece y la otra se achica: sin agente queda sin respuesta hasta el día siguiente; con agente se responde en segundos y la charla sigue por WhatsApp. En celular las dos tarjetas se apilan. Es la forma más rápida de explicar el valor del producto.
 
 ### 4. Panel del dueño del negocio
 
 Un panel de ejemplo que muestra lo que vería quien contrata el servicio: cuántas conversaciones hubo, cuántas resolvió el agente solo, cuántas pasaron a una persona, a qué hora preguntan más y cuáles son los temas más frecuentes. Tiene pestañas "Hoy" y "Esta semana".
 
-### 5. Números que cobran vida
+### 5. Nosotros con el equipo en primer plano
+
+La página de Nosotros dejó la foto grande y ahora presenta a cada integrante con su tarjeta: foto tipo currículum con el logo de Código Mate de fondo, nombre y título. Las fotos se cargan guardando un archivo por persona, sin tocar código (ver el detalle en el documento del sprint).
+
+### 6. Números que cobran vida
 
 Los resultados (tiempos de respuesta, porcentajes, horas ahorradas) suben desde cero cuando aparecen en pantalla. Si alguien prefiere menos movimiento, los ve directamente.
 
-### 6. Preguntas frecuentes
+### 7. Preguntas frecuentes
 
 Siete preguntas con respuesta en un acordeón: precio, qué pasa si no sabe, plataformas, tono de voz, datos de los clientes y aclaración de que los proyectos son simulados. Se puede usar con teclado.
 
-### 7. Cinta de plataformas
+### 8. Cinta de plataformas
 
 Una cinta animada con "Se instala donde ya estás": web a medida, Tiendanube, Shopify, WordPress, WooCommerce, Wix, Webflow y WhatsApp. Refuerza el mensaje de que funciona en cualquier sitio.
 
-### 8. Detalles que usan las webs profesionales
+### 9. Detalles que usan las webs profesionales
 
 - Un **aviso de privacidad** breve que cuenta qué guarda el sitio.
 - Un enlace oculto **"Saltar al contenido"** para quien navega con teclado.
@@ -61,7 +65,8 @@ Una cinta animada con "Se instala donde ya estás": web a medida, Tiendanube, Sh
 | Tema | Antes | Ahora |
 | --- | --- | --- |
 | Fondo | Solo oscuro | Oscuro y claro, con botón y respeto por el sistema |
-| Proyectos | Capturas fijas | Videos y una página de detalle por proyecto |
+| Proyectos | Capturas fijas | Videos y una página de detalle por proyecto, sin bloques repetidos |
+| Nosotros | Una foto grande del equipo | Una tarjeta por integrante, con foto tipo currículum |
 | Valor del servicio | Se contaba con texto | Se muestra con un comparador y un panel de ejemplo |
 | Dudas de clientes | Respondidas solo en el chat | Además, preguntas frecuentes |
 | Accesibilidad | Foco visible y movimiento reducido | Además, "Saltar al contenido" y comparador usable con teclado |
@@ -70,11 +75,12 @@ Una cinta animada con "Se instala donde ya estás": web a medida, Tiendanube, Sh
 ## Guion sugerido para mostrarlo en vivo
 
 1. **Inicio:** apretar el botón sol/luna y mostrar el cambio de fondo. Volver al oscuro.
-2. **"La diferencia":** arrastrar el control del comparador y contar la consulta de las 23:47.
+2. **"La diferencia":** arrastrar el control del comparador y contar la consulta de las 23:47 (las tarjetas crecen y se achican).
 3. **"Vos ves todo lo que pasa":** cambiar entre "Hoy" y "Esta semana" en el panel.
 4. **Proyectos:** mostrar los videos y entrar a un caso (por ejemplo, Distribución Federal).
 5. **Preguntas frecuentes:** abrir una respuesta, por ejemplo "¿Los proyectos de ejemplo son reales?".
-6. **Celular:** mostrar que todo se ve y se usa bien en pantalla chica.
+6. **Nosotros:** mostrar al equipo, una tarjeta por integrante.
+7. **Celular:** mostrar que todo se ve y se usa bien en pantalla chica.
 
 ## Aclaraciones honestas
 
