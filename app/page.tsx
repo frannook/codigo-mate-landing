@@ -1,6 +1,5 @@
 import BeforeAfter from '@/components/BeforeAfter';
 import Booking from '@/components/Booking';
-import Channels from '@/components/Channels';
 import Faq from '@/components/Faq';
 import ChatWidget from '@/components/ChatWidget';
 import FocusChatLink from '@/components/FocusChatLink';
@@ -15,6 +14,7 @@ import Reveal from '@/components/Reveal';
 import Steps from '@/components/Steps';
 import Testimonials from '@/components/Testimonials';
 import { ArrowRight } from '@/components/icons';
+import { waLink } from '@/lib/site';
 
 const HEADLINE: [string, number, boolean?][] = [
   ['Tu', 0.1],
@@ -176,14 +176,6 @@ export default function Home() {
             <p className="how__lead">Tres pasos. Vos nos contás cómo funciona tu negocio; del resto nos encargamos nosotros.</p>
           </div>
           <Steps />
-          <div className="how__cta" data-reveal="up">
-            <p>
-              <strong>La primera charla es sin costo.</strong> 30 minutos por videollamada para ver cómo quedaría el agente en tu web.
-            </p>
-            <a href="#agendar" className="btn btn--solid">
-              Agendar la primera charla <ArrowRight />
-            </a>
-          </div>
         </div>
       </section>
 
@@ -204,8 +196,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <Channels />
 
       <section id="testimonios" className="section section--proof">
         <div className="wrap section__inner proof">
@@ -247,9 +237,16 @@ export default function Home() {
             <p className="book__lead">
               30 minutos por videollamada. Revisamos tu sitio, las consultas que más recibís y te mostramos cómo quedaría tu agente.
             </p>
+            <ul className="book__checks" aria-label="Qué incluye la charla">
+              <li>Revisamos tu sitio y tus consultas más frecuentes</li>
+              <li>Te mostramos cómo quedaría tu agente</li>
+              <li>Sin costo y sin compromiso</li>
+            </ul>
             <div className="book__notes">
-              <span>Sin costo y sin compromiso</span>
               <span>Te confirmamos por email y WhatsApp</span>
+              <a className="book__wa" href={waLink('Hola, quiero agendar una charla sobre un agente para mi web.')} target="_blank" rel="noopener">
+                ¿Preferís escribir? Abrir WhatsApp <ArrowRight size={14} />
+              </a>
             </div>
           </div>
           <div data-reveal="right" className="glass glass--strong bk-card">
