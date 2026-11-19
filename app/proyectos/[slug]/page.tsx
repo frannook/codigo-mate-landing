@@ -116,14 +116,6 @@ export default async function Proyecto({ params }: { params: Promise<{ slug: str
               <strong>{next.name}</strong>
               <ArrowRight />
             </a>
-            <div className="pg__cta pj__ctas">
-              <a href="/#agendar" className="btn btn--solid">
-                Agendar una llamada <ArrowRight />
-              </a>
-              <a href="/#probalo" className="btn btn--ghost">
-                {p.demo}
-              </a>
-            </div>
           </div>
         </div>
       </main>

@@ -73,19 +73,6 @@ export default function Proyectos() {
               </li>
             ))}
           </ol>
-          <div className="pj__end" data-reveal="up">
-            <h2>
-              ¿Tu negocio podría ser <em className="accent">el próximo</em>?
-            </h2>
-            <div className="pg__cta pj__ctas">
-              <a href="/#agendar" className="btn btn--solid">
-                Agendar una llamada <ArrowRight />
-              </a>
-              <a href="/#probalo" className="btn btn--ghost">
-                Probar el agente
-              </a>
-            </div>
-          </div>
         </div>
       </main>
       <Footer />

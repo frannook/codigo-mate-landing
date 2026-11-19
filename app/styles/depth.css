@@ -39,7 +39,7 @@
 .how__cta p strong { color: var(--bone); font-weight: 500; }
 
 /* ---------- Proyectos: filas editoriales con la captura del sitio en 3D ---------- */
-.pj { list-style: none; margin: 0; padding: 0 0 clamp(24px, 4vw, 48px); }
+.pj { list-style: none; margin: 0; padding: 0 0 clamp(56px, 8vw, 104px); }
 .pj__row { display: grid; gap: clamp(32px, 5vw, 80px); align-items: center; padding-block: clamp(48px, 7vw, 96px); border-top: 1px solid var(--rule); }
 @media (min-width: 900px) {
   .pj__row { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
@@ -75,24 +75,8 @@
   .pj__shot { --rx: 3deg; --ry: -7deg; }
   .pj__row:nth-child(even) .pj__shot { --ry: 7deg; }
 }
-.pj__end { padding: clamp(48px, 7vw, 96px) 0 clamp(64px, 9vw, 120px); border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 28px; align-items: flex-start; }
-.pj__end h2 { margin: 0; max-width: 18ch; font-family: var(--fh); font-weight: 400; font-size: clamp(36px, 5vw, 64px); line-height: 1.04; color: var(--white); }
 
 /* ---------- Nosotros ---------- */
-.ab__photo-wrap { position: relative; perspective: 1200px; }
-.ab__photo-wrap::before {
-  content: ''; position: absolute; inset: 6%; z-index: -1; border-radius: 40px; filter: blur(48px);
-  background: radial-gradient(closest-side, rgba(233, 162, 59, 0.22), transparent 75%);
-}
-@media (min-width: 900px) { .ab__photo-wrap { --ry: 6deg; --rx: 2deg; } }
-.ab__photo-wrap::after { display: none; }
-.ab__chip {
-  position: absolute; z-index: 2; left: clamp(-8px, -1vw, 0px); bottom: 28px; padding: 10px 16px; border-radius: 999px;
-  display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--navy); background: var(--bone);
-  box-shadow: 0 18px 36px -14px rgba(0, 0, 0, 0.7); animation: tryFloat 5s ease-in-out infinite alternate;
-}
-.ab__chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }
-@keyframes tryFloat { from { transform: translateY(0); } to { transform: translateY(-6px); } }
 .ab__stats { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 520px; }
 .ab__stats li { padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 2px; background: rgba(27, 38, 59, 0.6); border: 1px solid rgba(119, 141, 169, 0.18); }
 .ab__stats strong { font-family: var(--fh); font-weight: 400; font-size: clamp(24px, 2.6vw, 30px); line-height: 1.1; color: var(--amber); }
@@ -105,7 +89,6 @@
 .ab__cards blockquote { margin: 6px 0 0; padding: 12px 14px; border-radius: 12px 12px 12px 4px; font-size: 14px; line-height: 1.5; color: var(--bone); background: rgba(11, 23, 36, 0.55); border: 1px solid rgba(119, 141, 169, 0.16); }
 
 .pg__note { margin: 0; font-size: 13px; color: var(--slate); }
-.pj__ctas { padding: 0; }
 
 /* Celulares: sin vidrio pesado ni giros, todo plano y liviano. */
 @media (max-width: 899px) {
