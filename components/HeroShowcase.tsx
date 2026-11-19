@@ -190,6 +190,9 @@ function CardView({ c }: { c: Card }) {
   }
 }
 
+// La secuencia del hero abre con turnos; el resto de los rubros siguen en su orden.
+SCENES.sort((a, b) => (a.tab === 'Turnos' ? -1 : 0) - (b.tab === 'Turnos' ? -1 : 0));
+
 export default function HeroShowcase() {
   const root = useRef<HTMLDivElement>(null);
   const master = useRef<gsap.core.Timeline | null>(null);
@@ -221,6 +224,9 @@ export default function HeroShowcase() {
 
     const tl = gsap.timeline({ repeat: -1, defaults: { ease: 'expo.out', duration: 0.5 } });
     master.current = tl;
+    // Si la entrada del hero está corriendo, la vitrina espera el evento hero:panel-in.
+    let gated = document.documentElement.classList.contains('intro-on');
+    if (gated) tl.pause(0);
 
     // Una escena = un tramo del timeline maestro. Se arman de a una y en orden: la primera al cargar y el resto
     // mientras la anterior se reproduce (cada una dura más de 10 s), para no bloquear la carga.
@@ -292,7 +298,16 @@ export default function HeroShowcase() {
 
     // Fuera de pantalla o con la pestaña oculta, no corre.
     let visible = true;
-    const sync = () => (visible && !document.hidden ? master.current?.resume() : master.current?.pause());
+    const sync = () => {
+      if (gated) return;
+      if (visible && !document.hidden) master.current?.resume();
+      else master.current?.pause();
+    };
+    const onPanel = () => {
+      gated = false;
+      sync();
+    };
+    window.addEventListener('hero:panel-in', onPanel);
     const io = new IntersectionObserver(([e]) => {
       visible = e.isIntersecting;
       sync();
@@ -304,6 +319,7 @@ export default function HeroShowcase() {
       clearTimeout(timer);
       io.disconnect();
       document.removeEventListener('visibilitychange', sync);
+      window.removeEventListener('hero:panel-in', onPanel);
       ctx.revert();
       buildUpTo.current = () => {};
       master.current = null;
