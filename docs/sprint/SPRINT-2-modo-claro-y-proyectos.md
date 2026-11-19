@@ -91,3 +91,34 @@ Commits de este tramo:
 Además se mergeó el PR #4: la lista "Probá con una de estas" de la portada ya no tiene fondo blanco en modo claro; usa el mismo crema del fondo.
 
 Revisado en el navegador: Nosotros en modo claro (escritorio) y la página de Proyectos con videos.
+
+## Tercer tramo: mejoras para una web más completa y "premium"
+
+Después de los dos tramos anteriores, sumamos diez mejoras de solo frontend (sin integraciones nuevas), pensadas para que la web se sienta como un producto completo y no solo una landing.
+
+| # | Mejora | Qué hace, en simple |
+| --- | --- | --- |
+| 1 | **Página de detalle por proyecto** | Cada caso (`/proyectos/el-ceibo`, `/proyectos/distribucion-federal`, `/proyectos/san-lucas`) tiene su página: video grande, el problema, lo que se hizo, resultados de ejemplo, una conversación de muestra y un enlace al siguiente proyecto. |
+| 2 | **Panel del dueño** | En el inicio, un panel de ejemplo con conversaciones, porcentaje resuelto por el agente, derivaciones a WhatsApp, gráfico por hora y temas más preguntados. Tiene pestañas Hoy / Esta semana. |
+| 3 | **Comparador "sin agente / con agente"** | Un control que se arrastra (o se mueve con el teclado) y muestra la misma consulta de las 23:47 con dos finales: sin respuesta o respondida en segundos. |
+| 4 | **Contadores animados** | Los números de resultados suben desde cero al aparecer en pantalla. Si la persona tiene el movimiento reducido, se ven directo. |
+| 5 | **Preguntas frecuentes** | Siete preguntas en acordeón (precio, qué pasa si no sabe, plataformas, tono, datos, ejemplos simulados). Funciona con teclado y suma datos estructurados para buscadores. |
+| 6 | **Transiciones entre páginas** | Al navegar, la página cambia con un fundido suave. Se desactiva si la persona pidió menos movimiento. |
+| 7 | **Cinta de plataformas** | Una cinta en movimiento con "Se instala donde ya estás": web a medida, Tiendanube, Shopify, WordPress, WooCommerce, Wix, Webflow y WhatsApp (nombres en texto). |
+| 8 | **Aviso de privacidad y "Saltar al contenido"** | Un aviso corto que cuenta qué guarda el sitio y se cierra con "Entendido"; y un enlace oculto para saltar directo al contenido con el teclado. |
+| 9 | **Modo claro según el sistema** | La primera vez, la web respeta si el dispositivo está en modo claro u oscuro; después recuerda lo que elija la persona con el botón. |
+| 10 | **Brillo de carga en los videos** | Mientras llega el video de cada proyecto, el marco muestra un brillo suave en lugar de un recuadro vacío. |
+
+### Detalles a tener en cuenta
+
+- **Todas las cifras son de ejemplo.** Los resultados (por ejemplo "60 % menos consultas", "10 h de espera") son ilustrativos del proyecto simulado y lo dicen en pantalla. No son mediciones reales.
+- **No se agregó ninguna integración.** Todo funciona con datos dentro de la propia web.
+- **Sitemap:** las tres páginas nuevas de proyectos se agregaron al mapa del sitio para buscadores.
+- **Verificación:** la web compila sin errores; se revisó en computadora y celular, con fondo oscuro y claro. El aviso de seguridad de la versión de Next.js sigue pendiente (no se actualizó).
+
+### Commits de este tramo
+
+1. Proyectos: página de detalle por caso (datos compartidos, contadores y sitemap).
+2. Inicio: comparador sin agente / con agente, panel del dueño, cinta de plataformas y preguntas frecuentes.
+3. Aviso de privacidad, "Saltar al contenido" y modo claro según el sistema.
+4. Docs: sprint 2 actualizado y documento de nuevas modificaciones para la presentación.
