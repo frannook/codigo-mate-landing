@@ -3,7 +3,6 @@ import Footer from '@/components/Footer';
 import Motion from '@/components/Motion';
 import Nav from '@/components/Nav';
 import Reveal from '@/components/Reveal';
-import ChatSample, { type SampleLine } from '@/components/ChatSample';
 import { ArrowRight } from '@/components/icons';
 import '../styles/about.css';
 import '../styles/pages.css';
@@ -14,34 +13,31 @@ export const metadata: Metadata = {
   description: 'Qué ofrece Código Mate: agentes de IA para webs de negocios, con seguimiento de pedidos, turnos, captura de contactos y pase a WhatsApp.'
 };
 
-const SERVICES: { title: string; text: string; who: string; items: string[]; sample: SampleLine[] }[] = [
+// Cuatro servicios, una idea cada uno. Sin conversaciones de muestra: eso ya lo muestran Probalo y Proyectos.
+const SERVICES: { title: string; text: string; who: string; items: string[] }[] = [
   {
-    title: 'Agente de atención 24 horas',
-    text: 'Un agente de IA en tu web que responde las dudas frecuentes con la información de tu negocio, con tu tono de voz, a cualquier hora.',
-    who: 'Negocios con muchas consultas repetidas: tiendas, estudios, institutos, servicios técnicos.',
-    items: ['Se instala con una línea de código', 'Funciona en cualquier plataforma', 'No inventa precios ni plazos'],
-    sample: [['user', '¿Hacen envíos a Salta?'], ['bot', 'Sí, enviamos a todo el país. El costo y el plazo dependen de tu código postal. ¿Me lo pasás?']]
+    title: 'Atención 24 horas',
+    text: 'Un agente en tu web que responde las dudas frecuentes con la información de tu negocio, a cualquier hora.',
+    who: 'Tiendas, estudios, institutos y servicios técnicos',
+    items: ['Se instala con una línea de código', 'Habla con tu tono de voz']
   },
   {
-    title: 'Seguimiento de pedidos y logística',
-    text: 'El agente se conecta a tu tienda o sistema de envíos y responde el estado real de cada pedido.',
-    who: 'Tiendas online y empresas de logística y envíos.',
-    items: ['Consulta por número de pedido', 'Cobertura, tarifas y reclamos', 'Reporte mensual de lo que se preguntó'],
-    sample: [['user', '¿Dónde está mi pedido 4821?'], ['bot', 'Va en camino y llega el jueves entre las 9 y las 13 h.']]
+    title: 'Pedidos y logística',
+    text: 'Se conecta a tu tienda o a tu sistema de envíos y responde el estado real de cada pedido.',
+    who: 'Tiendas online y empresas de envíos',
+    items: ['Consulta por número de pedido', 'Cobertura, tarifas y reclamos']
   },
   {
-    title: 'Turnos, reservas y captura de contactos',
+    title: 'Turnos y contactos',
     text: 'Ofrece horarios libres, toma turnos o reservas y guarda nombre, email y consulta en tu planilla o CRM.',
-    who: 'Salud, gastronomía, educación y servicios profesionales.',
-    items: ['Agenda en la misma charla', 'Contactos ya filtrados', 'Varios idiomas si hace falta'],
-    sample: [['user', 'Quiero un turno para el viernes.'], ['bot', 'El viernes tengo libres 10:00 y 15:30. ¿Cuál te sirve?']]
+    who: 'Salud, gastronomía, educación y servicios profesionales',
+    items: ['Agenda dentro de la charla', 'Contactos ya filtrados']
   },
   {
-    title: 'Pase a una persona por WhatsApp',
-    text: 'Cuando la consulta lo requiere, la charla completa llega a tu WhatsApp para que nadie repita lo ya conversado.',
-    who: 'Cualquier negocio que quiera atender mejor sin sumar trabajo a su equipo.',
-    items: ['Incluido en todos los planes', 'Con todo el contexto de la charla', 'El agente avisa cuando no sabe'],
-    sample: [['user', 'Necesito cambiar la dirección de entrega.'], ['bot', 'Eso lo resuelve una persona del equipo. Te paso por WhatsApp con el resumen de tu pedido.']]
+    title: 'Pase a una persona',
+    text: 'Cuando la consulta lo requiere, la charla completa llega a tu WhatsApp para que nadie repita lo conversado.',
+    who: 'Cualquier negocio que quiera atender sin sumar trabajo',
+    items: ['Con todo el contexto de la charla', 'Incluido en todos los planes']
   }
 ];
 
@@ -64,7 +60,7 @@ export default function Servicios() {
               Lo que hacemos para que tu web <em className="accent">atienda sola</em>.
             </h1>
             <p className="ab__lead">
-              Armamos e instalamos agentes de IA en sitios que ya existen. Cada servicio explica qué incluye y a quién está dirigido.
+              Instalamos agentes de IA en sitios que ya existen. Cuatro servicios, según lo que necesite tu negocio.
             </p>
           </div>
           <ul className="pg__grid">
@@ -81,7 +77,6 @@ export default function Servicios() {
                     <li key={i}>{i}</li>
                   ))}
                 </ul>
-                <ChatSample lines={s.sample} />
               </li>
             ))}
           </ul>
