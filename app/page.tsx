@@ -1,6 +1,5 @@
 import BeforeAfter from '@/components/BeforeAfter';
 import Booking from '@/components/Booking';
-import Faq from '@/components/Faq';
 import ChatWidget from '@/components/ChatWidget';
 import FocusChatLink from '@/components/FocusChatLink';
 import Footer from '@/components/Footer';
@@ -208,18 +207,6 @@ export default function Home() {
 
       <Quote />
 
-      <section id="faq" className="section section--faq">
-        <div className="wrap section__inner sec sec--narrow">
-          <div data-reveal="up" className="sec__head">
-            <h2 className="h2" data-headline>
-              Preguntas <em className="accent">frecuentes</em>.
-            </h2>
-          </div>
-          <div data-reveal="up">
-            <Faq />
-          </div>
-        </div>
-      </section>
 
       <section id="agendar" className="section section--book ambient">
         <div className="wrap section__inner book">
