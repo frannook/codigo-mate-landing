@@ -6,19 +6,6 @@ import { useEffect, useRef, useState } from 'react';
 // El chat se descarga recién la primera vez que se abre: la mascota no suma peso a la carga de la página.
 const ChatWidget = dynamic(() => import('./ChatWidget'), { ssr: false });
 
-// Lo que dice Yuyo cada vez que el mouse se le acerca (va rotando).
-const PHRASES = [
-  '¿Charlamos?',
-  '¿Un mate?',
-  '¿En qué te ayudo?',
-  '¿Qué necesitás?',
-  'Preguntame lo que quieras',
-  '¿Tenés una tienda online?',
-  'Respondo al toque',
-  'Atiendo las 24 horas',
-  '¿Te cuento cómo funciono?',
-  '¿Agendamos una charla?'
-];
 const NEAR_PX = 150;
 
 // Yuyo, una hoja de yerba con remera de Código Mate y su mate, camina por el borde inferior de la página.
@@ -28,7 +15,6 @@ export default function YuyoLauncher() {
   const [open, setOpen] = useState(false);
   const [loaded, setLoaded] = useState(false); // una vez abierto queda montado: la charla no se pierde al cerrar
   const [near, setNear] = useState(false);
-  const [phrase, setPhrase] = useState(0);
   const btnRef = useRef<HTMLButtonElement>(null);
   const walkRef = useRef<HTMLDivElement>(null);
   const openRef = useRef(false);
@@ -54,7 +40,6 @@ export default function YuyoLauncher() {
       if (next === isNear) return;
       isNear = next;
       setNear(next);
-      if (next) setPhrase(p => (p + 1) % PHRASES.length);
     };
     const onMove = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
@@ -74,7 +59,6 @@ export default function YuyoLauncher() {
     let hide = 0;
     const greet = () => {
       if (document.hidden || openRef.current) return;
-      setPhrase(p => (p + 1) % PHRASES.length);
       setNear(true);
       hide = window.setTimeout(() => setNear(false), 3800);
     };
@@ -114,7 +98,6 @@ export default function YuyoLauncher() {
             aria-label="Hablar con Yuyo, el agente de Código Mate"
             aria-expanded={open}
             onClick={() => toggle(!open)}
-            onFocus={() => setPhrase(p => (p + 1) % PHRASES.length)}
           >
             <svg viewBox="0 0 80 92" width="80" height="92" aria-hidden="true" focusable="false">
               {/* patitas con zapatillas */}
@@ -175,9 +158,6 @@ export default function YuyoLauncher() {
             </svg>
           </button>
         </div>
-        <span key={phrase} className="yuyo__hint" aria-hidden="true">
-          {PHRASES[phrase]}
-        </span>
       </div>
 
       <div className="yuyo__panel" role="dialog" aria-label="Chat con Yuyo" hidden={!open}>
