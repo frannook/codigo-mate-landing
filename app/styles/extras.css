@@ -212,3 +212,11 @@
 .bk-check svg path { stroke-dasharray: 26; stroke-dashoffset: 26; animation: bkDraw 0.6s var(--ease-out) 0.2s forwards; }
 @keyframes bkDraw { to { stroke-dashoffset: 0; } }
 @media (prefers-reduced-motion: reduce) { .bk-check svg path { stroke-dashoffset: 0; animation: none; } }
+
+/* ---------- Hero: entrada en secuencia (components/HeroIntro.tsx) ---------- */
+/* Solo con JS, escritorio y movimiento permitido (clase intro-on en <html>, la pone layout.tsx). */
+.intro-on .hero__copy { perspective: 1200px; }
+.intro-on .hero__word, .intro-on .hero .eyebrow, .intro-on .hero__lead, .intro-on .hero__visual { opacity: 0; }
+.intro-on .hero__ctas .btn { opacity: 0; }
+.intro-on .hero__word, .intro-on .hero .eyebrow, .intro-on .hero__lead, .intro-on .hero__ctas, .intro-on .hero__stage { animation: none !important; }
+.intro-on .hero__word { transform-style: preserve-3d; }

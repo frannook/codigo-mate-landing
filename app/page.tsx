@@ -4,6 +4,7 @@ import Faq from '@/components/Faq';
 import ChatWidget from '@/components/ChatWidget';
 import FocusChatLink from '@/components/FocusChatLink';
 import Footer from '@/components/Footer';
+import HeroIntro from '@/components/HeroIntro';
 import HeroShowcase from '@/components/HeroShowcase';
 import Motion from '@/components/Motion';
 import Nav from '@/components/Nav';
@@ -42,6 +43,7 @@ export default function Home() {
       <Motion />
       <Nav />
       <main>
+      <HeroIntro />
       <div className="top">
         <div aria-hidden="true" className="top__glow" />
         <div aria-hidden="true" className="top__grid" />

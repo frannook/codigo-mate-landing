@@ -62,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "var d=document.documentElement;d.dataset.motion='on';if('IntersectionObserver' in window)d.classList.add('reveal-on')"
+              "var d=document.documentElement;d.dataset.motion='on';if('IntersectionObserver' in window)d.classList.add('reveal-on');try{if(matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)').matches){d.classList.add('intro-on');setTimeout(function(){if(!d.dataset.heroOk)d.classList.remove('intro-on')},6000)}}catch(e){}"
           }}
         />
         {/* Tema: la elección guardada o, la primera vez, la preferencia del sistema. Se aplica antes del primer pintado para que no parpadee. */}
